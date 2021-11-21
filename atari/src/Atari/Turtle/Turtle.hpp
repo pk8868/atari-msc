@@ -1,6 +1,10 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
+// z pliku interpreter
+class InstructionSet;
+
+
 // instrukcje, które wykonuje ¿ó³w
 enum class TurtleInstructions : short {
 	None = 0xffff,
@@ -29,24 +33,30 @@ enum class TurtleInstructions : short {
 // pomocnicza struktura do wyœwietlania danych o ¿ó³wiu
 struct TurtleData {
 	sf::Vector2f currentPosition = sf::Vector2f(0.f, 0.f);
-
+	float rotation = 0.f;
+	bool penDown = true;
+	bool visible = true;
 };
 
 class Turtle {
 public:
-	Turtle();
+	Turtle() { ; }
+	Turtle(sf::Vector2i canvasSize, sf::Texture* texturePtr);
 	~Turtle();
 
-	void Draw();
+	void Draw(sf::RenderWindow& window);
 	
-	void ExecuteInstruction();
+	void ExecuteInstructionSet(InstructionSet& instructionSet);
 
-	// liczba ¿ó³wii
-	static int m_turtleCount;
+	TurtleData& getTurtleData() { return m_data; }
 private:
 	// tekstura wspólna dla wszystkich instancji ¿ó³wii
-	static sf::Texture* m_turtleTexture;
+	sf::Texture* m_turtleTexture = nullptr;
 
 	sf::Sprite m_turtleSprite;
 
+	TurtleData m_data;
+
+private:
+	sf::Vector2f m_canvasSize;
 };

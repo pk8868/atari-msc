@@ -29,12 +29,17 @@ void App::run() {
 		// updatowanie elementów gui
 		ImGui::SFML::Update(m_window, s_frameTime);
 
+
+		m_atari->Update();
+
 		// wyczyszczenie ekranu
 		m_window.clear();
 
 		// zupdatowanie okna z inputem
 		m_input.Update();
 
+		// aktualizacja instancji Atari
+		m_atari->Draw(m_window);
 
 		// wyrenderowanie imgui na ekran
 		ImGui::SFML::Render(m_window);

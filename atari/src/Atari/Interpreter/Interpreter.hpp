@@ -4,10 +4,10 @@
 
 class Interpreter {
 public:
-	Interpreter();
-	~Interpreter();
+	Interpreter() { ; }
+	~Interpreter() { ; }
 
 private:
-	std::vector<Turtle>& r_turtles;
+	//std::vector<Turtle>& r_turtles;
 
 };

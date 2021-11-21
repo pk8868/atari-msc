@@ -340,7 +340,6 @@ namespace tLang {
 		if (dStruct.id != "main") 
 			string += "\n}\n";
 
-
 		return string;
 	}
 

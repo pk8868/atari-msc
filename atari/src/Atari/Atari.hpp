@@ -2,20 +2,28 @@
 #include "Canvas/Canvas.hpp"
 #include "Turtle/Turtle.hpp"
 #include "Interpreter/Interpreter.hpp"
+#include <memory>
+
+struct AppData {
+	sf::Vector2i windowSize = { 800, 600 };
+};
 
 class Atari {
 public:
-	Atari();
+	Atari(const AppData& appData);
 	~Atari();
 
 	void Draw(sf::RenderWindow& window);
 	void Update();
 
 	
-	Interpreter& getInterpreter() { return m_interpreter; }
+	Interpreter& getInterpreter() { return *m_interpreter; }
 private:
+	// dane aplikacji
+	AppData m_appData;
+
 	// instancja interpretera
-	Interpreter m_interpreter;
+	std::unique_ptr<Interpreter> m_interpreter = nullptr;
 
 	// lista ¿ó³wii
 	std::vector<Turtle> m_turtles;
@@ -23,6 +31,9 @@ private:
 
 
 	// plansza
-	Canvas m_canvas;
+	std::unique_ptr<Canvas> m_canvas = nullptr;
+
+	// tekstura
+	sf::Texture* m_turtleTexture;
 
 };

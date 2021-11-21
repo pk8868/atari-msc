@@ -21,7 +21,7 @@ App::App() {
 		
 		m_window.create(sf::VideoMode(temp_windowSize.x, temp_windowSize.y),
 						temp_windowName,
-						sf::Style::Titlebar | sf::Style::Close);
+						sf::Style::Titlebar | sf::Style::Close, sf::ContextSettings(0, 0, 8));
 	}
 
 	// ustawienie maksymalnego frameratu
@@ -51,11 +51,14 @@ App::App() {
 		ImGui::SFML::Init(m_window);
 
 
-
+	m_atari = new Atari(AppData{ sf::Vector2i(m_window.getSize()) });
 }
 
 App::~App() {
+	delete m_atari; m_atari = nullptr;
+
 	ImGui::SFML::Shutdown();
 
+	// zapisanie wszystkiego do pliku konfiguracyjnego
 	tLang::saveToFile(m_configFile, "config");
 }

@@ -1,9 +1,16 @@
 #include "pch.h"
 #include "Canvas.hpp"
+#include "Utils/Utils.hpp"
 
 Canvas::Canvas(sf::Vector2i windowSize) {
-	p_circleShape.setRadius(1.f);
-	p_circleShape.setOrigin({ 1.f, 1.f });
+	p_circleShape.setRadius(1.5f);
+	p_circleShape.setOrigin({ 1.5f, 1.5f });
+
+
+	if (!p_Texture.create(windowSize.x, windowSize.y, sf::ContextSettings(0, 0, 16)))
+		throw std::runtime_error("Couldn't create canvas");
+
+	Clear();
 }
 
 Canvas::~Canvas() {
@@ -18,16 +25,13 @@ void Canvas::DrawOnScreen(sf::RenderWindow& r_window) {
 void Canvas::Draw(const sf::Vector2f& point_A, const sf::Vector2f& point_B, const sf::Color& color) {	
 	// stworzenie grubej linii od a do b
 	{
-		sf::VertexArray temp_buffer(sf::PrimitiveType::Quads, 4);
-		// lewy dolny
-		temp_buffer.append(sf::Vertex({ point_A.x - 1.f, point_A.y }, color));
-		// prawy dolny
-		temp_buffer.append(sf::Vertex({ point_A.x + 1.f, point_A.y }, color));
+		sf::VertexArray temp_buffer(sf::PrimitiveType::Lines);
 
-		// prawy górny
-		temp_buffer.append(sf::Vertex({ point_B.x + 1.f, point_B.y }, color));
-		// lewy górny
-		temp_buffer.append(sf::Vertex({ point_B.x - 1.f, point_B.y }, color));
+
+		temp_buffer.append(sf::Vertex({ point_A.x, point_A.y }, color));
+		
+
+		temp_buffer.append(sf::Vertex({ point_B.x, point_B.y }, color));
 
 		p_Texture.draw(temp_buffer);
 	}
@@ -51,6 +55,6 @@ void Canvas::Draw(const sf::Vector2f& point_A, const sf::Vector2f& point_B, cons
 }
 
 void Canvas::Clear() {
-	p_Texture.clear();
+	p_Texture.clear(sf::Color::White);
 	p_Texture.display();
 }

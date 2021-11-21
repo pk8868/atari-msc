@@ -5,6 +5,6 @@ appData
 }
 userPreference
 {
-	windowSize = 1024,768
+	windowSize = 1280,768
 	fontSize = 18.0
 }

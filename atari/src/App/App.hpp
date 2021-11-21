@@ -23,6 +23,6 @@ private:
 	Input m_input;
 
 	// instancja atari
-	//Atari m_atari;
+	Atari* m_atari = nullptr;
 };
 
