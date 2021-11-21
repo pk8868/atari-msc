@@ -3,7 +3,8 @@
 
 class Canvas {
 public:
-	Canvas();
+	Canvas() { ; }
+	Canvas(sf::Vector2i windowSize);
 	~Canvas();
 
 	void DrawOnScreen(sf::RenderWindow& r_window);
@@ -13,5 +14,11 @@ public:
 
 	
 private:
+	// plansza (tekstura i sprite)
 	sf::RenderTexture p_Texture;
+	sf::Sprite p_Sprite;
+
+	// rzeczy u¿yteczne przy rysowaniu linii
+	sf::CircleShape p_circleShape;
+
 };

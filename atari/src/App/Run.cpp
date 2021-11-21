@@ -15,11 +15,6 @@ void App::run() {
 				m_window.close();
 				break;
 			}
-			else if (l_event.type == sf::Event::Resized)
-			{
-				sf::FloatRect visibleArea(0, 0, l_event.size.width, l_event.size.height);
-				m_window.setView(sf::View(visibleArea));
-			}
 			else {
 				ImGui::SFML::ProcessEvent(m_window, l_event);
 			}
@@ -31,16 +26,17 @@ void App::run() {
 		s_frameTime = l_clock.restart();
 		frameTime = s_frameTime.asSeconds();
 
-		// updatowanie elementów
+		// updatowanie elementów gui
 		ImGui::SFML::Update(m_window, s_frameTime);
-
 
 		// wyczyszczenie ekranu
 		m_window.clear();
 
+		// zupdatowanie okna z inputem
 		m_input.Update();
 
 
+		// wyrenderowanie imgui na ekran
 		ImGui::SFML::Render(m_window);
 
 		// wyrenderowanie
@@ -48,8 +44,10 @@ void App::run() {
 
 
 		// odebranie danych wejœciowych
-		if (m_input.shouldGet())
+		if (m_input.shouldGet()) {
 			m_input.getString(); // wys³aæ do interpretera atari
+			m_input.clear();
+		}
 
 	}
 }

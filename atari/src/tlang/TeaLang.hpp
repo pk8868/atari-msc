@@ -330,7 +330,7 @@ namespace tLang {
 		}
 
 		for (int i = 0; i < (int)dStruct.data.size(); i++) {
-			string += dStruct.id != "main" ? "\t" : "" +
+			string += (dStruct.id != "main" ? "\t" : "") +
 				dStruct.data[i].key + " = " + dStruct.data[i].value;
 
 			// last line doesnt add endline
@@ -339,6 +339,8 @@ namespace tLang {
 		}
 		if (dStruct.id != "main") 
 			string += "\n}\n";
+
+
 		return string;
 	}
 

@@ -19,6 +19,8 @@ private:
 
 	// lista ¿ó³wii
 	std::vector<Turtle> m_turtles;
+	std::vector<int>	m_activeTurtles;
+
 
 	// plansza
 	Canvas m_canvas;

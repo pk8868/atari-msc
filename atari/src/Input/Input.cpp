@@ -20,16 +20,13 @@ void Input::Update() {
 	ImGui::End();
 }
 
-std::string Input::getString()
-{
-
-	std::string temp_text = p_Input.inputText;
-
-	// wyczyszczenie tekstu i ustawnienie rozmiaru tekstu na 64
-	p_Input.inputText = "";
-	p_Input.inputText.resize(64);
-
+std::string Input::getString() {
 	p_Input.shouldReturn = false;
 
-	return temp_text;
+	return p_Input.inputText;
+}
+
+void Input::clear() {
+	p_Input.inputText = "";
+	p_Input.inputText.resize(64);
 }
