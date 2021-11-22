@@ -9,6 +9,7 @@
 #include <stdexcept>
 #include <string>
 #include <memory>
+#include <future>
 
 // sfml
 #include <SFML/Graphics.hpp>

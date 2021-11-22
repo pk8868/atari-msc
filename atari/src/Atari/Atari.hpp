@@ -4,6 +4,9 @@
 #include "Interpreter/Interpreter.hpp"
 #include <memory>
 
+// z pliku interpreter.hpp
+class Interpreter;
+
 struct AppData {
 	sf::Vector2i windowSize = { 800, 600 };
 };
@@ -15,9 +18,10 @@ public:
 
 	void Draw(sf::RenderWindow& window);
 	void Update();
-
 	
 	Interpreter& getInterpreter() { return *m_interpreter; }
+	Canvas& getCanvas() { return *m_canvas; }
+	const sf::Image& getImage() { return m_canvas->getImage(); }
 private:
 	// dane aplikacji
 	AppData m_appData;

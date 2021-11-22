@@ -2,6 +2,7 @@ appData
 {
 	appTitle = Atari-Logo Interpreter
 	fontLoc = assets/consolas.ttf
+	iconLoc = assets/icon.png
 }
 userPreference
 {

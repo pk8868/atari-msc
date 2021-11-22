@@ -22,4 +22,8 @@ namespace util {
 		return sf::Vector2f(point.x * cos(angle) - point.y * sin(angle),
 			point.x * sin(angle) + point.y * cos(angle));
 	} // rotate a vector
+
+	static void saveToFile(sf::Image image, std::string filename) {
+		image.saveToFile(filename);
+	}
 }

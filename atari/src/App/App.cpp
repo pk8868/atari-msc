@@ -22,6 +22,14 @@ App::App() {
 		m_window.create(sf::VideoMode(temp_windowSize.x, temp_windowSize.y),
 						temp_windowName,
 						sf::Style::Titlebar | sf::Style::Close, sf::ContextSettings(0, 0, 8));
+
+		// ustawienie ikonki programu
+		if (m_configFile["appData"]["iconLoc"]) {
+			sf::Image temp_img;
+			temp_img.loadFromFile(m_configFile["appData"]["iconLoc"]->value);
+
+			m_window.setIcon(16, 16, temp_img.getPixelsPtr());
+		}
 	}
 
 	// ustawienie maksymalnego frameratu

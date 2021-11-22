@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "App.hpp"
+#include "Utils/Utils.hpp"
 
 void App::run() {
 	sf::Event l_event;
@@ -8,17 +9,28 @@ void App::run() {
 	float frameTime = 0.f;
 
 
+	std::future<void> secondThread;
 	while (true) {
 		// handlowanie eventów
 		while (m_window.pollEvent(l_event)) {
+			// obs³uga eventu klikniêcia x
 			if (l_event.type == sf::Event::Closed) {
 				m_window.close();
 				break;
 			}
 			else {
+				if (l_event.type == sf::Event::KeyReleased &&
+					l_event.key.code == sf::Keyboard::Key::F11) {
+					// zapisywanie do pliku na drugim w¹tku
+					secondThread = std::async(std::launch::async, util::saveToFile, m_atari->getCanvas().getImage(),
+						"elo.png");
+				}
+
 				ImGui::SFML::ProcessEvent(m_window, l_event);
 			}
 		}
+
+		// wyjœcie z pêtli
 		if (!m_window.isOpen())
 			break;
 

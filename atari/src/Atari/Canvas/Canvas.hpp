@@ -10,11 +10,12 @@ public:
 
 	void DrawOnScreen(sf::RenderWindow& r_window);
 
-	
+	// narysowanie linii
 	void Draw(const sf::Vector2f& point_A, const sf::Vector2f& point_B, const sf::Color& color);
 	void Clear();
 
-	
+	sf::Image getImage() { return p_Texture.getTexture().copyToImage(); }
+
 private:
 	// plansza (tekstura i sprite)
 	sf::RenderTexture p_Texture;

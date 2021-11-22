@@ -4,10 +4,14 @@
 
 class Interpreter {
 public:
-	Interpreter() { ; }
+	Interpreter(std::vector<Turtle>& turtles);
 	~Interpreter() { ; }
 
 private:
-	//std::vector<Turtle>& r_turtles;
+	// lista ¿ó³wi
+	std::vector<Turtle>& r_turtles;
+
+	// lista zapisanych procedur
+	std::vector<Function> m_functions;
 
 };

@@ -15,6 +15,7 @@ Turtle::~Turtle() {
 void Turtle::Draw(sf::RenderWindow& window) {
 	if (m_data.visible) {
 		m_turtleSprite.setPosition(m_data.currentPosition + m_canvasSize / 2.f);
+		m_turtleSprite.setRotation(m_data.rotation);
 		window.draw(m_turtleSprite);
 	}
 }

@@ -4,14 +4,25 @@
 Atari::Atari(const AppData& appData)
 	:m_appData(appData)
 {
+	tLang::tCode t_atariSettings("atariSettings");
+	
+	// stworzenie planszy
 	m_canvas = std::make_unique<Canvas>(appData.windowSize);
-	m_interpreter = std::make_unique<Interpreter>();
+	// stworzenie instancji interpretera
+	m_interpreter = std::make_unique<Interpreter>(m_turtles);
+
+
 
 
 	// wczytanie z pliku tekstury ¿ó³wia
-	m_turtleTexture = new sf::Texture();
-	m_turtleTexture->loadFromFile("assets/atari.png");
-	m_turtleTexture->setSmooth(true);
+	if (t_atariSettings["turtle"]["texture"]) {
+		m_turtleTexture = new sf::Texture();
+		if (!m_turtleTexture->loadFromFile(t_atariSettings["turtle"]["texture"]->value))
+			throw std::runtime_error("Couldn't load turtle texture");
+		m_turtleTexture->setSmooth(true);
+	}
+	else
+		throw std::runtime_error("Couldn't find texture in atariSettings");
 
 	// stworzenie pierwszego (domyœlnego) ¿ó³wia
 	m_turtles.emplace_back(appData.windowSize, m_turtleTexture);

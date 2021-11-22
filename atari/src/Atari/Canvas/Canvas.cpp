@@ -14,7 +14,7 @@ Canvas::Canvas(sf::Vector2i windowSize) {
 }
 
 Canvas::~Canvas() {
-
+	;
 }
 
 void Canvas::DrawOnScreen(sf::RenderWindow& r_window) {
@@ -58,3 +58,4 @@ void Canvas::Clear() {
 	p_Texture.clear(sf::Color::White);
 	p_Texture.display();
 }
+

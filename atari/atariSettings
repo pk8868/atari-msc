@@ -1,0 +1,4 @@
+turtle
+{
+	texture=assets/atari.png
+}
