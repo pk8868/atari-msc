@@ -58,13 +58,11 @@ App::App() {
 	else
 		ImGui::SFML::Init(m_window);
 
-
-	m_atari = new Atari(AppData{ sf::Vector2i(m_window.getSize()) });
+	// stworzenie instancji atari
+	m_atari = std::make_unique<Atari>(AppData{ sf::Vector2i(m_window.getSize()) });
 }
 
 App::~App() {
-	delete m_atari; m_atari = nullptr;
-
 	ImGui::SFML::Shutdown();
 
 	// zapisanie wszystkiego do pliku konfiguracyjnego

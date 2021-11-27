@@ -26,4 +26,25 @@ namespace util {
 	static void saveToFile(sf::Image image, std::string filename) {
 		image.saveToFile(filename);
 	}
+	
+	static sf::Texture* getTexture(std::string filename) {
+		sf::Texture* temp_texture = new sf::Texture();
+
+		// jesli nie za³aduje siê tekstura zwróci siê null
+		if (!temp_texture->loadFromFile(filename)) {
+			delete temp_texture;
+			return NULL;
+		}
+		temp_texture->setSmooth(true);
+
+		return temp_texture;		
+	}
 }
+
+#ifdef _DEBUG
+template<typename T>
+static std::ostream& operator<<(std::ostream& stream, const sf::Vector2<T>& vector) {
+	stream << vector.x << ", " << vector.y;
+	return stream;
+}
+#endif

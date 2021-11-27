@@ -1,6 +1,7 @@
 #pragma once
 #include "CodeStructures.hpp"
 #include "Errors.hpp"
+#include "Atari/Turtle/Turtle.hpp"
 
 class Interpreter {
 public:

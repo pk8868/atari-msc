@@ -2,6 +2,7 @@
 #include "Canvas/Canvas.hpp"
 #include "Turtle/Turtle.hpp"
 #include "Interpreter/Interpreter.hpp"
+#include "Utils/Utils.hpp"
 #include <memory>
 
 // z pliku interpreter.hpp

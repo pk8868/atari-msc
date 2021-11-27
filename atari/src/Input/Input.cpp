@@ -2,7 +2,7 @@
 #include "Input.hpp"
 
 Input::Input() {
-	p_Input.inputText.resize(64);
+	clear();
 }
 
 Input::~Input() {

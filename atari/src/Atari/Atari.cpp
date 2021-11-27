@@ -6,26 +6,35 @@ Atari::Atari(const AppData& appData)
 {
 	tLang::tCode t_atariSettings("atariSettings");
 	
-	// stworzenie planszy
-	m_canvas = std::make_unique<Canvas>(appData.windowSize);
-	// stworzenie instancji interpretera
-	m_interpreter = std::make_unique<Interpreter>(m_turtles);
 
-
-
-
+	std::future<sf::Texture*> load_texture;
 	// wczytanie z pliku tekstury ¿ó³wia
 	if (t_atariSettings["turtle"]["texture"]) {
-		m_turtleTexture = new sf::Texture();
-		if (!m_turtleTexture->loadFromFile(t_atariSettings["turtle"]["texture"]->value))
-			throw std::runtime_error("Couldn't load turtle texture");
-		m_turtleTexture->setSmooth(true);
+		// ³adowanie tekstury na drugim rdzeniu
+		load_texture = std::async(std::launch::async, util::getTexture, t_atariSettings["turtle"]["texture"]->value);
 	}
 	else
 		throw std::runtime_error("Couldn't find texture in atariSettings");
 
+
+	// stworzenie planszy
+	m_canvas = std::make_unique<Canvas>(appData.windowSize);
+
+	// wyczyszczenie planszy
+	m_canvas->Clear();
+
+	// stworzenie instancji interpretera
+	m_interpreter = std::make_unique<Interpreter>(m_turtles);
+	// otrzymanie tekstury od drugiego rdzenia
+	m_turtleTexture = load_texture.get();
+
+	// sprawdzenie czy tekstura siê za³adowa³a poprawnie
+	if (!m_turtleTexture)
+		throw std::runtime_error("Couldn't load texture");
+
 	// stworzenie pierwszego (domyœlnego) ¿ó³wia
-	m_turtles.emplace_back(appData.windowSize, m_turtleTexture);
+	m_turtles.emplace_back(appData.windowSize, m_turtleTexture, m_canvas.get());
+
 }
 
 Atari::~Atari() {
@@ -33,10 +42,6 @@ Atari::~Atari() {
 }
 
 void Atari::Draw(sf::RenderWindow& window) {
-	m_canvas->Clear();
-	m_canvas->Draw(sf::Vector2f(m_appData.windowSize / 2),
-		sf::Vector2f(sf::Mouse::getPosition(window)), sf::Color::Red);
-
 	m_canvas->DrawOnScreen(window);
 
 	{
@@ -59,7 +64,11 @@ void Atari::Draw(sf::RenderWindow& window) {
 
 		// wypisanie danych na temat wybranego ¿ó³wia
 		{
+			// stworzenie tymczasowej struktury
 			TurtleData temp_data = m_turtles[activeTab].getTurtleData();
+
+			// odwrócenie osi Y (tak, aby by³o bardziej intuicyjnie)
+			temp_data.currentPosition.y *= -1.f;
 
 			{ // wypisanie pozycji
 				std::string temp_text = "Aktualna pozycja: "
