@@ -37,7 +37,7 @@ struct Instruction {
 // zestaw instrukcji, zapisywany w nawiasach kwadratowych
 struct InstructionSet {
 	// operator []
-	Instruction& operator[](int x) { if (x >= 0 && x < instructions.size()) return instructions[x]; }
+	Instruction& operator[](int x) { if (x >= 0 && x < instructions.size()) return instructions[x]; return instructions[0]; }
 	int size() { return (int)instructions.size(); }
 
 	// lista instrukcji

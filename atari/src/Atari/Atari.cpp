@@ -7,11 +7,13 @@ Atari::Atari(const AppData& appData)
 	tLang::tCode t_atariSettings("atariSettings");
 	
 
-	std::future<sf::Texture*> load_texture;
+	std::future<bool> load_texture;
 	// wczytanie z pliku tekstury ¿ó³wia
 	if (t_atariSettings["turtle"]["texture"]) {
+		m_turtleTexture = new sf::Texture();
+
 		// ³adowanie tekstury na drugim rdzeniu
-		load_texture = std::async(std::launch::async, util::getTexture, t_atariSettings["turtle"]["texture"]->value);
+		load_texture = std::async(std::launch::async, util::getTexture, t_atariSettings["turtle"]["texture"]->value, m_turtleTexture);
 	}
 	else
 		throw std::runtime_error("Couldn't find texture in atariSettings");
@@ -26,19 +28,19 @@ Atari::Atari(const AppData& appData)
 	// stworzenie instancji interpretera
 	m_interpreter = std::make_unique<Interpreter>(m_turtles);
 	// otrzymanie tekstury od drugiego rdzenia
-	m_turtleTexture = load_texture.get();
-
+	
 	// sprawdzenie czy tekstura siê za³adowa³a poprawnie
-	if (!m_turtleTexture)
+	if (!load_texture.get())
 		throw std::runtime_error("Couldn't load texture");
 
 	// stworzenie pierwszego (domyœlnego) ¿ó³wia
-	m_turtles.emplace_back(appData.windowSize, m_turtleTexture, m_canvas.get());
-
+	m_turtles.emplace_back(m_turtleTexture, m_canvas.get());
 }
 
 Atari::~Atari() {
 	delete m_turtleTexture;
+	m_turtleTexture = nullptr;
+	m_turtles.clear();
 }
 
 void Atari::Draw(sf::RenderWindow& window) {
@@ -68,7 +70,7 @@ void Atari::Draw(sf::RenderWindow& window) {
 			TurtleData temp_data = m_turtles[activeTab].getTurtleData();
 
 			// odwrócenie osi Y (tak, aby by³o bardziej intuicyjnie)
-			temp_data.currentPosition.y *= -1.f;
+			temp_data.currentPosition.y *= -1;
 
 			{ // wypisanie pozycji
 				std::string temp_text = "Aktualna pozycja: "
@@ -78,7 +80,8 @@ void Atari::Draw(sf::RenderWindow& window) {
 
 				ImGui::Text(temp_text.c_str());
 			}
-			{
+
+			{ // wypisanie rotacji
 				std::string temp_text = "Obrot: "
 					+ std::to_string(int(temp_data.rotation)) + " stopni";
 

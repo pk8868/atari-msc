@@ -16,6 +16,8 @@ public:
 
 	sf::Image getImage() { return p_Texture.getTexture().copyToImage(); }
 
+	sf::Vector2f getSize() { return sf::Vector2f(p_Texture.getSize()); }
+
 private:
 	// plansza (tekstura i sprite)
 	sf::RenderTexture p_Texture;

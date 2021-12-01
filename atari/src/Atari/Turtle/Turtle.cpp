@@ -2,12 +2,12 @@
 #include "Turtle.hpp"
 #include "Utils/Utils.hpp"
 
-Turtle::Turtle(sf::Vector2i canvasSize, sf::Texture* texturePtr, Canvas* canvas)
-	:m_canvasSize(sf::Vector2f(canvasSize)), m_turtleTexture(texturePtr), r_canvas(canvas)
+Turtle::Turtle(sf::Texture* texturePtr, Canvas* canvas)
+	:r_canvas(canvas)
 {
 	// ustawienie tekstury, srodka ¿ó³wia i pozycji
-	m_turtleSprite.setTexture(*m_turtleTexture);
-	m_turtleSprite.setOrigin(sf::Vector2f(m_turtleTexture->getSize() / 2U));
+	m_turtleSprite.setTexture(*texturePtr);
+	m_turtleSprite.setOrigin(sf::Vector2f(texturePtr->getSize() / 2U));
 	m_turtleSprite.setPosition(p_normalizeVector(sf::Vector2f(0.f, 0.f)));
 }
 
@@ -110,6 +110,6 @@ void Turtle::p_rotate(float angle) {
 }
 
 sf::Vector2f Turtle::p_normalizeVector(sf::Vector2f vector) {
-	vector += (m_canvasSize / 2.f);
+	vector += r_canvas->getSize() / 2.f;
 	return vector;
 }

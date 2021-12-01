@@ -6,10 +6,11 @@ int main(char** args, int argc) {
 		App app;
 		app.run();
 	}
-	// wypisanie z³apanego b³êdu
+	// wypisanie z³apanego b³êdu do pliku
 	catch (std::exception& e)
 	{
-		std::cout << e.what() << std::endl;
+		util::addToLogFile(e.what());
+		return -1;
 	}
 
 	return 0;

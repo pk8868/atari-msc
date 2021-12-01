@@ -354,3 +354,4 @@ MigrationBackup/
 *.user
 *.sln
 
+log.txt

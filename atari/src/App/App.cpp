@@ -32,14 +32,23 @@ App::App() {
 		}
 	}
 
+	// wy³¹czenie ³adowania domyœlnej czcionki - przed stworzeniem atari, bo zasoby opengl sa w uzyciu
+	if (m_configFile["appData"]["fontLoc"]) {
+		ImGui::SFML::Init(m_window, false);
+	}
+
+	// za³adowanie instancji atari 
+	std::future<Atari*> temp_atariThread;
+	temp_atariThread = std::async(std::launch::async, getAtari,
+								  AppData{ sf::Vector2i(m_window.getSize()) });
+
+
 	// ustawienie maksymalnego frameratu
 	m_window.setFramerateLimit(60);
 
 
 	// jeœli jest zdefiniowana sciezka do nowej czcionki, za³aduj j¹
 	if (m_configFile["appData"]["fontLoc"]) {
-		// wy³¹czenie ³adowania domyœlnej czcionki
-		ImGui::SFML::Init(m_window, false);
 
 		float fontSize = 20.f;
 		// ustalenie rozmiaru czcionki w pikselach
@@ -58,11 +67,17 @@ App::App() {
 	else
 		ImGui::SFML::Init(m_window);
 
-	// stworzenie instancji atari
-	m_atari = std::make_unique<Atari>(AppData{ sf::Vector2i(m_window.getSize()) });
+	// odebranie instancji atari od drugiego w¹tku
+	m_atari = temp_atariThread.get();
 }
 
 App::~App() {
+	m_window.setActive();
+
+	// usuniecie atari
+	delete m_atari;
+
+	// wylaczenie imgui
 	ImGui::SFML::Shutdown();
 
 	// zapisanie wszystkiego do pliku konfiguracyjnego

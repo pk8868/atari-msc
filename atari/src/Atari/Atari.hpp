@@ -8,10 +8,12 @@
 // z pliku interpreter.hpp
 class Interpreter;
 
+// dane aplikacji
 struct AppData {
 	sf::Vector2i windowSize = { 800, 600 };
 };
 
+// klasa atari
 class Atari {
 public:
 	Atari(const AppData& appData);
@@ -42,3 +44,8 @@ private:
 	sf::Texture* m_turtleTexture;
 
 };
+
+
+static Atari* getAtari(const AppData& appData) {
+	return new Atari(appData);
+}

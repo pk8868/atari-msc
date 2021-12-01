@@ -23,6 +23,6 @@ private:
 	Input m_input;
 
 	// instancja atari
-	std::unique_ptr<Atari> m_atari = nullptr;
+	Atari* m_atari = nullptr;
 };
 

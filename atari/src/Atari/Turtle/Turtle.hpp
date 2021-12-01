@@ -16,7 +16,7 @@ struct TurtleData {
 class Turtle {
 public:
 	Turtle() { ; }
-	Turtle(sf::Vector2i canvasSize, sf::Texture* texturePtr, Canvas* canvas);
+	Turtle(sf::Texture* texturePtr, Canvas* canvas);
 	~Turtle();
 
 	void Draw(sf::RenderWindow& window);
@@ -26,17 +26,12 @@ public:
 	TurtleData getTurtleData() { return m_data; }
 private:
 	// tekstura wspólna dla wszystkich instancji ¿ó³wii
-	sf::Texture* m_turtleTexture = nullptr;
-
 	sf::Sprite m_turtleSprite;
 
 	TurtleData m_data;
 
 private:
-	Canvas* r_canvas;
-
-private:
-	sf::Vector2f m_canvasSize;
+	Canvas* r_canvas = nullptr;
 	
 private:
 	void p_move(int amount);
