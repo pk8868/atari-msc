@@ -1,8 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-// To Do: normalizacja (punkt 0,0 œrodkiem planszy)
-
 class Canvas {
 public:
 	Canvas(sf::Vector2i windowSize);

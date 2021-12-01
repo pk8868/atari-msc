@@ -6,14 +6,14 @@ Atari::Atari(const AppData& appData)
 {
 	tLang::tCode t_atariSettings("atariSettings");
 	
-
-	std::future<bool> load_texture;
 	// wczytanie z pliku tekstury ¿ó³wia
 	if (t_atariSettings["turtle"]["texture"]) {
 		m_turtleTexture = new sf::Texture();
 
-		// ³adowanie tekstury na drugim rdzeniu
-		load_texture = std::async(std::launch::async, util::getTexture, t_atariSettings["turtle"]["texture"]->value, m_turtleTexture);
+		// ³adowanie tekstury i sprawdzenie czy siê prawid³owo za³adowa³a
+		if (!m_turtleTexture->loadFromFile(t_atariSettings["turtle"]["texture"]->value))
+			throw std::runtime_error("Couldn't load turtle texture - " +
+				t_atariSettings["turtle"]["texture"]->value);
 	}
 	else
 		throw std::runtime_error("Couldn't find texture in atariSettings");
@@ -29,9 +29,6 @@ Atari::Atari(const AppData& appData)
 	m_interpreter = std::make_unique<Interpreter>(m_turtles);
 	// otrzymanie tekstury od drugiego rdzenia
 	
-	// sprawdzenie czy tekstura siê za³adowa³a poprawnie
-	if (!load_texture.get())
-		throw std::runtime_error("Couldn't load texture");
 
 	// stworzenie pierwszego (domyœlnego) ¿ó³wia
 	m_turtles.emplace_back(m_turtleTexture, m_canvas.get());

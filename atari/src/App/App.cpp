@@ -37,12 +37,6 @@ App::App() {
 		ImGui::SFML::Init(m_window, false);
 	}
 
-	// za³adowanie instancji atari 
-	std::future<Atari*> temp_atariThread;
-	temp_atariThread = std::async(std::launch::async, getAtari,
-								  AppData{ sf::Vector2i(m_window.getSize()) });
-
-
 	// ustawienie maksymalnego frameratu
 	m_window.setFramerateLimit(60);
 
@@ -67,15 +61,12 @@ App::App() {
 	else
 		ImGui::SFML::Init(m_window);
 
-	// odebranie instancji atari od drugiego w¹tku
-	m_atari = temp_atariThread.get();
+	// stworzenie instancji atari
+	m_atari = std::make_unique<Atari>(AppData{ sf::Vector2i(m_window.getSize()) });
 }
 
 App::~App() {
-	m_window.setActive();
 
-	// usuniecie atari
-	delete m_atari;
 
 	// wylaczenie imgui
 	ImGui::SFML::Shutdown();
