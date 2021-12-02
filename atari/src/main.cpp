@@ -23,7 +23,20 @@ int main(char** args, int argc) {
 		delete init_clock;
 #endif
 
+#ifdef HEAP_MONITOR
+		bool running = true;
+
+		std::future<void> snapshotHandlerThread;
+		snapshotHandlerThread = std::async(std::launch::async, runSnapshotHandler, &running);
+#endif // HEAP_MONITOR
+
+
 		app.run();
+
+#ifdef HEAP_MONITOR
+		running = false;
+		snapshotHandlerThread.get();
+#endif
 	}
 	// wypisanie z³apanego b³êdu do pliku
 	catch (std::exception& e)

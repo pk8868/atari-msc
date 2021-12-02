@@ -49,6 +49,18 @@ namespace util {
 			+ (time.tm_sec >= 10 ? std::to_string(time.tm_sec) : "0" + std::to_string(time.tm_sec)) + "]";
 	}
 
+	// godzina, minuta, sekunda
+	static std::string getShortTime() {
+		time_t t = time(NULL);
+
+		tm time;
+		localtime_s(&time, &t);
+
+		return "[" + std::to_string(time.tm_hour) + ":" +
+			(time.tm_min >= 10 ? std::to_string(time.tm_min) : "0" + std::to_string(time.tm_min)) + ":"
+			+ (time.tm_sec >= 10 ? std::to_string(time.tm_sec) : "0" + std::to_string(time.tm_sec)) + "]";
+	}
+
 	static void addToLogFile(const char* string) {
 		std::ofstream stream("log.txt", std::ios::out | std::ios::app);
 
