@@ -62,6 +62,8 @@ void Interpreter::pParse(const std::string& code, SetPList& r_setList, ErrorList
 			status.insideRepeat = true;
 		}
 
+		pDeleteSpaces(currentSet.code);
+
 		if (!ifEmptyString(currentSet.code))
 			r_setList.push_back(currentSet);
 

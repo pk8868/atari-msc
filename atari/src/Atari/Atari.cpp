@@ -96,6 +96,8 @@ void Atari::Draw(sf::RenderWindow& window) {
 		ImGui::End();
 	}
 
+	m_interpreter->Draw();
+
 	// narysowanie ¿ó³wi
 	{
 		for (int i = 0; i < m_turtles.size(); i++)

@@ -15,7 +15,7 @@ Turtle::~Turtle() {
 	r_canvas = nullptr;
 }
 
-void Turtle::Draw(sf::RenderWindow& window) {
+void Turtle::Draw(sf::RenderTarget& window) {
 	if (m_data.visible)		
 		window.draw(m_turtleSprite);
 }

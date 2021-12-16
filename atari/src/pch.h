@@ -17,6 +17,9 @@
 // imgui
 #include "Utils/ImGuiUtils.hpp"
 
+// utils
+#include "Utils/Utils.hpp"
+
 // windows.h
 #ifdef _WIN32
 #include <Windows.h>

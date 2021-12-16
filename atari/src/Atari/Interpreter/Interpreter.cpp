@@ -8,32 +8,40 @@ Interpreter::Interpreter(std::vector<Turtle>& turtles)
 }
 
 ErrorList Interpreter::interpretCode(std::string code) {
-	m_instructionSets.clear();
+	{
+		perf::ScopeClock interpreter("Interpreter");
 
-	// zmniejszenie do faktycznego rozmiaru
-	ErrorList list{};
+		m_instructionSets.clear();
 
-	SetPList setList{};
+		// zmniejszenie do faktycznego rozmiaru
+		m_list.clear();
 
-	// parsowanie kodu (duze wyrazy)
-	pParse(code, setList, list);
+		SetPList setList{};
 
-	for (int i = 0; i < setList.size(); i++)
-		pInterpret(setList[i], list);
+		// parsowanie kodu (duze wyrazy)
+		pParse(code, setList, m_list);
 
-	// ¿ó³w wykonuje polecenia
-	for (int i = 0; i < m_instructionSets.size(); i++)
-		r_turtles[0].ExecuteInstructionSet(m_instructionSets[i]);
+		for (int i = 0; i < setList.size(); i++)
+			pInterpret(setList[i], m_list);
+
+	}
+
+	if (!m_list.size()) {
+		// ¿ó³w wykonuje polecenia jesli nie ma bledow
+		for (int i = 0; i < m_instructionSets.size(); i++)
+			r_turtles[0].ExecuteInstructionSet(m_instructionSets[i]);
+	}
 
 
-	for (int i = 0; i < list.size(); i++)
-		std::cout << (short)list[i].code << "-" << list[i].message << "\n";
+	pCreateErrorString();
 
-	return list;
+	return m_list;
 }
 
 void Interpreter::Draw() {
-
+	ImGui::Begin("Konsola interpretera");
+	ImGui::Text(m_errorString.c_str());
+	ImGui::End();
 }
 
 bool Interpreter::ifEmptyString(const std::string& string) {
@@ -42,4 +50,19 @@ bool Interpreter::ifEmptyString(const std::string& string) {
 			return false;
 	}
 	return true;
+}
+
+void Interpreter::pCreateErrorString() {
+	m_errorString.clear();
+	std::stringstream stream;
+	for (int i = 0; i < m_list.size(); i++)
+		stream << (int)m_list[i].code << " - " << m_list[i].message << "\n";
+
+	m_errorString = stream.str();
+}
+
+// po koñcu repeata zostaje spacja po ] i wszystkie komendy po nim s¹ Ÿle interpretowane
+void Interpreter::pDeleteSpaces(std::string& string) {
+	while (string[0] == ' ')
+		string.erase(0, 1);
 }

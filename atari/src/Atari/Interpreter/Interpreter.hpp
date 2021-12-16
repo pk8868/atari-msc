@@ -25,6 +25,10 @@ public:
 
 	void Draw();
 private:
+	ErrorList m_list;
+	std::string m_errorString;
+
+
 	// lista ¿ó³wi
 	std::vector<Turtle>& r_turtles;
 
@@ -41,4 +45,8 @@ private:
 	bool ifEmptyString(const std::string& string);
 
 	void pInterpret(SetPrecursor& precursor, ErrorList& errorList);
+
+private:
+	void pCreateErrorString();
+	void pDeleteSpaces(std::string& string);
 };
