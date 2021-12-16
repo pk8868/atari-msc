@@ -55,9 +55,11 @@ struct InstructionSet {
 	} set_data;
 };
 
+typedef std::vector<InstructionSet> InstructionSets;
+
 // funkcja
 struct Function {
-	std::vector<InstructionSet> m_sets;
+	InstructionSets m_sets;
 
 	// funkcja
 	struct functionData {

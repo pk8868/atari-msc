@@ -2,6 +2,7 @@
 #include <SFML/System/Vector2.hpp>
 #include <math.h>
 
+
 namespace util {
 	static float getAngle(const sf::Vector2f& start, const sf::Vector2f& nxt) {
 		float ab = (start - nxt).y;
@@ -23,10 +24,12 @@ namespace util {
 			point.x * sin(angle) + point.y * cos(angle));
 	} // rotate a vector
 
+	// zapisanie obrazu do pliku
 	static void saveToFile(sf::Image image, std::string filename) {
 		image.saveToFile(filename);
 	}
 	
+	// wczytanie tekstury
 	static bool getTexture(std::string filename, sf::Texture* texture) {
 		// jesli nie za³aduje siê tekstura zwróci siê null
 		bool done = texture->loadFromFile(filename);
@@ -61,6 +64,7 @@ namespace util {
 			+ (time.tm_sec >= 10 ? std::to_string(time.tm_sec) : "0" + std::to_string(time.tm_sec)) + "]";
 	}
 
+	// dopisanie do pliku
 	static void addToLogFile(const char* string) {
 		std::ofstream stream("log.txt", std::ios::out | std::ios::app);
 
@@ -73,6 +77,10 @@ namespace util {
 
 		stream.close();
 	}
+
+
+
+	
 }
 
 #ifdef _DEBUG

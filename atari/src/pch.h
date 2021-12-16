@@ -15,8 +15,7 @@
 #include <SFML/Graphics.hpp>
 
 // imgui
-#include <imgui/imgui-SFML.h>
-#include <imgui/imgui.h>
+#include "Utils/ImGuiUtils.hpp"
 
 // windows.h
 #ifdef _WIN32

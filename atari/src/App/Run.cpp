@@ -65,7 +65,7 @@ void App::run() {
 
 		// odebranie danych wejœciowych
 		if (m_input.shouldGet()) {
-			m_input.getString(); // wys³aæ do interpretera atari
+			m_atari->getInterpreter().interpretCode(m_input.getString());
 			m_input.clear();
 		}
 
