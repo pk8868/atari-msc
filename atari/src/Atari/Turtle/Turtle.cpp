@@ -67,6 +67,10 @@ void Turtle::ExecuteInstructionSet(InstructionSet& instructionSet) {
 			case TurtleInstructions::LT:
 				p_rotate((float)-instructionSet[i].arg);
 				break;
+
+			case TurtleInstructions::CS:
+				r_canvas->Clear();
+				break;
 			}
 		}
 

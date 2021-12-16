@@ -358,4 +358,5 @@ log.txt
 perflog.txt
 bin-debug/
 PerformanceDebug/
+PerformanceRelease/
 

@@ -11,7 +11,7 @@ enum class TurtleInstructions : short {
 	ST = 0x4,
 	// podnieœ pisak
 	PU = 0x6,
-	// opóu
+	// opusc pisak
 	PD = 0x8,
 
 	// instrukcje wymagaj¹ce argumentu
@@ -22,7 +22,11 @@ enum class TurtleInstructions : short {
 	// do przodu
 	FD = 0x5,
 	// do ty³u
-	BK = 0x7
+	BK = 0x7,
+
+	// to brzmi zle ale dam tutaj clear screen
+	CS = 0xFE
+
 };
 
 // instrukcja dla ¿ó³wia
