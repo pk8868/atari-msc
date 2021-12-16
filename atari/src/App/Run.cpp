@@ -53,6 +53,9 @@ void App::run() {
 		// aktualizacja instancji Atari
 		m_atari->Draw(m_window);
 
+		// g³ówne menu programu
+		p_mainMenu();
+
 		// wyrenderowanie imgui na ekran
 		ImGui::SFML::Render(m_window);
 
@@ -67,4 +70,15 @@ void App::run() {
 		}
 
 	}
+}
+
+void App::p_mainMenu() {
+	ImGui::BeginMainMenuBar();
+
+	if (ImGui::Button("Help"))
+		// wywo³anie przegl¹darki dla dokumentu html, dwa \ bo nie zadzia³a z normalnym /
+		ShellExecuteA(NULL, "open", "doc\\index.html", NULL, NULL, SW_SHOWNORMAL);
+
+
+	ImGui::EndMainMenuBar();
 }

@@ -24,5 +24,9 @@ private:
 
 	// instancja atari
 	std::unique_ptr<Atari> m_atari = nullptr;
+
+private:
+	// g³ówne menu aplikacji
+	void p_mainMenu();
 };
 
