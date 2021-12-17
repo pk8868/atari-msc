@@ -19,16 +19,16 @@ namespace tLang {
 		}
 
 		// sfml types
-		sf::Color rgba();
-		sf::Vector2f v2f();
+		const sf::Color rgba();
+		const sf::Vector2f v2f();
 
 		// ints
-		int			i32();
-		long		i64();
+		const int			i32();
+		const long		i64();
 
 		// floats
-		float		fp32();
-		double		fp64();
+		const float		fp32();
+		const double		fp64();
 
 		std::string key = "";
 		std::string value = "";
