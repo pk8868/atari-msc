@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pl-PL">
+    <head>
+        <meta charset="utf-8">
+        <title> Kody błędów </title>
+    </head>
+    <body>
+        <div id="header">
+            <h1> Kody błędów </h1>
+        </div>
+        <div id="nav">
+            <a href="index.html"> strona główna </a>
+        </div>
+        <div id="main">
+            <div id="c-nav">
+                <div id="parser">
+                    <a href="#E1"> Kod 1</a>
+                    <a href="#E2"> Kod 2</a>
+                </div>
+                <div id="interpreting">
+                    <a href="#E241"> Kod 241</a>
+                    <a href="#E242"> Kod 242</a>
+                </div>
+            </div>
+
+            <div id="errors">
+                <div class="error">
+                    <h2> <a name="E1">Kod 1</a> </h2>
+                    <p>
+                        Oczekiwano argumentu po poleceniu.<br>
+                        Przykład:
+                        <code>FD PU</code>
+                    </p>
+                </div>
+                <div class="error">
+                    <h2> <a name="E242">Kod 242</a> </h2>
+                    <p>
+                        Nieznane polecenie.<br>
+                        Przykład:
+                        <code>FT 90</code>
+                    </p>
+                </div>
+
+                <div class="error">
+                    <h2> <a name="E241">Kod 241</a> </h2>
+                    <p>
+                        Brak lewego nawiasu kwadratowego po poleceniu REPEAT.<br>
+                        Przykład:
+                        <code>REPEAT 3 FD 40]</code>
+                    </p>
+                </div>
+                <div class="error">
+                    <h2> <a name="E242">Kod 242</a> </h2>
+                    <p>
+                        Brak prawego nawiasu kwadratowego po poleceniu REPEAT<br>
+                        Przykład:
+                        <code>REPEAT 3 [FD 40</code>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+
+        </div>
+    </body>
+</html>
