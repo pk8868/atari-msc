@@ -23,7 +23,7 @@ public:
 
 	ErrorList interpretCode(std::string code);
 
-	void Draw();
+	const std::string& getErrorString() { return m_errorString; }
 private:
 	ErrorList m_list;
 	std::string m_errorString;

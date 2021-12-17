@@ -54,7 +54,9 @@ void Interpreter::pInterpret(SetPrecursor& precursor, ErrorList& errorList) {
 			else
 				errorList.emplace_back(ErrorCode::UnknownCommand, " nieznana komenda " + current);
 
-			status.expectingArg = (int)currentInstruction.instruction & 0x1;
+			// poprawka, pozwala wychwytywaæ blêdne polecenia gdy wystêpuj¹ jedna po drugiej
+			if (currentInstruction.instruction != TurtleInstructions::None)
+				status.expectingArg = (int)currentInstruction.instruction & 0x1;
 
 			// jesli nie spodziewa sie argumentu dodaje go do listy instrukcji
 			if (!status.expectingArg) {

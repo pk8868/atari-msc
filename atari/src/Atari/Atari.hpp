@@ -19,7 +19,8 @@ public:
 	Atari(const AppData& appData);
 	~Atari();
 
-	void Draw(sf::RenderWindow& window);
+	void DrawCanvas(sf::RenderWindow& window);
+	void DrawUI();
 	void Update();
 	
 	Interpreter& getInterpreter() { return *m_interpreter; }
@@ -43,6 +44,10 @@ private:
 	// tekstura
 	sf::Texture* m_turtleTexture;
 
+
+private:
+	// aktywny zolw w UI
+	int activeTab = 0;
 };
 
 

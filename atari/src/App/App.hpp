@@ -25,6 +25,8 @@ private:
 	// instancja atari
 	std::unique_ptr<Atari> m_atari = nullptr;
 
+	// watek do zapisywania screenshotow
+	std::future<void> secondThread;
 private:
 	// g³ówne menu aplikacji
 	void p_mainMenu();

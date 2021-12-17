@@ -4033,7 +4033,9 @@ void ImGui::Columns(int columns_count, const char* id, bool border)
     ImGuiWindow* window = GetCurrentWindow();
     IM_ASSERT(columns_count >= 1);
 
-    ImGuiOldColumnFlags flags = (border ? 0 : ImGuiOldColumnFlags_NoBorder);
+    // dodane zeby sie nie przesuwalo
+    ImGuiOldColumnFlags flags = (border ? 0 : ImGuiOldColumnFlags_NoBorder) | ImGuiOldColumnFlags_NoResize;
+    
     //flags |= ImGuiOldColumnFlags_NoPreserveWidths; // NB: Legacy behavior
     ImGuiOldColumns* columns = window->DC.CurrentColumns;
     if (columns != NULL && columns->Count == columns_count && columns->Flags == flags)

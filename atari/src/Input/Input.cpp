@@ -1,7 +1,10 @@
 #include "pch.h"
 #include "Input.hpp"
 
-Input::Input() {
+
+Input::Input(sf::RenderWindow* r_window)
+	:r_window(r_window)
+{
 	clear();
 }
 
@@ -9,14 +12,64 @@ Input::~Input() {
 
 }
 
-void Input::Update() {
-	ImGui::Begin("Input");
-	// miejsce na tekst
-	ImGui::InputText("", (char*)p_Input.inputText.c_str(), 64);
+void Input::Update(const std::string& errorCodes, Atari& atari) {
 
-	// przycisk do wykonania poleceñ
-	if (ImGui::Button("Wykonaj"))
-		p_Input.shouldReturn = true;
+	{
+		sf::Vector2f temp_screensize(r_window->getSize());
+		sf::Vector2f temp_windowsize(r_window->getSize().x, r_window->getSize().y * 0.20f);
+		// ustawienie pozycji i rozmiaru okna
+		ImGui::SetNextWindowSize(ImVec2{ temp_windowsize });
+		ImGui::SetNextWindowPos(ImVec2{ temp_screensize - temp_windowsize });
+	}
+
+	sf::Vector2f maxItemSize(r_window->getSize().x - ImGui::GetStyle().WindowPadding.x,
+				(r_window->getSize().y * 0.20f) - ImGui::GetStyle().WindowPadding.y);
+
+	ImGui::Begin("Atari Interpreter", NULL, 
+		ImGuiWindowFlags_NoTitleBar |
+		ImGuiWindowFlags_NoResize	|
+		ImGuiWindowFlags_NoMove		|
+		ImGuiWindowFlags_NoCollapse);
+
+	if (ImGui::BeginTabBar("Opcje"))
+	{
+
+		if (ImGui::BeginTabItem("Wejscie"))
+		{ // okienko z inputem
+
+			ImGui::EndTabItem();
+			// miejsce na tekst
+			ImGui::PushItemWidth(maxItemSize.x - 150.f);
+			if (ImGui::InputText("", (char*)p_Input.inputText.c_str(), 64, ImGuiInputTextFlags_EnterReturnsTrue)) 
+				p_Input.shouldReturn = true;
+			ImGui::PopItemWidth();
+
+
+			// przycisk w tej samej lini
+			ImGui::SameLine();
+			// przycisk do wykonania poleceñ
+			if (ImGui::Button("Wykonaj", ImVec2(150.f, 0.f)))
+				p_Input.shouldReturn = true;
+		}
+
+		if (ImGui::BeginTabItem("Konsola Interpretera"))
+		{ // okienko z bledami
+			ImGui::EndTabItem();
+			
+			ImGui::Text(errorCodes.c_str());
+		}
+
+		if (ImGui::BeginTabItem("Atari"))
+		{
+			ImGui::EndTabItem();
+			// stan zolwi
+			atari.DrawUI();
+		}
+
+		ImGui::EndTabBar();
+	}
+	
+
 	ImGui::End();
 }
 

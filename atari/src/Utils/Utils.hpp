@@ -52,6 +52,21 @@ namespace util {
 			+ (time.tm_sec >= 10 ? std::to_string(time.tm_sec) : "0" + std::to_string(time.tm_sec)) + "]";
 	}
 
+	// spaghetti do otrzymania godziny
+	static std::string getScreenshotTime() {
+		time_t t = time(NULL);
+
+		tm time;
+		localtime_s(&time, &t);
+
+		return std::to_string(1900 + time.tm_year) + "_" +
+			(time.tm_mon >= 10 ? std::to_string(time.tm_mon + 1) : "0" + std::to_string(time.tm_mon + 1)) + "_" +
+			(time.tm_mday >= 10 ? std::to_string(time.tm_mday) : "0" + std::to_string(time.tm_mday)) + "_" +
+			std::to_string(time.tm_hour) + "_" +
+			(time.tm_min >= 10 ? std::to_string(time.tm_min) : "0" + std::to_string(time.tm_min)) + "_"
+			+ (time.tm_sec >= 10 ? std::to_string(time.tm_sec) : "0" + std::to_string(time.tm_sec));
+	}
+
 	// godzina, minuta, sekunda
 	static std::string getShortTime() {
 		time_t t = time(NULL);

@@ -9,8 +9,9 @@ Interpreter::Interpreter(std::vector<Turtle>& turtles)
 
 ErrorList Interpreter::interpretCode(std::string code) {
 	{
-		perf::ScopeClock interpreter("Interpreter");
-
+#ifdef PERFMON
+		perf::ScopeClock* i_clock = new perf::ScopeClock("Interpreter");
+#endif
 		m_instructionSets.clear();
 
 		// zmniejszenie do faktycznego rozmiaru
@@ -24,24 +25,20 @@ ErrorList Interpreter::interpretCode(std::string code) {
 		for (int i = 0; i < setList.size(); i++)
 			pInterpret(setList[i], m_list);
 
+		pCreateErrorString();
+#ifdef PERFMON
+		delete i_clock;
+#endif
 	}
 
+	// jeœli nie ma errorów
 	if (!m_list.size()) {
 		// ¿ó³w wykonuje polecenia jesli nie ma bledow
 		for (int i = 0; i < m_instructionSets.size(); i++)
 			r_turtles[0].ExecuteInstructionSet(m_instructionSets[i]);
 	}
 
-
-	pCreateErrorString();
-
 	return m_list;
-}
-
-void Interpreter::Draw() {
-	ImGui::Begin("Konsola interpretera");
-	ImGui::Text(m_errorString.c_str());
-	ImGui::End();
 }
 
 bool Interpreter::ifEmptyString(const std::string& string) {

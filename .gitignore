@@ -360,3 +360,5 @@ bin-debug/
 PerformanceDebug/
 PerformanceRelease/
 
+screenshots/
+dump/
