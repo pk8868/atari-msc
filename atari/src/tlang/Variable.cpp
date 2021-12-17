@@ -2,7 +2,7 @@
 
 
 namespace tLang {
-	sf::Color		Variable::rgba() {
+	sf::Color Variable::rgba() {
 		if (this->value.length() == 6) {
 			return sf::Color((uint32_t)strtol(this->value.substr(0, 6).c_str(), NULL, 16));
 		}
@@ -12,7 +12,7 @@ namespace tLang {
 		return sf::Color();
 	}
 
-	sf::Vector2f	Variable::v2f() {
+	sf::Vector2f Variable::v2f() {
 		std::string v1 = "";
 
 		std::string v2 = "";

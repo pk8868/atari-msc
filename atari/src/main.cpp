@@ -7,7 +7,6 @@
 
 int main(char** args, int argc) {
 	try {
-
 #ifdef PERFMON
 		// wyczyszczenie pliku z danymi wydajnoœci
 		perf::init();
