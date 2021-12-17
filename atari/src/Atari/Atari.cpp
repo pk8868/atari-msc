@@ -42,27 +42,33 @@ Atari::~Atari() {
 	m_turtles.clear();
 }
 
-void Atari::Draw(sf::RenderWindow& window) {
+void Atari::DrawCanvas(sf::RenderWindow& window) {
 	m_canvas->DrawOnScreen(window);
-
+	// narysowanie ¿ó³wi
 	{
-		int activeTab = 0;
-		ImGui::Begin("ATARI");
+		for (int i = 0; i < m_turtles.size(); i++)
+			m_turtles[i].Draw(window);
+	}
+}
+
+void Atari::DrawUI() {
+	{ // tabela z ¿ó³wiami
+		ImGui::Columns(2);
+		ImGui::SetColumnOffset(1, 200.f);
 
 		// tabela z ¿ó³wiami
-		if (ImGui::BeginTabBar("tabela2")) {
+		ImGui::BeginChild("menu");
+		for (int i = 0; i < m_turtles.size(); i++) {
+			std::string nazwa = "Zolw" + std::to_string(i);
 
-			for (int i = 0; i < m_turtles.size(); i++) {
-				std::string nazwa = "Zolw" + std::to_string(i);
-				if (ImGui::BeginTabItem(nazwa.c_str())) {
-					activeTab = i;
-					ImGui::EndTabItem();
-				}
+			// DO ZROBIENIA - POKAZYWANIE ZE PRZYCISK JEST AKTYWNY
+			if (ImGui::Button(nazwa.c_str(), ImVec2{200.f - (2.f * (ImGui::GetStyle().ItemSpacing.x + ImGui::GetStyle().FramePadding.x)), 0.f})) {
+				activeTab = i;
 			}
-
-			ImGui::EndTabBar();
 		}
+		ImGui::EndChild();
 
+		ImGui::NextColumn();
 		// wypisanie danych na temat wybranego ¿ó³wia
 		{
 			// stworzenie tymczasowej struktury
@@ -90,18 +96,16 @@ void Atari::Draw(sf::RenderWindow& window) {
 
 			// checkboxy z danymi na temat sladu i widocznosci
 			ImGui::Checkbox("Widoczny", &temp_data.visible);
+
+			// checkbox w tej samej linii
+			ImGui::SameLine();
+
 			ImGui::Checkbox("Zostawia slad", &temp_data.penDown);
 		}
 
-		ImGui::End();
+		
+		
 	}
-
-	// narysowanie ¿ó³wi
-	{
-		for (int i = 0; i < m_turtles.size(); i++)
-			m_turtles[i].Draw(window);
-	}
-	
 
 }
 

@@ -11,11 +11,13 @@ public:
 	// narysowanie linii
 	void Draw(const sf::Vector2f& point_A, const sf::Vector2f& point_B, const sf::Color& color);
 	void Clear();
+	void Update() { p_Texture.display(); }
 
 	sf::Image getImage() { return p_Texture.getTexture().copyToImage(); }
 
 	sf::Vector2f getSize() { return sf::Vector2f(p_Texture.getSize()); }
 
+	sf::RenderTarget& getTarget() { return p_Texture; }
 private:
 	// plansza (tekstura i sprite)
 	sf::RenderTexture p_Texture;

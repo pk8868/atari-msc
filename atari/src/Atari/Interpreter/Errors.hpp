@@ -5,9 +5,14 @@
 enum class ErrorCode : short {
 	None = 0xffff,
 
-	ExpectedArgument,
-	UnknownCommand,
-	InvalidTurtleID
+	// interpreting errors
+	ExpectedArgument = 0x01,
+	UnknownCommand = 0x04,
+	InvalidTurtleID = 0x03,
+
+	// parsing errors
+	MissingRightBracket = 0xF1,
+	MissingLeftBracket = 0xF2
 
 };
 
@@ -17,7 +22,5 @@ struct InterpreterError {
 	std::string message = "";
 };
 
-
-struct ErrorList {
-	std::vector<InterpreterError> errorList;
-};
+// lista b³êdów
+typedef std::vector<InterpreterError> ErrorList;

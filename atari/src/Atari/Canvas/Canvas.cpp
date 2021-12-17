@@ -6,8 +6,8 @@ Canvas::Canvas(sf::Vector2i windowSize) {
 	p_circleShape.setRadius(1.5f);
 	p_circleShape.setOrigin({ 1.5f, 1.5f });
 
-
-	if (!p_Texture.create(windowSize.x, windowSize.y, sf::ContextSettings(0, 0, 16)))
+	// y * 0.8f, zeby nie stworzylo sie pod UI
+	if (!p_Texture.create(windowSize.x, int(windowSize.y * 0.8f), sf::ContextSettings(0, 0, 16)))
 		throw std::runtime_error("Couldn't create canvas");
 
 	Clear();

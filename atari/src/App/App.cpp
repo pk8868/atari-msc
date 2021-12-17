@@ -40,6 +40,8 @@ App::App() {
 	// ustawienie maksymalnego frameratu
 	m_window.setFramerateLimit(60);
 
+	// stworzenie okna input
+	m_input = Input(&m_window);
 
 	// jeœli jest zdefiniowana sciezka do nowej czcionki, za³aduj j¹
 	if (m_configFile["appData"]["fontLoc"]) {

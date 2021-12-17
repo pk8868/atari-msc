@@ -19,7 +19,7 @@ public:
 	Turtle(sf::Texture* texturePtr, Canvas* canvas);
 	~Turtle();
 
-	void Draw(sf::RenderWindow& window);
+	void Draw(sf::RenderTarget& window);
 	
 	void ExecuteInstructionSet(InstructionSet& instructionSet);
 

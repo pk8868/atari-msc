@@ -15,7 +15,7 @@ Turtle::~Turtle() {
 	r_canvas = nullptr;
 }
 
-void Turtle::Draw(sf::RenderWindow& window) {
+void Turtle::Draw(sf::RenderTarget& window) {
 	if (m_data.visible)		
 		window.draw(m_turtleSprite);
 }
@@ -66,6 +66,10 @@ void Turtle::ExecuteInstructionSet(InstructionSet& instructionSet) {
 				// obrót w lewo
 			case TurtleInstructions::LT:
 				p_rotate((float)-instructionSet[i].arg);
+				break;
+
+			case TurtleInstructions::CS:
+				r_canvas->Clear();
 				break;
 			}
 		}
