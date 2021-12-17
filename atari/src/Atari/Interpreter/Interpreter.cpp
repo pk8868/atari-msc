@@ -8,10 +8,11 @@ Interpreter::Interpreter(std::vector<Turtle>& turtles)
 }
 
 ErrorList Interpreter::interpretCode(std::string code) {
-	{
 #ifdef PERFMON
-		perf::ScopeClock* i_clock = new perf::ScopeClock("Interpreter");
+	perf::ScopeClock i_clock("Interpreter");
 #endif
+	{
+
 		m_instructionSets.clear();
 
 		// zmniejszenie do faktycznego rozmiaru
@@ -26,9 +27,6 @@ ErrorList Interpreter::interpretCode(std::string code) {
 			pInterpret(setList[i], m_list);
 
 		pCreateErrorString();
-#ifdef PERFMON
-		delete i_clock;
-#endif
 	}
 
 	// jeœli nie ma errorów

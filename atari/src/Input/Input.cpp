@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Input.hpp"
 
+#define INPUTSIZE 100
 
 Input::Input(sf::RenderWindow* r_window)
 	:r_window(r_window)
@@ -40,7 +41,7 @@ void Input::Update(const std::string& errorCodes, Atari& atari) {
 			ImGui::EndTabItem();
 			// miejsce na tekst
 			ImGui::PushItemWidth(maxItemSize.x - 150.f);
-			if (ImGui::InputText("", (char*)p_Input.inputText.c_str(), 64, ImGuiInputTextFlags_EnterReturnsTrue)) 
+			if (ImGui::InputText("", (char*)p_Input.inputText.c_str(), INPUTSIZE, ImGuiInputTextFlags_EnterReturnsTrue))
 				p_Input.shouldReturn = true;
 			ImGui::PopItemWidth();
 
@@ -81,5 +82,5 @@ std::string Input::getString() {
 
 void Input::clear() {
 	p_Input.inputText = "";
-	p_Input.inputText.resize(64);
+	p_Input.inputText.resize(INPUTSIZE);
 }

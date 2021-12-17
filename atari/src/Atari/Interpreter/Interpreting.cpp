@@ -19,6 +19,7 @@ void Interpreter::pInterpret(SetPrecursor& precursor, ErrorList& errorList) {
 	std::string current;
 
 	while (std::getline(stream, current, ' ')) {
+		
 		if (status.expectingArg) {
 			// !!! SPRAWDZIÆ CZY TO LICZBA
 			currentInstruction.arg = atoi(current.c_str());
