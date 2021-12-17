@@ -11,8 +11,8 @@ enum class ErrorCode : short {
 	InvalidTurtleID = 0x03,
 
 	// parsing errors
-	MissingRightBracket = 0xF1,
-	MissingLeftBracket = 0xF2
+	MissingLeftBracket = 0xF1,
+	MissingRightBracket
 
 };
 
