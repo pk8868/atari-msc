@@ -2,6 +2,10 @@
 #include <SFML/System/Vector2.hpp>
 #include <math.h>
 
+#define LAUNCH_THREAD(id, ...) id = std::async(std::launch::async, __VA_ARGS__)
+#define NEW_THREAD(id, type, ...) std::future<type> id = std::async(std::launch::async, __VA_ARGS__)
+#define JOIN_THREAD(id) id.get()
+
 
 namespace util {
 	static float getAngle(const sf::Vector2f& start, const sf::Vector2f& nxt) {

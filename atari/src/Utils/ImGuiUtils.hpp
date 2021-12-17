@@ -7,7 +7,7 @@
 #define STYLE_BIND_FLOAT(x) if (structure[#x]) t_style.x = structure[#x]->fp32();
 #define STYLE_BIND_INT(x) if (structure[#x]) t_style.x = structure[#x]->i32();
 #define STYLE_BIND_VECTOR(x) if (structure[#x]) t_style.x = structure[#x]->v2f();
-#define STYLE_BIND_COLOR(id) if (structure[#id]) t_style.Colors[id] = structure[#id]->rgba();
+#define STYLE_BIND_COLOR(id) if (structure["COL_" + std::string(ImGui::GetStyleColorName(id))]) t_style.Colors[id] = structure["COL_" + std::string(ImGui::GetStyleColorName(id))]->rgba();
 
 namespace util {
 
@@ -57,59 +57,9 @@ namespace util {
 
 
 		// KOLORY
-		STYLE_BIND_COLOR(ImGuiCol_Text);
-		STYLE_BIND_COLOR(ImGuiCol_TextDisabled);
-		STYLE_BIND_COLOR(ImGuiCol_WindowBg);
-		STYLE_BIND_COLOR(ImGuiCol_ChildBg);
-		STYLE_BIND_COLOR(ImGuiCol_PopupBg);
-		STYLE_BIND_COLOR(ImGuiCol_Border);
-		STYLE_BIND_COLOR(ImGuiCol_BorderShadow);
-		STYLE_BIND_COLOR(ImGuiCol_FrameBg);
-		STYLE_BIND_COLOR(ImGuiCol_FrameBgHovered);
-		STYLE_BIND_COLOR(ImGuiCol_FrameBgActive);
-		STYLE_BIND_COLOR(ImGuiCol_TitleBg);
-		STYLE_BIND_COLOR(ImGuiCol_TitleBgActive);
-		STYLE_BIND_COLOR(ImGuiCol_TitleBgCollapsed);
-		STYLE_BIND_COLOR(ImGuiCol_MenuBarBg);
-		STYLE_BIND_COLOR(ImGuiCol_ScrollbarBg);
-		STYLE_BIND_COLOR(ImGuiCol_ScrollbarGrab);
-		STYLE_BIND_COLOR(ImGuiCol_ScrollbarGrabHovered);
-		STYLE_BIND_COLOR(ImGuiCol_ScrollbarGrabActive);
-		STYLE_BIND_COLOR(ImGuiCol_CheckMark);
-		STYLE_BIND_COLOR(ImGuiCol_SliderGrab);
-		STYLE_BIND_COLOR(ImGuiCol_SliderGrabActive);
-		STYLE_BIND_COLOR(ImGuiCol_Button);
-		STYLE_BIND_COLOR(ImGuiCol_ButtonHovered);
-		STYLE_BIND_COLOR(ImGuiCol_ButtonActive);
-		STYLE_BIND_COLOR(ImGuiCol_Header);
-		STYLE_BIND_COLOR(ImGuiCol_HeaderHovered);
-		STYLE_BIND_COLOR(ImGuiCol_HeaderActive);
-		STYLE_BIND_COLOR(ImGuiCol_Separator);
-		STYLE_BIND_COLOR(ImGuiCol_SeparatorHovered);
-		STYLE_BIND_COLOR(ImGuiCol_SeparatorActive);
-		STYLE_BIND_COLOR(ImGuiCol_ResizeGrip);
-		STYLE_BIND_COLOR(ImGuiCol_ResizeGripHovered);
-		STYLE_BIND_COLOR(ImGuiCol_ResizeGripActive);
-		STYLE_BIND_COLOR(ImGuiCol_Tab);
-		STYLE_BIND_COLOR(ImGuiCol_TabHovered);
-		STYLE_BIND_COLOR(ImGuiCol_TabActive);
-		STYLE_BIND_COLOR(ImGuiCol_TabUnfocused);
-		STYLE_BIND_COLOR(ImGuiCol_TabUnfocusedActive);
-		STYLE_BIND_COLOR(ImGuiCol_PlotLines);
-		STYLE_BIND_COLOR(ImGuiCol_PlotLinesHovered);
-		STYLE_BIND_COLOR(ImGuiCol_PlotHistogram);
-		STYLE_BIND_COLOR(ImGuiCol_PlotHistogramHovered);
-		STYLE_BIND_COLOR(ImGuiCol_TableHeaderBg);
-		STYLE_BIND_COLOR(ImGuiCol_TableBorderStrong);
-		STYLE_BIND_COLOR(ImGuiCol_TableBorderLight);
-		STYLE_BIND_COLOR(ImGuiCol_TableRowBg);
-		STYLE_BIND_COLOR(ImGuiCol_TableRowBgAlt);
-		STYLE_BIND_COLOR(ImGuiCol_TextSelectedBg);
-		STYLE_BIND_COLOR(ImGuiCol_DragDropTarget);
-		STYLE_BIND_COLOR(ImGuiCol_NavHighlight);
-		STYLE_BIND_COLOR(ImGuiCol_NavWindowingHighlight);
-		STYLE_BIND_COLOR(ImGuiCol_NavWindowingDimBg);
-		STYLE_BIND_COLOR(ImGuiCol_ModalWindowDimBg);
+		for (int i = 0; i < 53; i++)
+			STYLE_BIND_COLOR(i);
+
 	}
 
 

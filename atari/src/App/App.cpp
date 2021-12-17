@@ -1,7 +1,22 @@
 #include "pch.h"
 #include "App.hpp"
 
+// za³adowanie stylu
+static void LoadStyle(bool* readyStyle) {
+	// za³adowanie pliku
+	tLang::tCode imguiFile("imgui");
+
+	// zaczekaj na imgui init
+	while (!(*readyStyle)) { Sleep(10); }
+
+	// stworzenie stylu
+	util::changeStyle(imguiFile[0]);
+}
+
 App::App() {
+	bool readyStyle = false;
+	NEW_THREAD(styleLoader, void, LoadStyle, &readyStyle);
+
 	// za³adowanie pliku konfiguracyjnego
 	m_configFile.addFile("config");
 
@@ -33,9 +48,8 @@ App::App() {
 	}
 
 	// wy³¹czenie ³adowania domyœlnej czcionki - przed stworzeniem atari, bo zasoby opengl sa w uzyciu
-	if (m_configFile["appData"]["fontLoc"]) {
+	if (m_configFile["appData"]["fontLoc"])
 		ImGui::SFML::Init(m_window, false);
-	}
 
 	// ustawienie maksymalnego frameratu
 	m_window.setFramerateLimit(60);
@@ -60,11 +74,17 @@ App::App() {
 		ImGui::SFML::UpdateFontTexture();
 	}
 	// w przeciwnym wypadku za³aduj domyœln¹ czcionkê
-	else
+	else {
 		ImGui::SFML::Init(m_window);
+	}
+
+	readyStyle = true;
 
 	// stworzenie instancji atari
 	m_atari = std::make_unique<Atari>(AppData{ sf::Vector2i(m_window.getSize()) });
+
+	// zaczekaj az style skoñcz¹ siê ³adowaæ
+	JOIN_THREAD(styleLoader);
 }
 
 App::~App() {
