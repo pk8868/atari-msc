@@ -30,5 +30,20 @@ private:
 private:
 	// g³ówne menu aplikacji
 	void p_mainMenu();
+
+private:
+	struct AppSettings {
+		sf::Vector2i windowSize;
+		int fontSize;
+		std::string theme;
+	} m_appSettings{ sf::Vector2i(1280, 720), 18, "dark" };
+
+	const std::vector<std::string> smThemes{ "light", "dark", "classic" };
+
+	void pSaveSettings();
+
+	// okno ustawieñ
+	bool m_SettingsOpened = false;
+	void pSettings();
 };
 

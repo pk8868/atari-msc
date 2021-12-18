@@ -24,9 +24,8 @@ App::App() {
 	// stworzenie okna
 	{
 		// sprawdzenie i za³adowanie rozmiaru okna
-		sf::Vector2i temp_windowSize(800, 600);
 		if (m_configFile["userPreference"]["windowSize"])
-			temp_windowSize = sf::Vector2i(m_configFile["userPreference"]["windowSize"]->v2f());
+			m_appSettings.windowSize = sf::Vector2i(m_configFile["userPreference"]["windowSize"]->v2f());
 
 
 		// sprawdzenie i za³adowanie tytu³u 
@@ -35,7 +34,7 @@ App::App() {
 			temp_windowName = m_configFile["appData"]["appTitle"]->value;
 		
 		
-		m_window.create(sf::VideoMode(temp_windowSize.x, temp_windowSize.y),
+		m_window.create(sf::VideoMode(m_appSettings.windowSize.x, m_appSettings.windowSize.y),
 						temp_windowName,
 						sf::Style::Titlebar | sf::Style::Close, sf::ContextSettings(0, 0, 8));
 
@@ -60,16 +59,14 @@ App::App() {
 
 	// jeœli jest zdefiniowana sciezka do nowej czcionki, za³aduj j¹
 	if (m_configFile["appData"]["fontLoc"]) {
-
-		float fontSize = 20.f;
 		// ustalenie rozmiaru czcionki w pikselach
 		if (m_configFile["userPreference"]["fontSize"])
-			fontSize = m_configFile["userPreference"]["fontSize"]->fp32();
+			m_appSettings.fontSize = m_configFile["userPreference"]["fontSize"]->fp32();
 
 		// za³adowanie z pliku
 		ImGui::GetIO().Fonts->AddFontFromFileTTF(
 								m_configFile["appData"]["fontLoc"]->value.c_str(),
-								fontSize);
+								(float)m_appSettings.fontSize);
 
 		// zupdateowanie czcionek imgui
 		ImGui::SFML::UpdateFontTexture();
@@ -78,6 +75,14 @@ App::App() {
 	else {
 		ImGui::SFML::Init(m_window);
 	}
+
+	// ustawienie motywu aplikacji
+	if (m_configFile["userPreference"]["theme"])
+		m_appSettings.theme = m_configFile["userPreference"]["theme"]->value;
+
+	
+	if (!util::setTheme(m_appSettings.theme))
+		m_appSettings.theme = "dark"; // jesli jest niepoprawna nazwa motywu ustaw na dark
 
 	readyStyle = true;
 
@@ -89,11 +94,38 @@ App::App() {
 }
 
 App::~App() {
-
-
 	// wylaczenie imgui
 	ImGui::SFML::Shutdown();
 
+	// zapisanie ustawieñ do pliku
+	pSaveSettings();
+
 	// zapisanie wszystkiego do pliku konfiguracyjnego
 	tLang::saveToFile(m_configFile, "config");
+}
+
+void App::pSaveSettings() {
+	// stworzenie struktury userPreference
+	if (m_configFile["userPreference"].id != "userPreference")
+		m_configFile.addDataStructure(tLang::DataStructure("userPreference", 3));
+
+	auto& t_userPreference = m_configFile["userPreference"];
+
+	// zapisanie rozmiaru okna 
+	if (t_userPreference["windowSize"])
+		t_userPreference["windowSize"]->value = util::vec2ToString(m_appSettings.windowSize);
+	else
+		t_userPreference.addVariable("windowSize", util::vec2ToString(m_appSettings.windowSize));
+
+	// zapisanie rozmiaru czcionki
+	if (t_userPreference["fontSize"])
+		t_userPreference["fontSize"]->value = std::to_string(m_appSettings.fontSize);
+	else
+		t_userPreference.addVariable("fontSize", std::to_string(m_appSettings.fontSize));
+
+	// zapisanie motywu
+	if (t_userPreference["theme"])
+		t_userPreference["theme"]->value = m_appSettings.theme;
+	else
+		t_userPreference.addVariable("theme", m_appSettings.theme);
 }

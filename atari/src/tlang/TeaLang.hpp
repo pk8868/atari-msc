@@ -217,6 +217,7 @@ namespace tLang {
 		~tCode();
 
 		void addDataStructure(DataStructure& structure);
+		void addDataStructure(DataStructure&& structure);
 
 		void addFile(const std::string& filename);
 

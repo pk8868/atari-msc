@@ -55,6 +55,10 @@ void App::run() {
 		// g³ówne menu programu
 		p_mainMenu();
 
+		// okno z ustawieniami
+		if (m_SettingsOpened)
+			pSettings();
+
 		// wyrenderowanie imgui na ekran
 		ImGui::SFML::Render(m_window);
 
@@ -74,9 +78,11 @@ void App::run() {
 void App::p_mainMenu() {
 	ImGui::BeginMainMenuBar();
 
-	if (ImGui::Button("Save")) {
+	if (ImGui::Button("Save"))
 		SAVE_SCREENSHOT();
-	}
+
+	if (ImGui::Button("Settings"))
+		m_SettingsOpened = !m_SettingsOpened;
 
 	if (ImGui::Button("Help"))
 		// wywo³anie przegl¹darki dla dokumentu html, dwa \ bo nie zadzia³a z normalnym /
@@ -84,4 +90,50 @@ void App::p_mainMenu() {
 
 
 	ImGui::EndMainMenuBar();
+}
+
+void App::pSettings() {
+	// nowe okno ImGUI
+	
+	ImGui::Begin("Settings", &m_SettingsOpened,
+		ImGuiWindowFlags_NoCollapse);
+
+	// rozmiar czcionki
+	ImGui::SliderInt("Rozmiar czcionki (px)", &m_appSettings.fontSize, 14, 30);
+	{ // wybieranie rozdzielczoœci	
+
+		// kombo
+		if (ImGui::BeginCombo("Rozdzielczosc",
+			util::vec2ToString(m_appSettings.windowSize, "x").c_str())) {
+			auto& temp_videoModes = sf::VideoMode::getFullscreenModes();
+
+			for (int i = 0; i < smThemes.size(); i++) {
+				if (ImGui::Selectable(
+					util::vec2ToString(sf::Vector2i(temp_videoModes[i].width, temp_videoModes[i].height), "x").c_str())) {
+					// jeœli jest wybrany zmiana rozmiaru okna
+					m_appSettings.windowSize = sf::Vector2i(temp_videoModes[i].width, temp_videoModes[i].height);
+				}
+			}
+
+			ImGui::EndCombo();
+		}
+		
+		// kombo
+		if (ImGui::BeginCombo("Motyw",
+			m_appSettings.theme.c_str())) {
+			
+			for (int i = 0; i < smThemes.size(); i++) {
+				if (ImGui::Selectable(smThemes[i].c_str()))
+					// jeœli jest wybrany zmiana nazwy motywu
+					m_appSettings.theme = smThemes[i];
+			}
+
+			ImGui::EndCombo();
+		}
+
+	}
+
+	// warning
+	ImGui::Text("UWAGA: Zmiana ustawien wymaga restartu aplikacji!");
+	ImGui::End();
 }

@@ -97,9 +97,10 @@ namespace util {
 		stream.close();
 	}
 
-
-
-	
+	template<typename T>
+	static std::string vec2ToString(const sf::Vector2<T>& vector, const std::string& separator = ", ") {
+		return std::to_string(vector.x) + separator + std::to_string(vector.y);
+	}	
 }
 
 #ifdef _DEBUG
