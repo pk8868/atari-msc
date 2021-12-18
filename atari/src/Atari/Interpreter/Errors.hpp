@@ -3,7 +3,7 @@
 
 // kody b³êdów interpretera
 enum class ErrorCode : short {
-	None = 0xffff,
+	None = -1,
 
 	// interpreting errors
 	ExpectedArgument = 0x01,
