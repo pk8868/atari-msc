@@ -1,11 +1,12 @@
 appData
 {
 	appTitle = Atari-Logo Interpreter
-	fontLoc = assets/consolas.ttf
+	fontLoc = assets/Open_Sans/OpenSans-Medium.ttf
 	iconLoc = assets/icon.png
 }
 userPreference
 {
-	windowSize = 1280,720
-	fontSize = 18.0
+	windowSize = 1600, 847
+	fontSize = 18
+	theme = light
 }

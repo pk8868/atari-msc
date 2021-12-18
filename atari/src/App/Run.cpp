@@ -24,6 +24,18 @@ void App::run() {
 					// zapisywanie do pliku na drugim w¹tku
 					SAVE_SCREENSHOT();
 				}
+				else if (l_event.type == sf::Event::Resized) {
+					// zmiana rozmiaru okna na nowy
+					m_window.setSize(sf::Vector2u(l_event.size.width, l_event.size.height));
+
+					// zmiana widoku
+					m_window.setView(sf::View(sf::FloatRect(0.f, 0.f, (float)l_event.size.width, (float)l_event.size.height)));
+
+					// aktualizacja ustawieñ i canvasu
+					m_appSettings.windowSize = sf::Vector2i(m_window.getSize());
+					m_atari->getCanvas().newWindowSize(m_window.getSize());
+				}
+
 
 				ImGui::SFML::ProcessEvent(m_window, l_event);
 			}
@@ -55,6 +67,10 @@ void App::run() {
 		// g³ówne menu programu
 		p_mainMenu();
 
+		// okno z ustawieniami
+		if (m_SettingsOpened)
+			pSettings();
+
 		// wyrenderowanie imgui na ekran
 		ImGui::SFML::Render(m_window);
 
@@ -74,9 +90,11 @@ void App::run() {
 void App::p_mainMenu() {
 	ImGui::BeginMainMenuBar();
 
-	if (ImGui::Button("Save")) {
+	if (ImGui::Button("Save"))
 		SAVE_SCREENSHOT();
-	}
+
+	if (ImGui::Button("Settings"))
+		m_SettingsOpened = !m_SettingsOpened;
 
 	if (ImGui::Button("Help"))
 		// wywo³anie przegl¹darki dla dokumentu html, dwa \ bo nie zadzia³a z normalnym /
@@ -84,4 +102,34 @@ void App::p_mainMenu() {
 
 
 	ImGui::EndMainMenuBar();
+}
+
+void App::pSettings() {
+	// nowe okno ImGUI
+	
+	ImGui::Begin("Settings", &m_SettingsOpened,
+		ImGuiWindowFlags_NoCollapse);
+
+	// rozmiar czcionki
+	ImGui::SliderInt("Rozmiar czcionki (px)", &m_appSettings.fontSize, 12, 40);
+	{ // wybieranie rozdzielczoœci
+
+		// kombo
+		if (ImGui::BeginCombo("Motyw",
+			m_appSettings.theme.c_str())) {
+			
+			for (int i = 0; i < smThemes.size(); i++) {
+				if (ImGui::Selectable(smThemes[i].c_str()))
+					// jeœli jest wybrany zmiana nazwy motywu
+					m_appSettings.theme = smThemes[i];
+			}
+
+			ImGui::EndCombo();
+		}
+
+	}
+
+	// warning
+	ImGui::Text("UWAGA: Zmiana ustawien wymaga restartu aplikacji!");
+	ImGui::End();
 }

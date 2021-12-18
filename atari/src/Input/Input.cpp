@@ -16,11 +16,10 @@ Input::~Input() {
 void Input::Update(const std::string& errorCodes, Atari& atari) {
 
 	{
-		sf::Vector2f temp_screensize(r_window->getSize());
-		sf::Vector2f temp_windowsize(r_window->getSize().x, r_window->getSize().y * 0.20f);
+		sf::Vector2f temp_windowsize((float)r_window->getSize().x, r_window->getSize().y * 0.20f);
 		// ustawienie pozycji i rozmiaru okna
 		ImGui::SetNextWindowSize(ImVec2{ temp_windowsize });
-		ImGui::SetNextWindowPos(ImVec2{ temp_screensize - temp_windowsize });
+		ImGui::SetNextWindowPos(ImVec2{ (sf::Vector2f)r_window->getSize() - temp_windowsize });
 	}
 
 	sf::Vector2f maxItemSize(r_window->getSize().x - ImGui::GetStyle().WindowPadding.x,

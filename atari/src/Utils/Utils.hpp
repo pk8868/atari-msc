@@ -2,6 +2,10 @@
 #include <SFML/System/Vector2.hpp>
 #include <math.h>
 
+#define LAUNCH_THREAD(id, ...) id = std::async(std::launch::async, __VA_ARGS__)
+#define NEW_THREAD(id, type, ...) std::future<type> id = std::async(std::launch::async, __VA_ARGS__)
+#define JOIN_THREAD(id) id.get()
+
 
 namespace util {
 	static float getAngle(const sf::Vector2f& start, const sf::Vector2f& nxt) {
@@ -93,15 +97,21 @@ namespace util {
 		stream.close();
 	}
 
-
-
-	
+	template<typename T>
+	static std::string vec2ToString(const sf::Vector2<T>& vector, const std::string& separator = ", ") {
+		return std::to_string(vector.x) + separator + std::to_string(vector.y);
+	}	
 }
 
 #ifdef _DEBUG
 template<typename T>
 static std::ostream& operator<<(std::ostream& stream, const sf::Vector2<T>& vector) {
 	stream << vector.x << ", " << vector.y;
+	return stream;
+}
+
+static std::ostream& operator<<(std::ostream& stream, const sf::Color& color) {
+	stream << (int)color.r << ", " << (int)color.g << ", " << (int)color.b << ", " << (int)color.a;
 	return stream;
 }
 #endif

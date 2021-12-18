@@ -57,6 +57,28 @@ namespace tLang {
 		}
 	}
 
+	void tCode::addDataStructure(DataStructure&& structure) {
+		int getId = groupExists(structure.id);
+
+		if (getId < 0) {
+			dStucture.push_back(structure);
+		}
+		else {
+			for (int i = 0; i < (int)structure.data.size(); i++) {
+				bool replace = false;
+				for (int j = 0; j < (int)dStucture[getId].data.size(); j++) {
+					if (structure.data[i].key == dStucture[getId].data[j].key) {
+						dStucture[getId].data[j].value = structure.data[i].value;
+						replace = true;
+					}
+				}
+
+				if (!replace)
+					dStucture[getId].addVariable(structure.data[i].key, structure.data[i].value);
+			}
+		}
+	}
+
 
 	DataStructure& tCode::dataGroup(const std::string& id) {
 		for (int i = 0; i < (int)dStucture.size(); i++) {

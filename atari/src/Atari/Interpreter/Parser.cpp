@@ -17,7 +17,7 @@ void Interpreter::pParse(const std::string& code, SetPList& r_setList, ErrorList
 
 		// repeat
 		if (status.insideRepeat) {
-			int leftBracketPos = 0;
+			size_t leftBracketPos = 0;
 
 			// znalezienie startu repeat'a
 			if (code.find('[', oldPosition) == std::string::npos) {
@@ -33,7 +33,7 @@ void Interpreter::pParse(const std::string& code, SetPList& r_setList, ErrorList
 				break;
 			}
 			else
-				currentPosition = code.find(']', oldPosition);
+				currentPosition = (int)code.find(']', oldPosition);
 
 			// znalezienie liczby powtórzeñ
 			currentSet.repeat = pGetRepeatNumber(code.substr(oldPosition,
@@ -51,12 +51,12 @@ void Interpreter::pParse(const std::string& code, SetPList& r_setList, ErrorList
 		else {
 			// jesli nie ma repeat to do konca jest zwykly instruction set
 			if (code.find("REPEAT", oldPosition) == std::string::npos)
-				currentPosition = code.length() - 1;
+				currentPosition = (int)code.length() - 1;
 			else
-				currentPosition = code.find("REPEAT", oldPosition);
+				currentPosition = (int)code.find("REPEAT", oldPosition);
 
 			// wyciêcie kodu do REPEAT
-			currentSet.code = code.substr(oldPosition, currentPosition - oldPosition);
+			currentSet.code = code.substr(oldPosition, size_t(currentPosition - oldPosition));
 
 
 			status.insideRepeat = true;

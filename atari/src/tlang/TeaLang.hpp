@@ -23,12 +23,12 @@ namespace tLang {
 		sf::Vector2f v2f();
 
 		// ints
-		int			i32();
-		long		i64();
+		int i32();
+		long i64();
 
 		// floats
-		float		fp32();
-		double		fp64();
+		float fp32();
+		double fp64();
 
 		std::string key = "";
 		std::string value = "";
@@ -217,6 +217,7 @@ namespace tLang {
 		~tCode();
 
 		void addDataStructure(DataStructure& structure);
+		void addDataStructure(DataStructure&& structure);
 
 		void addFile(const std::string& filename);
 
