@@ -26,10 +26,12 @@ void App::run() {
 				}
 				if (l_event.type == sf::Event::Resized) {
 					// zaaktualizowaæ canvas
+					perf::ScopeClock resize_clock("Resize");
+
 					m_window.setSize(sf::Vector2u(l_event.size.width, l_event.size.height));
 
 					// zmiana widoku
-					m_window.setView(sf::View(sf::FloatRect(0, 0, l_event.size.width, l_event.size.height)));
+					m_window.setView(sf::View(sf::FloatRect(0.f, 0.f, (float)l_event.size.width, (float)l_event.size.height)));
 
 					m_appSettings.windowSize = sf::Vector2i(m_window.getSize());
 					m_atari->getCanvas().newWindowSize(m_window.getSize());
@@ -110,7 +112,7 @@ void App::pSettings() {
 		ImGuiWindowFlags_NoCollapse);
 
 	// rozmiar czcionki
-	ImGui::SliderInt("Rozmiar czcionki (px)", &m_appSettings.fontSize, 14, 30);
+	ImGui::SliderInt("Rozmiar czcionki (px)", &m_appSettings.fontSize, 12, 40);
 	{ // wybieranie rozdzielczoœci
 
 		// kombo

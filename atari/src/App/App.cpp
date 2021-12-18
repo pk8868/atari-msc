@@ -54,6 +54,14 @@ App::App() {
 	// ustawienie maksymalnego frameratu
 	m_window.setFramerateLimit(60);
 
+	// ustawienie okna na œrodku ekranu
+	{
+		sf::Vector2i screenSize(sf::VideoMode::getDesktopMode().width,
+			sf::VideoMode::getDesktopMode().height);
+
+		m_window.setPosition((screenSize - (sf::Vector2i)m_window.getSize()) /2);
+	}
+
 	// stworzenie okna input
 	m_input = Input(&m_window);
 
@@ -61,7 +69,7 @@ App::App() {
 	if (m_configFile["appData"]["fontLoc"]) {
 		// ustalenie rozmiaru czcionki w pikselach
 		if (m_configFile["userPreference"]["fontSize"])
-			m_appSettings.fontSize = m_configFile["userPreference"]["fontSize"]->fp32();
+			m_appSettings.fontSize = m_configFile["userPreference"]["fontSize"]->i32();
 
 		// za³adowanie z pliku
 		ImGui::GetIO().Fonts->AddFontFromFileTTF(

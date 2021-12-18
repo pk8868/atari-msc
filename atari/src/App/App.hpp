@@ -32,13 +32,13 @@ private:
 	void p_mainMenu();
 
 private:
+	const std::vector<std::string> smThemes{ "light", "dark", "classic" };
+
 	struct AppSettings {
 		sf::Vector2i windowSize;
 		int fontSize;
 		std::string theme;
-	} m_appSettings{ sf::Vector2i(1280, 720), 18, "dark" };
-
-	const std::vector<std::string> smThemes{ "light", "dark", "classic" };
+	} m_appSettings{ sf::Vector2i(1280, 720), 18, smThemes[0] };
 
 	void pSaveSettings();
 
