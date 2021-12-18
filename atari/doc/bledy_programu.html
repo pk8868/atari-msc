@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pl-PL">
+    <head>
+        <meta charset="utf-8">
+        <title> Błędy aplikacji </title>
+    </head>
+    <body>
+        <div id="header">
+            <h1> Polecenia ATARI </h1>
+        </div>
+        <div id="nav">
+            <a href="index.html"> Strona główna </a>
+        </div>
+        <div id="main">
+            <div id="c-nav">
+                
+            </div>
+            <div id="appErrors">
+                <div class="overallInfo">
+                    <h2>Informacje ogólne</h2>
+                    <p>
+                        Błędy są zapisywane w pliku tekstowym <i>log</i> z datą wystąpienia.
+                    </p>
+                </div>
+                <div class="appError">
+                    <h2> <a name="E1"> "tCode - Couldn't open config/imgui/atariSettings" </a> </h2> 
+                    Powód: Brak pliku lub brak dostępu do pliku
+                    <p>
+                        Naprawa: stworzenie pliku config/imgui/atariSettings
+                    </p>
+                </div>
+                <div class="appError">
+                    <h2> <a name="E2"> "Couldn't load turtle texture!" </a> </h2> 
+                    Powód: Brak pliku lub brak dostępu do pliku z teksturą żółwia
+                    <p>
+                        Naprawa: przywrócenie pliku z teksturą lub zmiana zmiennej texture w atariSettings
+                    </p>
+                </div>
+                <div class="appError">
+                    <h2> <a name="E3"> "Couldn't find texture in atariSettings" </a> </h2> 
+                    Powód: Brak zmiennej texture w atariSettings
+                    <p>
+                        Naprawa: zmiana zmiennej texture w atariSettings
+                    </p>
+                </div>
+                <div class="appError">
+                    <h2> <a name="E4"> "Couldn't create canvas" </a> </h2> 
+                    Powód: Błąd przy tworzeniu RenderTexture (plansza)
+                    <p>
+                        
+                    </p>
+                </div>
+                <div class="appError">
+                    <h2> <a name="E5"> "tCode saveToFile - Couldn't save config" </a> </h2> 
+                    Powód: Błąd przy zapisywaniu pliku config
+                    <p>
+                        
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+
+        </div>
+    </body>
+</html>
