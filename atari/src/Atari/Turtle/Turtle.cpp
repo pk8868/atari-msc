@@ -16,8 +16,10 @@ Turtle::~Turtle() {
 }
 
 void Turtle::Draw(sf::RenderTarget& window) {
-	if (m_data.visible)		
+	if (m_data.visible) {
+		m_turtleSprite.setPosition(p_normalizeVector(sf::Vector2f(m_data.currentPosition)));
 		window.draw(m_turtleSprite);
+	}
 }
 
 void Turtle::ExecuteInstructionSet(InstructionSet& instructionSet) {
@@ -93,8 +95,8 @@ void Turtle::p_move(int amount) {
 
 	// rysowanie na planszy
 	if (m_data.penDown)
-		r_canvas->Draw(p_normalizeVector(sf::Vector2f(old_pos)),
-					   p_normalizeVector(sf::Vector2f(m_data.currentPosition)),
+		r_canvas->Draw(sf::Vector2f(old_pos),
+					   sf::Vector2f(m_data.currentPosition),
 					   sf::Color::Black);
 
 }

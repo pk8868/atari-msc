@@ -24,6 +24,17 @@ void App::run() {
 					// zapisywanie do pliku na drugim w¹tku
 					SAVE_SCREENSHOT();
 				}
+				if (l_event.type == sf::Event::Resized) {
+					// zaaktualizowaæ canvas
+					m_window.setSize(sf::Vector2u(l_event.size.width, l_event.size.height));
+
+					// zmiana widoku
+					m_window.setView(sf::View(sf::FloatRect(0, 0, l_event.size.width, l_event.size.height)));
+
+					m_appSettings.windowSize = sf::Vector2i(m_window.getSize());
+					m_atari->getCanvas().newWindowSize(m_window.getSize());
+				}
+
 
 				ImGui::SFML::ProcessEvent(m_window, l_event);
 			}
@@ -100,26 +111,8 @@ void App::pSettings() {
 
 	// rozmiar czcionki
 	ImGui::SliderInt("Rozmiar czcionki (px)", &m_appSettings.fontSize, 14, 30);
-	{ // wybieranie rozdzielczoœci	
+	{ // wybieranie rozdzielczoœci
 
-		// kombo
-		if (ImGui::BeginCombo("Rozdzielczosc",
-			util::vec2ToString(m_appSettings.windowSize, "x").c_str())) {
-			auto& temp_videoModes = sf::VideoMode::getFullscreenModes();
-
-			for (int i = 0; i < temp_videoModes.size(); i++) {
-				if (temp_videoModes[i].width >= 800 && temp_videoModes[i].height >= 600) {
-					if (ImGui::Selectable(
-						util::vec2ToString(sf::Vector2i(temp_videoModes[i].width, temp_videoModes[i].height), "x").c_str())) {
-						// jeœli jest wybrany zmiana rozmiaru okna
-						m_appSettings.windowSize = sf::Vector2i(temp_videoModes[i].width, temp_videoModes[i].height);
-					}
-				}
-			}
-
-			ImGui::EndCombo();
-		}
-		
 		// kombo
 		if (ImGui::BeginCombo("Motyw",
 			m_appSettings.theme.c_str())) {

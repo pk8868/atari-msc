@@ -32,11 +32,11 @@ App::App() {
 		std::string temp_windowName = "Atari";
 		if (m_configFile["appData"]["appTitle"])
 			temp_windowName = m_configFile["appData"]["appTitle"]->value;
-		
-		
+
+
 		m_window.create(sf::VideoMode(m_appSettings.windowSize.x, m_appSettings.windowSize.y),
-						temp_windowName,
-						sf::Style::Titlebar | sf::Style::Close, sf::ContextSettings(0, 0, 8));
+			temp_windowName,
+			sf::Style::Titlebar | sf::Style::Resize | sf::Style::Close, sf::ContextSettings(0, 0, 8));
 
 		// ustawienie ikonki programu
 		if (m_configFile["appData"]["iconLoc"]) {

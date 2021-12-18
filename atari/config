@@ -6,7 +6,7 @@ appData
 }
 userPreference
 {
-	windowSize = 1366, 768
-	fontSize = 14
-	theme = light
+	windowSize = 1600, 847
+	fontSize = 18
+	theme = classic
 }
