@@ -108,4 +108,9 @@ static std::ostream& operator<<(std::ostream& stream, const sf::Vector2<T>& vect
 	stream << vector.x << ", " << vector.y;
 	return stream;
 }
+
+static std::ostream& operator<<(std::ostream& stream, const sf::Color& color) {
+	stream << (int)color.r << ", " << (int)color.g << ", " << (int)color.b << ", " << (int)color.a;
+	return stream;
+}
 #endif

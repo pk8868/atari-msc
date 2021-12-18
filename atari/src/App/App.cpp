@@ -8,7 +8,8 @@ static void LoadStyle(bool* readyStyle) {
 
 	// zaczekaj na imgui init
 	while (!(*readyStyle)) { Sleep(10); }
-
+	
+	
 	// stworzenie stylu
 	util::changeStyle(imguiFile[0]);
 }

@@ -4,10 +4,13 @@
 #include "tlang/TeaLang.hpp"
 #include <string>
 
+#include "Utils.hpp"
+
 #define STYLE_BIND_FLOAT(x) if (structure[#x]) t_style.x = structure[#x]->fp32();
-#define STYLE_BIND_INT(x) if (structure[#x]) t_style.x = structure[#x]->i32();
+#define STYLE_BIND_INT(x)	if (structure[#x]) t_style.x = structure[#x]->i32();
 #define STYLE_BIND_VECTOR(x) if (structure[#x]) t_style.x = structure[#x]->v2f();
-#define STYLE_BIND_COLOR(id) if (structure["COL_" + std::string(ImGui::GetStyleColorName(id))]) t_style.Colors[id] = structure["COL_" + std::string(ImGui::GetStyleColorName(id))]->rgba();
+#define STYLE_BIND_COLOR(id) if (structure["COL_" + std::string(ImGui::GetStyleColorName(id))])\
+			t_style.Colors[id] = structure["COL_" + std::string(ImGui::GetStyleColorName(id))]->rgba();
 
 namespace util {
 

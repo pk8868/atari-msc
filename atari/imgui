@@ -4,4 +4,5 @@ TabRounding = 1
 TabBorderSize = 1
 
 
-COL_Text = FFFFFF
+COL_Text = FFFFFFFF
+COL_WindowBg = FFFFFFFF

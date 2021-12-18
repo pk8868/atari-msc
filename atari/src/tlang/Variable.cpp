@@ -1,13 +1,14 @@
 #include "TeaLang.hpp"
 
+#include "Utils/Utils.hpp"
 
 namespace tLang {
 	sf::Color Variable::rgba() {
 		if (this->value.length() == 6) {
-			return sf::Color((uint32_t)strtol(this->value.substr(0, 6).c_str(), NULL, 16));
+			return sf::Color((uint32_t)strtoll(this->value.substr(0, 6).c_str(), NULL, 16));
 		}
 		else if (this->value.length() == 8) {
-			return sf::Color((uint32_t)strtol(this->value.substr(0, 8).c_str(), NULL, 16));
+			return sf::Color((uint32_t)strtoll(this->value.substr(0, 8).c_str(), NULL, 16));
 		}
 		return sf::Color();
 	}
