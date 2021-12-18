@@ -2,7 +2,7 @@
 
 // instrukcje, które wykonuje ¿ó³w
 enum class TurtleInstructions : short {
-	None = 0xffff,
+	None = -1,
 
 	// instrukcje nie wymagaj¹ce argumentów
 	// ukryj ¿ó³wia
