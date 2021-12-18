@@ -1,6 +1,0 @@
-THEME = classic
-
-DisabledAlpha = 0
-WindowRounding = 3
-TabRounding = 1
-TabBorderSize = 1

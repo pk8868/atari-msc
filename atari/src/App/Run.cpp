@@ -107,11 +107,13 @@ void App::pSettings() {
 			util::vec2ToString(m_appSettings.windowSize, "x").c_str())) {
 			auto& temp_videoModes = sf::VideoMode::getFullscreenModes();
 
-			for (int i = 0; i < smThemes.size(); i++) {
-				if (ImGui::Selectable(
-					util::vec2ToString(sf::Vector2i(temp_videoModes[i].width, temp_videoModes[i].height), "x").c_str())) {
-					// jeœli jest wybrany zmiana rozmiaru okna
-					m_appSettings.windowSize = sf::Vector2i(temp_videoModes[i].width, temp_videoModes[i].height);
+			for (int i = 0; i < temp_videoModes.size(); i++) {
+				if (temp_videoModes[i].width >= 800 && temp_videoModes[i].height >= 600) {
+					if (ImGui::Selectable(
+						util::vec2ToString(sf::Vector2i(temp_videoModes[i].width, temp_videoModes[i].height), "x").c_str())) {
+						// jeœli jest wybrany zmiana rozmiaru okna
+						m_appSettings.windowSize = sf::Vector2i(temp_videoModes[i].width, temp_videoModes[i].height);
+					}
 				}
 			}
 
