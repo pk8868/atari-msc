@@ -30,6 +30,7 @@ private:
 private:
 	// g³ówne menu aplikacji
 	void p_mainMenu();
+	
 
 private:
 	const std::vector<std::string> smThemes{ "light", "dark", "classic" };

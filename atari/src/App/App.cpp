@@ -14,6 +14,10 @@ static void LoadStyle(bool* readyStyle) {
 	util::changeStyle(imguiFile[0]);
 }
 
+static void app_LoadIcon(std::string filename, sf::Image* img) {
+	img->loadFromFile(filename);
+}
+
 App::App() {
 	bool readyStyle = false;
 	NEW_THREAD(styleLoader, void, LoadStyle, &readyStyle);
@@ -21,72 +25,84 @@ App::App() {
 	// za³adowanie pliku konfiguracyjnego
 	m_configFile.addFile("config");
 
+	// rdzeñ do ³adowania ikony i jego zmienne
+	std::future<void> iconLoader;
+	bool loadIcon = false;
+	sf::Image temp_img;
+
 	// stworzenie okna
 	{
 		// sprawdzenie i za³adowanie rozmiaru okna
-		if (m_configFile["userPreference"]["windowSize"])
-			m_appSettings.windowSize = sf::Vector2i(m_configFile["userPreference"]["windowSize"]->v2f());
-
+		{
+			auto v_windowSize = m_configFile["userPreference"]["windowSize"];
+			if (v_windowSize)
+				m_appSettings.windowSize = sf::Vector2i(v_windowSize->v2f());
+		}
 
 		// sprawdzenie i za³adowanie tytu³u 
-		std::string temp_windowName = "Atari";
-		if (m_configFile["appData"]["appTitle"])
-			temp_windowName = m_configFile["appData"]["appTitle"]->value;
+		{
+			std::string temp_windowName = "Atari";
+			auto v_windowName = m_configFile["appData"]["appTitle"];
+			if (v_windowName)
+				temp_windowName = v_windowName->value;
+
+			{
+				// stworzenie okna
+				m_window.create(sf::VideoMode(m_appSettings.windowSize.x, m_appSettings.windowSize.y), temp_windowName,
+					sf::Style::Titlebar | sf::Style::Resize | sf::Style::Close, sf::ContextSettings(0, 0, 8));
+			}
+		}
+
+		
 
 
-		m_window.create(sf::VideoMode(m_appSettings.windowSize.x, m_appSettings.windowSize.y),
-			temp_windowName,
-			sf::Style::Titlebar | sf::Style::Resize | sf::Style::Close, sf::ContextSettings(0, 0, 8));
-
+		
 		// ustawienie ikonki programu
-		if (m_configFile["appData"]["iconLoc"]) {
-			sf::Image temp_img;
-			temp_img.loadFromFile(m_configFile["appData"]["iconLoc"]->value);
-
-			m_window.setIcon(16, 16, temp_img.getPixelsPtr());
+		{
+			auto v_iconLoc = m_configFile["appData"]["iconLoc"];
+			if (v_iconLoc) {
+				LAUNCH_THREAD(iconLoader, app_LoadIcon, v_iconLoc->value, &temp_img);
+				loadIcon = true;
+			}
 		}
 	}
 
 	// wy³¹czenie ³adowania domyœlnej czcionki - przed stworzeniem atari, bo zasoby opengl sa w uzyciu
-	if (m_configFile["appData"]["fontLoc"])
+	auto v_fontLoc = m_configFile["appData"]["fontLoc"];
+	if (v_fontLoc)
 		ImGui::SFML::Init(m_window, false);
 
 	// ustawienie maksymalnego frameratu
 	m_window.setFramerateLimit(60);
 
-	// ustawienie okna na œrodku ekranu
-	{
-		sf::Vector2i screenSize(sf::VideoMode::getDesktopMode().width,
-			sf::VideoMode::getDesktopMode().height);
-
-		m_window.setPosition((screenSize - (sf::Vector2i)m_window.getSize()) /2);
-	}
-
 	// stworzenie okna input
 	m_input = Input(&m_window);
 
 	// jeœli jest zdefiniowana sciezka do nowej czcionki, za³aduj j¹
-	if (m_configFile["appData"]["fontLoc"]) {
+	if (v_fontLoc) {
 		// ustalenie rozmiaru czcionki w pikselach
-		if (m_configFile["userPreference"]["fontSize"])
-			m_appSettings.fontSize = m_configFile["userPreference"]["fontSize"]->i32();
+		{
+			auto v_fontSize = m_configFile["userPreference"]["fontSize"];
+			if (v_fontSize)
+				m_appSettings.fontSize = v_fontSize->i32();
+		}
 
 		// za³adowanie z pliku
 		ImGui::GetIO().Fonts->AddFontFromFileTTF(
-								m_configFile["appData"]["fontLoc"]->value.c_str(),
+								v_fontLoc->value.c_str(),
 								(float)m_appSettings.fontSize);
 
 		// zupdateowanie czcionek imgui
 		ImGui::SFML::UpdateFontTexture();
 	}
 	// w przeciwnym wypadku za³aduj domyœln¹ czcionkê
-	else {
+	else
 		ImGui::SFML::Init(m_window);
-	}
 
 	// ustawienie motywu aplikacji
-	if (m_configFile["userPreference"]["theme"])
-		m_appSettings.theme = m_configFile["userPreference"]["theme"]->value;
+	auto v_theme = m_configFile["userPreference"]["theme"];
+	if (v_theme)
+		m_appSettings.theme = v_theme->value;
 
 	
 	if (!util::setTheme(m_appSettings.theme))
@@ -96,6 +112,13 @@ App::App() {
 
 	// stworzenie instancji atari
 	m_atari = std::make_unique<Atari>(AppData{ sf::Vector2i(m_window.getSize()) });
+
+
+	// jesli jest ladowana ikona zaczekaj az skoncza sie ladowac
+	if (loadIcon)
+		JOIN_THREAD(iconLoader);
+
+	m_window.setIcon(temp_img.getSize().x, temp_img.getSize().y, temp_img.getPixelsPtr());
 
 	// zaczekaj az style skoñcz¹ siê ³adowaæ
 	JOIN_THREAD(styleLoader);

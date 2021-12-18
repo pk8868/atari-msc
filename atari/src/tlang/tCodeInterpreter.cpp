@@ -94,7 +94,7 @@ namespace tLang {
 
 			name = line.substr(0, eqSpot);
 
-			value = line.substr(eqSpot + 1i32, line.size() - (eqSpot));
+			value = line.substr(eqSpot + 1, line.size() - (eqSpot));
 
 			deleteSpecialCharsAndSpaces(name);
 			deleteSpecialChars(value);
@@ -112,34 +112,23 @@ namespace tLang {
 	}
 
 	void tCode::deleteSpecialChar(std::string& id) {
-		for (int i = 0; i < (int)id.length(); i++) {
-			switch (id[i]) {
-			case '\t':
-				id.erase(id.begin() + i);
-				i--; // go to the previous char
-				break;
-			}
-		}
+		// usuniêcie wszystkich tabów na pocz¹tku
+		while (id[0] == '\t')
+			id.erase(id.begin());
 	}
 
 	void tCode::deleteSpecialChars(std::string& id) {
-		for (int i = 0; i < (int)id.length(); i++) {
-			switch (id[i]) {
-			case '\t':
-			case '=':
-				id.erase(id.begin() + i);
-				i--; // go to the previous char
-				break;
-			}
+		// usuniecie specjalnych znakow na poczatku
+		while (	id[0] == '\t' ||
+				id[0] == ' ' ||
+				id[0] == '=')
+			id.erase(id.begin());
 
-			// erase spaces at the start and at the end
-			if (i == 0 && id[i] == ' ') {
-				id.erase(id.begin());
-			}
-			else if (i == (int)id.length() - 1 && id[i] == ' ') {
-				id.erase(id.begin() + i);
-			}
-		}
+		// usuniecie specjalnych znakow na koncu
+		while (	id[id.length() - 1] == '\t' ||
+				id[id.length() - 1] == ' ' ||
+				id[id.length() - 1] == '=')
+			id.erase(id.begin());
 	}
 
 	void tCode::deleteSpecialCharsAndSpaces(std::string& id) {

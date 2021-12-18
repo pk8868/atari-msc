@@ -6,25 +6,24 @@
 
 #include "Utils.hpp"
 
-#define STYLE_BIND_FLOAT(x) if (structure[#x]) t_style.x = structure[#x]->fp32();
-#define STYLE_BIND_INT(x)	if (structure[#x]) t_style.x = structure[#x]->i32();
-#define STYLE_BIND_VECTOR(x) if (structure[#x]) t_style.x = structure[#x]->v2f();
-#define STYLE_BIND_COLOR(id) if (structure["COL_" + std::string(ImGui::GetStyleColorName(id))])\
-			t_style.Colors[id] = structure["COL_" + std::string(ImGui::GetStyleColorName(id))]->rgba();
+#define STYLE_BIND_FLOAT(x)		currentVar = structure[#x]; if (currentVar) t_style.x = currentVar->fp32()
+#define STYLE_BIND_INT(x)		currentVar = structure[#x]; if (currentVar) t_style.x = currentVar->i32()
+#define STYLE_BIND_VECTOR(x)	currentVar = structure[#x]; if (currentVar) t_style.x = currentVar->v2f()
+#define STYLE_BIND_COLOR(id)	currentVar = structure["COL_" + std::string(ImGui::GetStyleColorName(id))]; \
+								if (currentVar) t_style.Colors[id] = currentVar->rgba();
 
 namespace util {
 
 	static bool setTheme(const std::string& theme) {
 		// ustawienie g³ównego motywu kolorów
-		if (theme == "light")
-			ImGui::StyleColorsLight();
+		if (theme == "dark")
+			ImGui::StyleColorsDark();
 		else if (theme == "classic")
 			ImGui::StyleColorsClassic();
 		else {
-			ImGui::StyleColorsDark();
-
+			ImGui::StyleColorsLight();
 			// jesli jest zla nazwa motywu zwraca false
-			if (theme != "dark")
+			if (theme != "light")
 				return false;
 		}
 
@@ -36,6 +35,8 @@ namespace util {
 
 		// przypisanie nazwy z pliku do struktury
 		// zmienne w pliku nazywaja sie tak samo jak zmienne w ImGUIStyle
+		tLang::Variable* currentVar;
+
 		STYLE_BIND_FLOAT	(Alpha);
 		STYLE_BIND_FLOAT	(DisabledAlpha);
 		STYLE_BIND_VECTOR	(WindowPadding);
@@ -77,8 +78,9 @@ namespace util {
 
 
 		// KOLORY
-		for (int i = 0; i < 53; i++)
+		for (int i = 0; i < 53; i++) {
 			STYLE_BIND_COLOR(i);
+		}
 
 	}
 
