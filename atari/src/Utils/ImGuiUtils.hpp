@@ -17,10 +17,22 @@ namespace util {
 
 	static void changeStyle(tLang::DataStructure& structure) {
 		auto& t_style = ImGui::GetStyle();
+		
+		// ustawienie g³ównego motywu kolorów
+		if (structure["THEME"]) {
+			if (structure["THEME"]->value == "light")
+				ImGui::StyleColorsLight();
+			else if (structure["THEME"]->value == "classic")
+				ImGui::StyleColorsClassic();
+			else
+				ImGui::StyleColorsDark();
+		}
+		
 
 		// przypisanie nazwy z pliku do struktury
 		// zmienne w pliku nazywaja sie tak samo jak zmienne w ImGUIStyle
 		STYLE_BIND_FLOAT	(Alpha);
+		STYLE_BIND_FLOAT	(DisabledAlpha);
 		STYLE_BIND_VECTOR	(WindowPadding);
 		STYLE_BIND_FLOAT	(WindowRounding);
 		STYLE_BIND_FLOAT	(WindowBorderSize);
