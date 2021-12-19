@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "Interpreter.hpp"
 
-Interpreter::Interpreter(std::vector<Turtle>& turtles)
-	:r_turtles(turtles)
+Interpreter::Interpreter(std::vector<Turtle>& turtles, Canvas& r_canvas)
+	:r_turtles(turtles), r_canvas(r_canvas)
 {
 
 }
@@ -32,8 +32,22 @@ ErrorList Interpreter::interpretCode(std::string code) {
 	// jeœli nie ma errorów
 	if (!m_list.size()) {
 		// ¿ó³w wykonuje polecenia jesli nie ma bledow
-		for (int i = 0; i < m_instructionSets.size(); i++)
-			r_turtles[0].ExecuteInstructionSet(m_instructionSets[i]);
+		for (int i = 0; i < m_instructionSets.size(); i++) {
+			for (int j = 0; j < m_instructionSets[i].set_data.repeat; j++) {
+				for (int n = 0; n < m_instructionSets[i].instructions.size(); n++) {
+					switch (m_instructionSets[i][n].instruction) {
+					case Instructions::CS:
+						r_canvas.Clear();
+						break;
+					default:
+						// wykonanie operacji dla kazdego aktywnego zolwia
+						for (int x = 0; x < r_turtles.size(); x++)
+							r_turtles[x].ExecuteInstructionSet(m_instructionSets[i][n]);
+						break;
+					}
+				}
+			}
+		}
 	}
 
 	return m_list;

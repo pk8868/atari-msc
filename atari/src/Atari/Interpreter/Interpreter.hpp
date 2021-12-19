@@ -18,19 +18,24 @@ private:
 	typedef std::vector<SetPrecursor> SetPList;
 
 public:
-	Interpreter(std::vector<Turtle>& turtles);
+	Interpreter(std::vector<Turtle>& turtles, Canvas& r_canvas);
 	~Interpreter() { ; }
 
 	ErrorList interpretCode(std::string code);
 
 	const std::string& getErrorString() { return m_errorString; }
 private:
+	// referencja canvasa
+	Canvas& r_canvas;
+
+	// do interpretera
 	ErrorList m_list;
 	std::string m_errorString;
 
 
 	// lista ¿ó³wi
 	std::vector<Turtle>& r_turtles;
+	std::vector<int> m_activeTurtles{ 0 };
 
 	// lista zapisanych procedur
 	std::vector<Function> m_functions;

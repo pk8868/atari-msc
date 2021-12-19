@@ -8,5 +8,5 @@ userPreference
 {
 	windowSize = 1600, 847
 	fontSize = 18
-	theme = classic
+	theme = light
 }

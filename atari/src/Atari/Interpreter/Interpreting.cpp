@@ -10,10 +10,10 @@ void Interpreter::pInterpret(SetPrecursor& precursor, ErrorList& errorList) {
 
 
 	struct InterpretingStatus {
-		bool expectingArg = false;
+		short expectingArg = false;
 	} status;
 
-	Instruction currentInstruction{ Instructions::None, 0};
+	Instruction currentInstruction{ Instructions::None, {0} };
 
 	std::stringstream stream(precursor.code);
 	std::string current;
@@ -22,10 +22,11 @@ void Interpreter::pInterpret(SetPrecursor& precursor, ErrorList& errorList) {
 		
 		if (status.expectingArg) {
 			// !!! SPRAWDZIÆ CZY TO LICZBA
-			currentInstruction.arg = atoi(current.c_str());
+			if (status.expectingArg == 1)
+				currentInstruction.arg[0] = atoi(current.c_str());
 
 			temp_Set.instructions.push_back(currentInstruction);
-			currentInstruction = Instruction{ Instructions::None, 0 };
+			currentInstruction = Instruction{ Instructions::None, {0} };
 
 			// wrocenie do wyszukiwania polecenia
 			status.expectingArg = false;
@@ -56,13 +57,14 @@ void Interpreter::pInterpret(SetPrecursor& precursor, ErrorList& errorList) {
 				errorList.emplace_back(ErrorCode::UnknownCommand, " nieznana komenda " + current);
 
 			// poprawka, pozwala wychwytywaæ blêdne polecenia gdy wystêpuj¹ jedna po drugiej
-			if (currentInstruction.instruction != Instructions::None)
+			if (currentInstruction.instruction != Instructions::None) {
 				status.expectingArg = (int)currentInstruction.instruction & 0x1;
+			}
 
 			// jesli nie spodziewa sie argumentu dodaje go do listy instrukcji
 			if (!status.expectingArg) {
 				temp_Set.instructions.push_back(currentInstruction);
-				currentInstruction = Instruction{ Instructions::None, 0 };
+				currentInstruction = Instruction{ Instructions::None, {0} };
 			}
 		}
 	}

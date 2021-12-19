@@ -8,7 +8,6 @@ Turtle::Turtle(sf::Texture* texturePtr, Canvas* canvas)
 	// ustawienie tekstury, srodka ¿ó³wia i pozycji
 	m_turtleSprite.setTexture(*texturePtr);
 	m_turtleSprite.setOrigin(sf::Vector2f(texturePtr->getSize() / 2U));
-	m_turtleSprite.setPosition(p_normalizeVector(sf::Vector2f(0.f, 0.f)));
 }
 
 Turtle::~Turtle() {
@@ -17,70 +16,62 @@ Turtle::~Turtle() {
 
 void Turtle::Draw(sf::RenderTarget& window) {
 	if (m_data.visible) {
+		// ustawienie pozycji ¿ó³wia przy kazdym renderowaniu ze wzgledu na zmiane rozmiaru okna
 		m_turtleSprite.setPosition(p_normalizeVector(sf::Vector2f(m_data.currentPosition)));
+		
 		window.draw(m_turtleSprite);
 	}
 }
 
-void Turtle::ExecuteInstructionSet(InstructionSet& instructionSet) {
+void Turtle::ExecuteInstructionSet(const Instruction& instructionSet) {
+	if (!m_data.active)
+		return;
+
 	// powtórzenie zestawu
-	for (int j = 0; j < instructionSet.set_data.repeat; j++) {
+	switch (instructionSet.instruction) {
+		// ukrycie ¿ó³wia
+	case Instructions::HT:
+		m_data.visible = false;
+		break;
 
-		// przejœcie przez wszystkie instrukcje w zestawie
-		for (int i = 0; i < instructionSet.size(); i++) {
-			switch (instructionSet[i].instruction) {
-				// ukrycie ¿ó³wia
-			case Instructions::HT:
-				m_data.visible = false;
-				break;
+		// pokazanie ¿ó³wia
+	case Instructions::ST:
+		m_data.visible = true;
+		break;
 
-				// pokazanie ¿ó³wia
-			case Instructions::ST:
-				m_data.visible = true;
-				break;
+		// podniesienie pisaka
+	case Instructions::PU:
+		m_data.penDown = false;
+		break;
 
-				// podniesienie pisaka
-			case Instructions::PU:
-				m_data.penDown = false;
-				break;
-
-				// opuœæ pisak
-			case Instructions::PD:
-				m_data.penDown = true;
-				break;
+		// opuœæ pisak
+	case Instructions::PD:
+		m_data.penDown = true;
+		break;
 
 
-				// ========== ruch ¿ó³wia ============
-				// ruch do przodu
-			case Instructions::FD:
-				p_move(-instructionSet[i].arg);
-				break;
-				// ruch do ty³u
-			case Instructions::BK:
-				p_move(instructionSet[i].arg);
-				break;
+		// ========== ruch ¿ó³wia ============
+		// ruch do przodu
+	case Instructions::FD:
+		p_move(-instructionSet.arg[0]);
+		break;
+		// ruch do ty³u
+	case Instructions::BK:
+		p_move(instructionSet.arg[0]);
+		break;
 
-				// obrót w prawo
-			case Instructions::RT:
-				p_rotate((float)instructionSet[i].arg);
-				break;
+		// obrót w prawo
+	case Instructions::RT:
+		p_rotate((float)instructionSet.arg[0]);
+		break;
 
-				// obrót w lewo
-			case Instructions::LT:
-				p_rotate((float)-instructionSet[i].arg);
-				break;
-
-			case Instructions::CS:
-				r_canvas->Clear();
-				break;
-			}
-		}
-
+		// obrót w lewo
+	case Instructions::LT:
+		p_rotate((float)-instructionSet.arg[0]);
+		break;
 	}
 
-	// ustawienie ¿ó³wia
-	m_turtleSprite.setPosition(p_normalizeVector(sf::Vector2f(m_data.currentPosition)));
-
+	// ustawienie rotacji ¿ó³wia
 	m_turtleSprite.setRotation(m_data.rotation);
 }
 
@@ -111,7 +102,6 @@ void Turtle::p_rotate(float angle) {
 	// sprawdzenie czy rotacja nie jest poni¿ej 0 stopni
 	while (m_data.rotation < 0.f)
 		m_data.rotation += 360.f;
-
 	
 }
 

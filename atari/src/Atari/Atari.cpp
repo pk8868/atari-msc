@@ -25,7 +25,7 @@ Atari::Atari(const AppData& appData)
 	m_canvas->Clear();
 
 	// stworzenie instancji interpretera
-	m_interpreter = std::make_unique<Interpreter>(m_turtles);
+	m_interpreter = std::make_unique<Interpreter>(m_turtles, *m_canvas.get());
 	
 	// odebranie tekstury od drugiego rdzenia
 	if (!texture_thread.get())

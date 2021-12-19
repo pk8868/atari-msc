@@ -11,6 +11,9 @@ struct TurtleData {
 	float rotation = 0.f;
 	bool penDown = true;
 	bool visible = true;
+
+	// czy jest aktywny
+	bool active = true;
 };
 
 class Turtle {
@@ -21,7 +24,7 @@ public:
 
 	void Draw(sf::RenderTarget& window);
 	
-	void ExecuteInstructionSet(InstructionSet& instructionSet);
+	void ExecuteInstructionSet(const Instruction& instructionSet);
 
 	TurtleData getTurtleData() { return m_data; }
 private:

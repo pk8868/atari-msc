@@ -35,7 +35,7 @@ struct Instruction {
 	Instructions instruction = Instructions::None;
 
 	// argument
-	short arg = 0;
+	std::vector<short> arg{ 0 };
 };
 
 // zestaw instrukcji, zapisywany w nawiasach kwadratowych
