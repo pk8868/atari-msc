@@ -44,7 +44,7 @@ int main(char** args, int argc) {
 
 #if _WIN32
 		// okno errora windows
-		::MessageBoxA(NULL, e.what(), NULL, MB_OK | MB_ICONERROR);
+		MessageBoxA(NULL, e.what(), NULL, MB_OK | MB_ICONERROR);
 #endif
 
 		return -1;

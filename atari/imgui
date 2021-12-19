@@ -1,9 +1,8 @@
-COL_FrameBg = 77777750
 TabRounding = 2
 
 
 light
 {
 	WindowRounding = 5
-	TabRounding = 0
+	COL_FrameBg = 77777750
 }
