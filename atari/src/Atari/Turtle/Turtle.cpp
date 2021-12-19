@@ -30,47 +30,47 @@ void Turtle::ExecuteInstructionSet(InstructionSet& instructionSet) {
 		for (int i = 0; i < instructionSet.size(); i++) {
 			switch (instructionSet[i].instruction) {
 				// ukrycie ¿ó³wia
-			case TurtleInstructions::HT:
+			case Instructions::HT:
 				m_data.visible = false;
 				break;
 
 				// pokazanie ¿ó³wia
-			case TurtleInstructions::ST:
+			case Instructions::ST:
 				m_data.visible = true;
 				break;
 
 				// podniesienie pisaka
-			case TurtleInstructions::PU:
+			case Instructions::PU:
 				m_data.penDown = false;
 				break;
 
 				// opuœæ pisak
-			case TurtleInstructions::PD:
+			case Instructions::PD:
 				m_data.penDown = true;
 				break;
 
 
 				// ========== ruch ¿ó³wia ============
 				// ruch do przodu
-			case TurtleInstructions::FD:
+			case Instructions::FD:
 				p_move(-instructionSet[i].arg);
 				break;
 				// ruch do ty³u
-			case TurtleInstructions::BK:
+			case Instructions::BK:
 				p_move(instructionSet[i].arg);
 				break;
 
 				// obrót w prawo
-			case TurtleInstructions::RT:
+			case Instructions::RT:
 				p_rotate((float)instructionSet[i].arg);
 				break;
 
 				// obrót w lewo
-			case TurtleInstructions::LT:
+			case Instructions::LT:
 				p_rotate((float)-instructionSet[i].arg);
 				break;
 
-			case TurtleInstructions::CS:
+			case Instructions::CS:
 				r_canvas->Clear();
 				break;
 			}

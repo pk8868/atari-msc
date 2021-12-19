@@ -6,9 +6,9 @@ enum class ErrorCode : short {
 	None = -1,
 
 	// interpreting errors
-	ExpectedArgument = 0x01,
-	UnknownCommand = 0x04,
-	InvalidTurtleID = 0x03,
+	ExpectedArgument = 1,
+	UnknownCommand,
+	InvalidTurtleID,
 
 	// parsing errors
 	MissingLeftBracket = 0xF1,

@@ -90,13 +90,21 @@ void App::run() {
 void App::p_mainMenu() {
 	ImGui::BeginMainMenuBar();
 
-	if (ImGui::Button("Save"))
-		SAVE_SCREENSHOT();
+	//if (ImGui::BeginMenuBar()) {
+		if (ImGui::BeginMenu("File")) {
+			if (ImGui::MenuItem("Save"))
+				SAVE_SCREENSHOT();
 
-	if (ImGui::Button("Settings"))
+			ImGui::EndMenu();
+		}
+
+		//ImGui::EndMenuBar();
+	//}
+
+	if (ImGui::MenuItem("Settings"))
 		m_SettingsOpened = !m_SettingsOpened;
 
-	if (ImGui::Button("Help"))
+	if (ImGui::MenuItem("Help"))
 		// wywo³anie przegl¹darki dla dokumentu html, dwa \ bo nie zadzia³a z normalnym /
 		ShellExecuteA(NULL, "open", "doc\\index.html", NULL, NULL, SW_SHOWNORMAL);
 
