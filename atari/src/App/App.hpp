@@ -18,6 +18,9 @@ private:
 	// plik konfiguracyjny
 	tLang::tCode m_configFile;
 
+	// plik konfiguracyjny ImGui
+	tLang::tCode m_imguiConfigFile;
+
 private:
 	// okno wejœcia
 	Input m_input;
