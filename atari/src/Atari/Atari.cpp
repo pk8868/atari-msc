@@ -78,20 +78,12 @@ void Atari::DrawUI() {
 			temp_data.currentPosition.y *= -1;
 
 			{ // wypisanie pozycji
-				std::string temp_text = "Aktualna pozycja: "
-					+ std::to_string(int(temp_data.currentPosition.x)) + ", "
-					+ std::to_string(int(temp_data.currentPosition.y));
-
-
-				ImGui::Text(temp_text.c_str());
+				ImGui::Text("Aktualna pozycja: %d, %d",
+					temp_data.currentPosition.x, temp_data.currentPosition.y);
 			}
 
 			{ // wypisanie rotacji
-				std::string temp_text = "Obrot: "
-					+ std::to_string(int(temp_data.rotation)) + " stopni";
-
-
-				ImGui::Text(temp_text.c_str());
+				ImGui::Text("Obrot: %d stopni", (int)temp_data.rotation);
 			}
 
 			// checkboxy z danymi na temat sladu i widocznosci

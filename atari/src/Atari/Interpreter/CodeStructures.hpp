@@ -1,7 +1,7 @@
 #pragma once
 
 // instrukcje, które wykonuje ¿ó³w
-enum class TurtleInstructions : short {
+enum class Instructions : short {
 	None = -1,
 
 	// instrukcje nie wymagaj¹ce argumentów
@@ -32,7 +32,7 @@ enum class TurtleInstructions : short {
 // instrukcja dla ¿ó³wia
 struct Instruction {
 	// kod instrukcji
-	TurtleInstructions instruction = TurtleInstructions::None;
+	Instructions instruction = Instructions::None;
 
 	// argument
 	short arg = 0;

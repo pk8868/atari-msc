@@ -41,6 +41,12 @@ int main(char** args, int argc) {
 	catch (std::exception& e)
 	{
 		util::addToLogFile(e.what());
+
+#if _WIN32
+		// okno errora windows
+		::MessageBoxA(NULL, e.what(), NULL, MB_OK | MB_ICONERROR);
+#endif
+
 		return -1;
 	}
 

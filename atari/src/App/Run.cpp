@@ -90,13 +90,21 @@ void App::run() {
 void App::p_mainMenu() {
 	ImGui::BeginMainMenuBar();
 
-	if (ImGui::Button("Save"))
-		SAVE_SCREENSHOT();
+	// menu File
+	if (ImGui::BeginMenu("File")) {
+		if (ImGui::MenuItem("Save"))
+			SAVE_SCREENSHOT();
 
-	if (ImGui::Button("Settings"))
+		if (ImGui::MenuItem("Exit"))
+			m_window.close();
+
+		ImGui::EndMenu();
+	}
+
+	if (ImGui::MenuItem("Settings"))
 		m_SettingsOpened = !m_SettingsOpened;
 
-	if (ImGui::Button("Help"))
+	if (ImGui::MenuItem("Help"))
 		// wywo³anie przegl¹darki dla dokumentu html, dwa \ bo nie zadzia³a z normalnym /
 		ShellExecuteA(NULL, "open", "doc\\index.html", NULL, NULL, SW_SHOWNORMAL);
 
@@ -119,9 +127,22 @@ void App::pSettings() {
 			m_appSettings.theme.c_str())) {
 			
 			for (int i = 0; i < smThemes.size(); i++) {
-				if (ImGui::Selectable(smThemes[i].c_str()))
+				if (ImGui::Selectable(smThemes[i].c_str())) {
 					// jeœli jest wybrany zmiana nazwy motywu
 					m_appSettings.theme = smThemes[i];
+
+					// zresetowanie opcji stylu
+					util::resetStyle();
+
+					// ustawienie motywu
+					util::setTheme(m_appSettings.theme);
+
+					// wczytanie g³ównych ustawieñ
+					util::changeStyle(m_imguiConfigFile[0]);
+
+					// wczytanie ustawieñ wybranego stylu
+					util::changeStyle(m_imguiConfigFile[m_appSettings.theme]);
+				}
 			}
 
 			ImGui::EndCombo();
@@ -130,6 +151,6 @@ void App::pSettings() {
 	}
 
 	// warning
-	ImGui::Text("UWAGA: Zmiana ustawien wymaga restartu aplikacji!");
+	ImGui::Text("UWAGA: Zmiana niektorych ustawien wymaga restartu aplikacji!");
 	ImGui::End();
 }

@@ -30,8 +30,12 @@ namespace util {
 		return true;
 	}
 
+	static void resetStyle() {
+		ImGui::GetStyle() = ImGuiStyle();
+	}
+
 	static void changeStyle(tLang::DataStructure& structure) {
-		auto& t_style = ImGui::GetStyle();		
+		auto& t_style = ImGui::GetStyle();	
 
 		// przypisanie nazwy z pliku do struktury
 		// zmienne w pliku nazywaja sie tak samo jak zmienne w ImGUIStyle

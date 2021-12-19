@@ -2,16 +2,20 @@
 #include "App.hpp"
 
 // za³adowanie stylu
-static void LoadStyle(bool* readyStyle) {
+static void LoadStyle(tLang::tCode* imguiConfigFile, std::string* theme, bool* readyStyle) {
 	// za³adowanie pliku
-	tLang::tCode imguiFile("imgui");
+	imguiConfigFile->addFile("imgui");
 
 	// zaczekaj na imgui init
 	while (!(*readyStyle)) { Sleep(10); }
 	
 	
-	// stworzenie stylu
-	util::changeStyle(imguiFile[0]);
+	// za³adowanie g³ównych zmiennych
+	util::changeStyle((*imguiConfigFile)[0]);
+	
+	// jeœli motyw istnieje za³aduj jego dane
+	if ((*imguiConfigFile)[*theme].id == *theme)
+		util::changeStyle((*imguiConfigFile)[*theme]);
 }
 
 static void app_LoadIcon(std::string filename, sf::Image* img) {
@@ -20,7 +24,7 @@ static void app_LoadIcon(std::string filename, sf::Image* img) {
 
 App::App() {
 	bool readyStyle = false;
-	NEW_THREAD(styleLoader, void, LoadStyle, &readyStyle);
+	NEW_THREAD(styleLoader, void, LoadStyle, &m_imguiConfigFile, &m_appSettings.theme, &readyStyle);
 
 	// za³adowanie pliku konfiguracyjnego
 	m_configFile.addFile("config");

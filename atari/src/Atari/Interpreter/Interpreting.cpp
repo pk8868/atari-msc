@@ -3,7 +3,7 @@
 
 
 #define SET_INSTRUCTION(x) if (current.find(#x) != std::string::npos) \
-						currentInstruction.instruction = TurtleInstructions::x
+						currentInstruction.instruction = Instructions::x
 
 void Interpreter::pInterpret(SetPrecursor& precursor, ErrorList& errorList) {
 	InstructionSet temp_Set;
@@ -13,7 +13,7 @@ void Interpreter::pInterpret(SetPrecursor& precursor, ErrorList& errorList) {
 		bool expectingArg = false;
 	} status;
 
-	Instruction currentInstruction{ TurtleInstructions::None, 0};
+	Instruction currentInstruction{ Instructions::None, 0};
 
 	std::stringstream stream(precursor.code);
 	std::string current;
@@ -25,7 +25,7 @@ void Interpreter::pInterpret(SetPrecursor& precursor, ErrorList& errorList) {
 			currentInstruction.arg = atoi(current.c_str());
 
 			temp_Set.instructions.push_back(currentInstruction);
-			currentInstruction = Instruction{ TurtleInstructions::None, 0 };
+			currentInstruction = Instruction{ Instructions::None, 0 };
 
 			// wrocenie do wyszukiwania polecenia
 			status.expectingArg = false;
@@ -56,13 +56,13 @@ void Interpreter::pInterpret(SetPrecursor& precursor, ErrorList& errorList) {
 				errorList.emplace_back(ErrorCode::UnknownCommand, " nieznana komenda " + current);
 
 			// poprawka, pozwala wychwytywaæ blêdne polecenia gdy wystêpuj¹ jedna po drugiej
-			if (currentInstruction.instruction != TurtleInstructions::None)
+			if (currentInstruction.instruction != Instructions::None)
 				status.expectingArg = (int)currentInstruction.instruction & 0x1;
 
 			// jesli nie spodziewa sie argumentu dodaje go do listy instrukcji
 			if (!status.expectingArg) {
 				temp_Set.instructions.push_back(currentInstruction);
-				currentInstruction = Instruction{ TurtleInstructions::None, 0 };
+				currentInstruction = Instruction{ Instructions::None, 0 };
 			}
 		}
 	}
