@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "Interpreter.hpp"
 
-Interpreter::Interpreter(std::vector<Turtle>& turtles, Canvas& r_canvas)
-	:r_turtles(turtles), r_canvas(r_canvas)
+Interpreter::Interpreter(std::vector<Turtle>& turtles, Canvas& r_canvas, const TurtleAddData& data)
+	:r_turtles(turtles), r_canvas(r_canvas), pAddData(data)
 {
 
 }
@@ -21,12 +21,12 @@ ErrorList Interpreter::interpretCode(std::string code) {
 		SetPList setList{};
 
 		// parsowanie kodu (duze wyrazy)
-		pParse(code, setList, m_list);
+		pParse(code, setList);
 
 		for (int i = 0; i < setList.size(); i++)
-			pInterpret(setList[i], m_list);
+			pInterpret(setList[i]);
 
-		pCreateErrorString();
+		
 	}
 
 	// jeœli nie ma errorów
@@ -39,6 +39,20 @@ ErrorList Interpreter::interpretCode(std::string code) {
 					case Instructions::CS:
 						r_canvas.Clear();
 						break;
+					case Instructions::TELL:
+						// podmiana aktywnych ¿ó³wi
+						m_activeTurtles = m_instructionSets[i][n].arg;
+						for (int i = 0; i < m_activeTurtles.size(); i++) {
+							// za duze id
+							if (m_activeTurtles[i] > r_turtles.size()) {
+								m_list.emplace_back(ErrorCode::InvalidTurtleID, " zle ID zolwia!");
+							}
+							// dodanie zolwia
+							else if (m_activeTurtles[i] == r_turtles.size())
+								r_turtles.emplace_back(pAddData.turtleptr, &r_canvas);
+						}
+						markInactiveTurtles();
+						break;
 					default:
 						// wykonanie operacji dla kazdego aktywnego zolwia
 						for (int x = 0; x < r_turtles.size(); x++)
@@ -50,6 +64,7 @@ ErrorList Interpreter::interpretCode(std::string code) {
 		}
 	}
 
+	pCreateErrorString();
 	return m_list;
 }
 
@@ -74,4 +89,18 @@ void Interpreter::pCreateErrorString() {
 void Interpreter::pDeleteSpaces(std::string& string) {
 	while (string[0] == ' ')
 		string.erase(0, 1);
+}
+
+void Interpreter::markInactiveTurtles() {
+	for (int i = 0; i < r_turtles.size(); i++) {
+		bool active = false;
+		for (int j = 0; j < m_activeTurtles.size(); j++) {
+			// jesli znajdzie na liscie zolwia
+			if (m_activeTurtles[j] == i) {
+				active = true;
+				break;
+			}
+		}
+		r_turtles[i].getTurtleDataRef().active = active;
+	}
 }

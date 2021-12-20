@@ -5,7 +5,7 @@
 #define SET_INSTRUCTION(x) if (current.find(#x) != std::string::npos) \
 						currentInstruction.instruction = Instructions::x
 
-void Interpreter::pInterpret(SetPrecursor& precursor, ErrorList& errorList) {
+void Interpreter::pInterpret(SetPrecursor& precursor) {
 	InstructionSet temp_Set;
 
 
@@ -17,19 +17,35 @@ void Interpreter::pInterpret(SetPrecursor& precursor, ErrorList& errorList) {
 
 	std::stringstream stream(precursor.code);
 	std::string current;
-
+	std::string argList = "";
 	while (std::getline(stream, current, ' ')) {
 		
 		if (status.expectingArg) {
 			// !!! SPRAWDZIÆ CZY TO LICZBA
+			bool addVar = true;
+
 			if (status.expectingArg == 1)
-				currentInstruction.arg[0] = atoi(current.c_str());
+				getArgList(currentInstruction, current);
+			else {
+				argList += current + ",";
 
-			temp_Set.instructions.push_back(currentInstruction);
-			currentInstruction = Instruction{ Instructions::None, {0} };
+				addVar = current.find(']') != std::string::npos; 
+				for (int i = 0; (i < current.length()) && current[i] != '\0'; i++) {
+					std::cout << i << ": " << current[i] << "\n";
+				}
+				if (addVar) {
+					getArgList(currentInstruction, argList);
+					argList = "";
+				}
+			}
 
-			// wrocenie do wyszukiwania polecenia
-			status.expectingArg = false;
+			if (addVar) {
+				temp_Set.instructions.push_back(currentInstruction);
+				currentInstruction = Instruction{ Instructions::None, {0} };
+
+				// wrocenie do wyszukiwania polecenia
+				status.expectingArg = false;
+			}
 		}
 		else {
 			// paskudny if
@@ -41,6 +57,8 @@ void Interpreter::pInterpret(SetPrecursor& precursor, ErrorList& errorList) {
 			else SET_INSTRUCTION(RT);
 			// W LEWO
 			else SET_INSTRUCTION(LT);
+			// TELL
+			else SET_INSTRUCTION(TELL);
 
 			// OPUŒÆ PISAK
 			else SET_INSTRUCTION(PU);
@@ -52,13 +70,19 @@ void Interpreter::pInterpret(SetPrecursor& precursor, ErrorList& errorList) {
 			else SET_INSTRUCTION(HT);
 			// WYCZYSC EKRAN
 			else SET_INSTRUCTION(CS);
-			// ERROR
+			// ERROR lub funkcja
 			else
-				errorList.emplace_back(ErrorCode::UnknownCommand, " nieznana komenda " + current);
+			{
+				
+				m_list.emplace_back(ErrorCode::UnknownCommand, " nieznana komenda " + current);
+			}
 
 			// poprawka, pozwala wychwytywaæ blêdne polecenia gdy wystêpuj¹ jedna po drugiej
 			if (currentInstruction.instruction != Instructions::None) {
-				status.expectingArg = (int)currentInstruction.instruction & 0x1;
+				if (currentInstruction.instruction != Instructions::TELL)
+					status.expectingArg = (int)currentInstruction.instruction & 0x1;
+				else
+					status.expectingArg = 2;
 			}
 
 			// jesli nie spodziewa sie argumentu dodaje go do listy instrukcji
@@ -71,4 +95,36 @@ void Interpreter::pInterpret(SetPrecursor& precursor, ErrorList& errorList) {
 
 	temp_Set.set_data.repeat = precursor.repeat;
 	m_instructionSets.push_back(temp_Set);
+}
+
+void Interpreter::getArgList(Instruction& instruction, std::string& string) {
+	arglistStripString(string);
+
+	pGetArgList(instruction.arg, string);
+}
+
+void Interpreter::arglistStripString(std::string& string) {
+	while (string[0] == ' ' || string[0] == '[')
+		string.erase(0, 1);
+
+	while (string[string.length() - 1] == ' ' || string[string.length() - 1] == ']'
+		|| string[string.length() - 1] == ',')
+		string.erase(string.length() - 1);
+}
+
+void Interpreter::pGetArgList(std::vector<int>& argList, std::string& string) {
+	std::stringstream argStream(string);
+
+	std::string currentArg;
+	bool firstArg = true;
+	while (std::getline(argStream, currentArg, ',')) {
+		// pierwszy argument
+		if (firstArg) {
+			argList[0] = atoi(currentArg.c_str());
+			firstArg = false;
+		}
+		else
+			argList.push_back(atoi(currentArg.c_str()));
+
+	}
 }

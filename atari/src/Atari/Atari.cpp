@@ -24,13 +24,12 @@ Atari::Atari(const AppData& appData)
 	// wyczyszczenie planszy
 	m_canvas->Clear();
 
-	// stworzenie instancji interpretera
-	m_interpreter = std::make_unique<Interpreter>(m_turtles, *m_canvas.get());
-	
 	// odebranie tekstury od drugiego rdzenia
 	if (!texture_thread.get())
 		throw std::runtime_error("Couldn't load turtle texture!");
 
+	// stworzenie instancji interpretera
+	m_interpreter = std::make_unique<Interpreter>(m_turtles, *m_canvas.get(), Interpreter::TurtleAddData{ m_turtleTexture });
 
 	// stworzenie pierwszego (domyœlnego) ¿ó³wia
 	m_turtles.emplace_back(m_turtleTexture, m_canvas.get());
@@ -93,6 +92,11 @@ void Atari::DrawUI() {
 			ImGui::SameLine();
 
 			ImGui::Checkbox("Zostawia slad", &temp_data.penDown);
+
+			// checkbox w tej samej linii
+			ImGui::SameLine();
+
+			ImGui::Checkbox("Aktywny", &temp_data.active);
 		}
 
 		

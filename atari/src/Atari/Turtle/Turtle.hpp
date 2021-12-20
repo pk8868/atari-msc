@@ -27,6 +27,7 @@ public:
 	void ExecuteInstructionSet(const Instruction& instructionSet);
 
 	TurtleData getTurtleData() { return m_data; }
+	TurtleData& getTurtleDataRef() { return m_data; }
 private:
 	// tekstura wspólna dla wszystkich instancji ¿ó³wii
 	sf::Sprite m_turtleSprite;

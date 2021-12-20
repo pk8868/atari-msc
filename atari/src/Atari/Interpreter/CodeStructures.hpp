@@ -13,6 +13,8 @@ enum class Instructions : short {
 	PU = 0x6,
 	// opusc pisak
 	PD = 0x8,
+	// wskazanie zolwia
+	TELL = 0xA,
 
 	// instrukcje wymagaj¹ce argumentu
 	// obrót w prawo
@@ -35,7 +37,7 @@ struct Instruction {
 	Instructions instruction = Instructions::None;
 
 	// argument
-	std::vector<short> arg{ 0 };
+	std::vector<int> arg{ 0 };
 };
 
 // zestaw instrukcji, zapisywany w nawiasach kwadratowych
@@ -51,7 +53,6 @@ struct InstructionSet {
 	struct setData {
 		// iloœæ powtórzeñ
 		int repeat = 1;
-
 	} set_data;
 };
 

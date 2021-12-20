@@ -29,7 +29,8 @@ void App::run() {
 					m_window.setSize(sf::Vector2u(l_event.size.width, l_event.size.height));
 
 					// zmiana widoku
-					m_window.setView(sf::View(sf::FloatRect(0.f, 0.f, (float)l_event.size.width, (float)l_event.size.height)));
+					m_window.setView(sf::View(sf::FloatRect(0.f, 0.f,
+						(float)l_event.size.width, (float)l_event.size.height)));
 
 					// aktualizacja ustawieñ i canvasu
 					m_appSettings.windowSize = sf::Vector2i(m_window.getSize());

@@ -35,7 +35,7 @@ namespace tLang {
 	};
 
 	// string lists
-	static int countItems(const std::string& string) {
+	static int countItems(const std::string& string, char separator = ',') {
 		int count = 0;
 		bool insideItem = false;
 		bool waitingforComma = false;
@@ -52,7 +52,7 @@ namespace tLang {
 					count++;
 				}
 			}
-			if (string[i] == ',') {
+			if (string[i] == separator) {
 				if (waitingforComma)
 					waitingforComma = false;
 			}
@@ -62,7 +62,7 @@ namespace tLang {
 	}
 
 	// add to string list
-	static void addToStringList(std::vector<std::string>& list, const std::string& string) {
+	static void addToStringList(std::vector<std::string>& list, const std::string& string, char separator = ',') {
 		int newItems = countItems(string);
 
 		list.reserve(list.capacity() + newItems);
@@ -93,7 +93,7 @@ namespace tLang {
 					countFromLastBracket = 0;
 				}
 			}
-			if (string[i] == ',') {
+			if (string[i] == separator) {
 				if (waitingForComma)
 					waitingForComma = false;
 			}
@@ -103,7 +103,7 @@ namespace tLang {
 	}
 
 	// add to int list
-	static void addToIntList(std::vector<int>& list, const std::string& string) {
+	static void addToIntList(std::vector<int>& list, const std::string& string, char separator = ',') {
 		int newItems = countItems(string);
 
 		list.reserve(list.capacity() + newItems);
@@ -134,7 +134,7 @@ namespace tLang {
 					countFromLastBracket = 0;
 				}
 			}
-			if (string[i] == ',') {
+			if (string[i] == separator) {
 				if (waitingForComma)
 					waitingForComma = false;
 			}
@@ -144,7 +144,7 @@ namespace tLang {
 	}
 
 	// add to float list
-	static void addToFloatList(std::vector<float>& list, const std::string& string) {
+	static void addToFloatList(std::vector<float>& list, const std::string& string, char separator = ',') {
 		int newItems = countItems(string);
 
 		list.reserve(list.capacity() + newItems);
@@ -175,7 +175,7 @@ namespace tLang {
 					countFromLastBracket = 0;
 				}
 			}
-			if (string[i] == ',') {
+			if (string[i] == separator) {
 				if (waitingForComma)
 					waitingForComma = false;
 			}

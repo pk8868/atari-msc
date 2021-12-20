@@ -43,11 +43,11 @@ void Canvas::Draw(const sf::Vector2f& point_A, const sf::Vector2f& point_B, cons
 		p_circleShape.setFillColor(color);
 
 		// zaokr¹glenie punktu A
-		p_circleShape.setPosition(point_A);
+		p_circleShape.setPosition(p_normalizeVector(point_A));
 		p_Texture.draw(p_circleShape);
 
 		// zaokr¹glenie punktu B
-		p_circleShape.setPosition(point_B);
+		p_circleShape.setPosition(p_normalizeVector(point_B));
 		p_Texture.draw(p_circleShape);
 		
 	}
