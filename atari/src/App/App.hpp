@@ -5,9 +5,21 @@
 
 // klasa aplikacji
 class App {
+private:
+	const std::vector<std::string> smThemes{ "light", "dark", "classic" };
+public:
+	struct AppSettings {
+		sf::Vector2i windowSize;
+		int fontSize;
+		std::string theme;
+	} m_appSettings{ sf::Vector2i(1280, 720), 18, smThemes[0] };
+
 public:
 	App();
 	~App();
+
+
+	static App& Get();
 
 	void run();
 private:
@@ -25,24 +37,11 @@ private:
 	// okno wejœcia
 	Input m_input;
 
-	// instancja atari
-	std::unique_ptr<Atari> m_atari = nullptr;
-
 	// watek do zapisywania screenshotow
 	std::future<void> secondThread;
 private:
 	// g³ówne menu aplikacji
 	void p_mainMenu();
-	
-
-private:
-	const std::vector<std::string> smThemes{ "light", "dark", "classic" };
-
-	struct AppSettings {
-		sf::Vector2i windowSize;
-		int fontSize;
-		std::string theme;
-	} m_appSettings{ sf::Vector2i(1280, 720), 18, smThemes[0] };
 
 	void pSaveSettings();
 

@@ -1,9 +1,7 @@
 #include "pch.h"
 #include "Atari.hpp"
 
-Atari::Atari(const AppData& appData)
-	:m_appData(appData)
-{
+Atari::Atari() {
 	tLang::tCode t_atariSettings("atariSettings");
 	
 	std::future<bool> texture_thread;
@@ -17,22 +15,12 @@ Atari::Atari(const AppData& appData)
 	else
 		throw std::runtime_error("Couldn't find \"texture\" in atariSettings");
 
-
-	// stworzenie planszy
-	m_canvas = std::make_unique<Canvas>(appData.windowSize);
-
-	// wyczyszczenie planszy
-	m_canvas->Clear();
-
 	// odebranie tekstury od drugiego rdzenia
 	if (!texture_thread.get())
 		throw std::runtime_error("Couldn't load turtle texture!");
 
-	// stworzenie instancji interpretera
-	m_interpreter = std::make_unique<Interpreter>(m_turtles, *m_canvas.get(), Interpreter::TurtleAddData{ m_turtleTexture });
-
 	// stworzenie pierwszego (domyœlnego) ¿ó³wia
-	m_turtles.emplace_back(m_turtleTexture, m_canvas.get());
+	m_turtles.push_back(Turtle());
 }
 
 Atari::~Atari() {
@@ -41,8 +29,13 @@ Atari::~Atari() {
 	m_turtles.clear();
 }
 
+Atari& Atari::Get() {
+	static Atari atari;
+	return atari;
+}
+
 void Atari::DrawCanvas(sf::RenderWindow& window) {
-	m_canvas->DrawOnScreen(window);
+	Canvas::Get().DrawOnScreen(window);
 	// narysowanie ¿ó³wi
 	{
 		for (int i = 0; i < m_turtles.size(); i++)

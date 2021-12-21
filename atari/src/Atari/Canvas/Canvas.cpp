@@ -1,13 +1,15 @@
 #include "pch.h"
 #include "Canvas.hpp"
 #include "Utils/Utils.hpp"
+#include "App/App.hpp"
 
-Canvas::Canvas(sf::Vector2i windowSize) {
+Canvas::Canvas() {
 	p_circleShape.setRadius(1.5f);
 	p_circleShape.setOrigin({ 1.5f, 1.5f });
 
 	// y * 0.8f, zeby nie stworzylo sie pod UI
-	if (!p_Texture.create(windowSize.x, int(windowSize.y * 0.8f), sf::ContextSettings(0, 0, 16)))
+	if (!p_Texture.create(App::Get().m_appSettings.windowSize.x, int(App::Get().m_appSettings.windowSize.y * 0.8f),
+		sf::ContextSettings(0, 0, 16)))
 		throw std::runtime_error("Couldn't create canvas");
 
 	Clear();
@@ -15,6 +17,12 @@ Canvas::Canvas(sf::Vector2i windowSize) {
 
 Canvas::~Canvas() {
 	;
+}
+
+Canvas& Canvas::Get()
+{
+	static Canvas m_Canvas;
+	return m_Canvas;
 }
 
 void Canvas::DrawOnScreen(sf::RenderWindow& r_window) {

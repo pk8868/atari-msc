@@ -3,7 +3,7 @@
 #include "Utils/Utils.hpp"
 
 // macro do zapisywania planszy
-#define SAVE_SCREENSHOT() secondThread = std::async(std::launch::async, util::saveToFile, m_atari->getCanvas().getImage(), "screenshots/" + util::getScreenshotTime() + ".png")
+#define SAVE_SCREENSHOT() secondThread = std::async(std::launch::async, util::saveToFile, Canvas::Get().getImage(), "screenshots/" + util::getScreenshotTime() + ".png")
 void App::run() {
 	sf::Event l_event;
 	sf::Clock l_clock;
@@ -34,7 +34,7 @@ void App::run() {
 
 					// aktualizacja ustawieñ i canvasu
 					m_appSettings.windowSize = sf::Vector2i(m_window.getSize());
-					m_atari->getCanvas().newWindowSize(m_window.getSize());
+					Canvas::Get().newWindowSize(m_window.getSize());
 				}
 
 
@@ -54,16 +54,16 @@ void App::run() {
 		ImGui::SFML::Update(m_window, s_frameTime);
 
 
-		m_atari->Update();
+		//Atari::Get().Update();
 
 		// wyczyszczenie ekranu
 		m_window.clear(sf::Color::White);
 
 		// narysowanie canvasu na oknie
-		m_atari->DrawCanvas(m_window);
+		Atari::Get().DrawCanvas(m_window);
 
 		// zupdatowanie okna z interfejsem u¿ytkownika
-		m_input.Update(m_atari->getInterpreter().getErrorString(), *m_atari);
+		m_input.Update(Interpreter::Get().getErrorString());
 
 		// g³ówne menu programu
 		p_mainMenu();
@@ -81,7 +81,7 @@ void App::run() {
 
 		// odebranie danych wejœciowych
 		if (m_input.shouldGet()) {
-			m_atari->getInterpreter().interpretCode(m_input.getString());
+			Interpreter::Get().interpretCode(m_input.getString());
 			m_input.clear();
 		}
 

@@ -1,20 +1,24 @@
 #include "pch.h"
 #include "Turtle.hpp"
 #include "Utils/Utils.hpp"
+#include "Atari/Atari.hpp"
 
-Turtle::Turtle(sf::Texture* texturePtr, Canvas* canvas)
-	:r_canvas(canvas)
-{
-	// ustawienie tekstury, srodka ¿ó³wia i pozycji
-	m_turtleSprite.setTexture(*texturePtr);
-	m_turtleSprite.setOrigin(sf::Vector2f(texturePtr->getSize() / 2U));
+Turtle::Turtle() {
+
 }
 
 Turtle::~Turtle() {
-	r_canvas = nullptr;
+	;
 }
 
 void Turtle::Draw(sf::RenderTarget& window) {
+	if (!textureptr) {
+		textureptr = Atari::Get().getTexture();
+
+		m_turtleSprite.setTexture(*textureptr);
+		m_turtleSprite.setOrigin((sf::Vector2f)textureptr->getSize() / 2.f);
+	}
+
 	if (m_data.visible) {
 		// ustawienie pozycji ¿ó³wia przy kazdym renderowaniu ze wzgledu na zmiane rozmiaru okna
 		m_turtleSprite.setPosition(p_normalizeVector(sf::Vector2f(m_data.currentPosition)));
@@ -24,6 +28,8 @@ void Turtle::Draw(sf::RenderTarget& window) {
 }
 
 void Turtle::ExecuteInstructionSet(const Instruction& instructionSet) {
+	
+
 	if (!m_data.active)
 		return;
 
@@ -86,7 +92,7 @@ void Turtle::p_move(int amount) {
 
 	// rysowanie na planszy
 	if (m_data.penDown)
-		r_canvas->Draw(sf::Vector2f(old_pos),
+		Canvas::Get().Draw(sf::Vector2f(old_pos),
 					   sf::Vector2f(m_data.currentPosition),
 					   sf::Color::Black);
 
@@ -106,6 +112,6 @@ void Turtle::p_rotate(float angle) {
 }
 
 sf::Vector2f Turtle::p_normalizeVector(sf::Vector2f vector) {
-	vector += r_canvas->getSize() / 2.f;
+	vector += Canvas::Get().getSize() / 2.f;
 	return vector;
 }

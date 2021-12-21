@@ -13,7 +13,7 @@ Input::~Input() {
 
 }
 
-void Input::Update(const std::string& errorCodes, Atari& atari) {
+void Input::Update(const std::string& errorCodes) {
 
 	{
 		sf::Vector2f temp_windowsize((float)r_window->getSize().x, r_window->getSize().y * 0.20f);
@@ -63,7 +63,7 @@ void Input::Update(const std::string& errorCodes, Atari& atari) {
 		{
 			ImGui::EndTabItem();
 			// stan zolwi
-			atari.DrawUI();
+			Atari::Get().DrawUI();
 		}
 
 		ImGui::EndTabBar();

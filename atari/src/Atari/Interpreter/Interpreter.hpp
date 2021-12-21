@@ -22,31 +22,25 @@ private:
 	typedef std::vector<SetPrecursor> SetPList;
 
 public:
-	struct TurtleAddData {
-		sf::Texture* turtleptr;
-	};
-
-	Interpreter(std::vector<Turtle>& turtles, Canvas& r_canvas, const TurtleAddData& data);
+	Interpreter();
 	~Interpreter() { ; }
+
+	// usuniecie kopiowania
+	Interpreter(const Interpreter&) = delete;
+	void operator=(const Interpreter&) = delete;
+
+	static Interpreter& Get();
 
 	ErrorList interpretCode(std::string code);
 
 	const std::string& getErrorString() { return m_errorString; }
 private:
-	// referencja canvasa
-	Canvas& r_canvas;
-
 	// do interpretera
 	ErrorList m_list;
 	std::string m_errorString;
 
 
-	// lista ¿ó³wi
-	std::vector<Turtle>& r_turtles;
 	std::vector<int> m_activeTurtles{ 0 };
-
-	// tekstura zolwia
-	TurtleAddData pAddData;
 
 	// lista zapisanych procedur
 	std::vector<Function> m_functions;

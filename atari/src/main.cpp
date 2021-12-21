@@ -10,16 +10,6 @@ int main(char** args, int argc) {
 #ifdef PERFMON
 		// wyczyszczenie pliku z danymi wydajnoœci
 		perf::init();
-
-		// stworzenie zegara mierzacego czas tworzenia programu
-		perf::ScopeClock* init_clock = new perf::ScopeClock("Init clock");
-#endif
-
-		App app;
-
-		// zakoñczenie zegara
-#ifdef PERFMON
-		delete init_clock;
 #endif
 
 #ifdef HEAP_MONITOR
@@ -29,13 +19,13 @@ int main(char** args, int argc) {
 		snapshotHandlerThread = std::async(std::launch::async, runSnapshotHandler, &running);
 #endif // HEAP_MONITOR
 
-
-		app.run();
+		App::Get().run();
 
 #ifdef HEAP_MONITOR
 		running = false;
 		snapshotHandlerThread.get();
 #endif
+
 	}
 	// wypisanie z³apanego b³êdu do pliku
 	catch (std::exception& e)

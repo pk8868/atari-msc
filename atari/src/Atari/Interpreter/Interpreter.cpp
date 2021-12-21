@@ -1,10 +1,15 @@
 #include "pch.h"
 #include "Interpreter.hpp"
+#include "Atari/Atari.hpp"
 
-Interpreter::Interpreter(std::vector<Turtle>& turtles, Canvas& r_canvas, const TurtleAddData& data)
-	:r_turtles(turtles), r_canvas(r_canvas), pAddData(data)
+Interpreter::Interpreter() {
+	;
+}
+
+Interpreter& Interpreter::Get()
 {
-
+	static Interpreter interpreter;
+	return interpreter;
 }
 
 ErrorList Interpreter::interpretCode(std::string code) {
@@ -37,26 +42,26 @@ ErrorList Interpreter::interpretCode(std::string code) {
 				for (int n = 0; n < m_instructionSets[i].instructions.size(); n++) {
 					switch (m_instructionSets[i][n].instruction) {
 					case Instructions::CS:
-						r_canvas.Clear();
+						Canvas::Get().Clear();
 						break;
 					case Instructions::TELL:
 						// podmiana aktywnych ¿ó³wi
 						m_activeTurtles = m_instructionSets[i][n].arg;
 						for (int i = 0; i < m_activeTurtles.size(); i++) {
 							// za duze id
-							if (m_activeTurtles[i] > r_turtles.size()) {
+							if (m_activeTurtles[i] > Atari::Get().getTurtles().size()) {
 								m_list.emplace_back(ErrorCode::InvalidTurtleID, " zle ID zolwia!");
 							}
 							// dodanie zolwia
-							else if (m_activeTurtles[i] == r_turtles.size())
-								r_turtles.emplace_back(pAddData.turtleptr, &r_canvas);
+							else if (m_activeTurtles[i] == Atari::Get().getTurtles().size())
+								Atari::Get().getTurtles().push_back(Turtle());
 						}
 						markInactiveTurtles();
 						break;
 					default:
 						// wykonanie operacji dla kazdego aktywnego zolwia
-						for (int x = 0; x < r_turtles.size(); x++)
-							r_turtles[x].ExecuteInstructionSet(m_instructionSets[i][n]);
+						for (int x = 0; x < Atari::Get().getTurtles().size(); x++)
+							Atari::Get().getTurtles()[x].ExecuteInstructionSet(m_instructionSets[i][n]);
 						break;
 					}
 				}
@@ -92,7 +97,7 @@ void Interpreter::pDeleteSpaces(std::string& string) {
 }
 
 void Interpreter::markInactiveTurtles() {
-	for (int i = 0; i < r_turtles.size(); i++) {
+	for (int i = 0; i < Atari::Get().getTurtles().size(); i++) {
 		bool active = false;
 		for (int j = 0; j < m_activeTurtles.size(); j++) {
 			// jesli znajdzie na liscie zolwia
@@ -101,6 +106,6 @@ void Interpreter::markInactiveTurtles() {
 				break;
 			}
 		}
-		r_turtles[i].getTurtleDataRef().active = active;
+		Atari::Get().getTurtles()[i].getTurtleDataRef().active = active;
 	}
 }

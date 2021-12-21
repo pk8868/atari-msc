@@ -4,7 +4,6 @@
 #include "Atari/Canvas/Canvas.hpp"
 
 
-
 // pomocnicza struktura do wyœwietlania danych o ¿ó³wiu
 struct TurtleData {
 	sf::Vector2i currentPosition = sf::Vector2i{ 0, 0 };
@@ -18,8 +17,7 @@ struct TurtleData {
 
 class Turtle {
 public:
-	Turtle() { ; }
-	Turtle(sf::Texture* texturePtr, Canvas* canvas);
+	Turtle();
 	~Turtle();
 
 	void Draw(sf::RenderTarget& window);
@@ -29,14 +27,12 @@ public:
 	TurtleData getTurtleData() { return m_data; }
 	TurtleData& getTurtleDataRef() { return m_data; }
 private:
-	// tekstura wspólna dla wszystkich instancji ¿ó³wii
 	sf::Sprite m_turtleSprite;
 
-	TurtleData m_data;
+	// tekstura dla zolwii (updateowana co Draw() zeby zapobiec petli)
+	const sf::Texture* textureptr = nullptr;
 
-private:
-	Canvas* r_canvas = nullptr;
-	
+	TurtleData m_data;	
 private:
 	void p_move(int amount);
 	void p_rotate(float angle);
