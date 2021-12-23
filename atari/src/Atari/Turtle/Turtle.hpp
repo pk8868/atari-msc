@@ -1,8 +1,6 @@
 #pragma once
-#include <SFML/Graphics.hpp>
 #include "Atari/Interpreter/CodeStructures.hpp"
 #include "Atari/Canvas/Canvas.hpp"
-
 
 // pomocnicza struktura do wyœwietlania danych o ¿ó³wiu
 struct TurtleData {

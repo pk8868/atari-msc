@@ -84,7 +84,7 @@ namespace util {
 	}
 
 	// dopisanie do pliku
-	static void addToLogFile(const char* string) {
+	static void addToLogFile(const std::string& string) {
 		std::ofstream stream("log.txt", std::ios::out | std::ios::app);
 
 		if (stream.good()) {

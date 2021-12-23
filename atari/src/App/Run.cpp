@@ -7,9 +7,9 @@
 void App::run() {
 	sf::Event l_event;
 	sf::Clock l_clock;
-	sf::Time s_frameTime;
-	float frameTime = 0.f;
+	sf::Time l_frameTime;
 
+	// glowna petla
 	while (true) {
 		// handlowanie eventów
 		while (m_window.pollEvent(l_event)) {
@@ -19,10 +19,15 @@ void App::run() {
 				break;
 			}
 			else {
-				if (l_event.type == sf::Event::KeyReleased &&
-					l_event.key.code == sf::Keyboard::Key::F11) {
-					// zapisywanie do pliku na drugim w¹tku
-					SAVE_SCREENSHOT();
+				if (l_event.type == sf::Event::KeyReleased) {
+					// F11 - screenshot
+					if (l_event.key.code == sf::Keyboard::Key::F11)
+						// zapisywanie do pliku na drugim w¹tku
+						SAVE_SCREENSHOT();
+					// F5 - logger
+					else if (l_event.key.code == sf::Keyboard::Key::F5)
+						// zmiana stanu okna
+						ErrorLog::Toggle();
 				}
 				else if (l_event.type == sf::Event::Resized) {
 					// zmiana rozmiaru okna na nowy
@@ -47,11 +52,10 @@ void App::run() {
 			break;
 
 		// updateowanie czasu klatki
-		s_frameTime = l_clock.restart();
-		frameTime = s_frameTime.asSeconds();
+		l_frameTime = l_clock.restart();
 
 		// updatowanie elementów gui
-		ImGui::SFML::Update(m_window, s_frameTime);
+		ImGui::SFML::Update(m_window, l_frameTime);
 
 
 		//Atari::Get().Update();
@@ -61,6 +65,9 @@ void App::run() {
 
 		// narysowanie canvasu na oknie
 		Atari::Get().DrawCanvas(m_window);
+
+		// narysowanie loggera
+		ErrorLog::Draw();
 
 		// zupdatowanie okna z interfejsem u¿ytkownika
 		m_input.Update(Interpreter::Get().getErrorString());

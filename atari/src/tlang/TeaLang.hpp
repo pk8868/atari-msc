@@ -8,6 +8,8 @@
 
 // from https://github.com/pk8868/tlang-cpp
 
+#include "App/Logger/ErrorLog.hpp"
+
 namespace tLang {
 
 	// tlang Variable
@@ -366,7 +368,7 @@ namespace tLang {
 			}
 		}
 		else
-			throw std::runtime_error("tCode saveToFile - Couldn't save " + filename);
+			ErrorLog::Log(Error{ Error::Warning, "Couldn't open" + filename });
 		stream.close();
 	}
 }

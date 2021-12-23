@@ -12,12 +12,15 @@ public:
 		sf::Vector2i windowSize;
 		int fontSize;
 		std::string theme;
-	} m_appSettings{ sf::Vector2i(1280, 720), 18, smThemes[0] };
+	} m_appSettings{ sf::Vector2i{1280, 720}, 18, smThemes[0] };
 
 public:
 	App();
 	~App();
 
+	// usuniecie mozliwosci kopiowania
+	App(const App&) = delete;
+	void operator=(const App&) = delete;
 
 	static App& Get();
 
@@ -27,11 +30,8 @@ private:
 	sf::RenderWindow m_window;
 
 
-	// plik konfiguracyjny
-	tLang::tCode m_configFile;
-
-	// plik konfiguracyjny ImGui
-	tLang::tCode m_imguiConfigFile;
+	// plik konfiguracyjny i plik konfiguracyjny imgui (style)
+	tLang::tCode m_configFile, m_imguiConfigFile;
 
 private:
 	// okno wejœcia

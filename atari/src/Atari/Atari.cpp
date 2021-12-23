@@ -13,11 +13,11 @@ Atari::Atari() {
 		texture_thread = std::async(std::launch::async, util::getTexture, t_atariSettings["turtle"]["texture"]->value, m_turtleTexture);
 	}
 	else
-		throw std::runtime_error("Couldn't find \"texture\" in atariSettings");
+		ErrorLog::Log(Error{ Error::Critical, "Couldn't find \"texture\" in atariSettings" });
 
 	// odebranie tekstury od drugiego rdzenia
 	if (!texture_thread.get())
-		throw std::runtime_error("Couldn't load turtle texture!");
+		ErrorLog::Log(Error{ Error::Critical, "Couldn't load turtle texture!" });
 
 	// stworzenie pierwszego (domyœlnego) ¿ó³wia
 	m_turtles.push_back(Turtle());

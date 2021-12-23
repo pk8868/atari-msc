@@ -7,7 +7,7 @@ static void LoadStyle(tLang::tCode* imguiConfigFile, std::string* theme, bool* r
 	imguiConfigFile->addFile("imgui");
 
 	// zaczekaj na imgui init
-	while (!(*readyStyle)) { Sleep(10); }
+	while (!(*readyStyle)) { std::chrono::milliseconds(10); }
 	
 	
 	// za³adowanie g³ównych zmiennych

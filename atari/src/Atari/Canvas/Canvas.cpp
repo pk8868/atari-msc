@@ -10,7 +10,7 @@ Canvas::Canvas() {
 	// y * 0.8f, zeby nie stworzylo sie pod UI
 	if (!p_Texture.create(App::Get().m_appSettings.windowSize.x, int(App::Get().m_appSettings.windowSize.y * 0.8f),
 		sf::ContextSettings(0, 0, 16)))
-		throw std::runtime_error("Couldn't create canvas");
+		ErrorLog::Log(Error{ Error::Critical, "Couldn't create canvas" });
 
 	Clear();
 }
@@ -81,7 +81,7 @@ void Canvas::newWindowSize(sf::Vector2u windowSize) {
 
 	// stworzenie nowego canvasa
 	if (!p_Texture.create(windowSize.x, int(windowSize.y * 0.8f), sf::ContextSettings(0, 0, 16)))
-		throw std::runtime_error("Couldn't create canvas");
+		ErrorLog::Log(Error{ Error::Critical, "Couldn't create canvas" });
 
 	// wycentrowanie starego canvasa
 	temp_oldCanvasSprite.setPosition(sf::Vector2f(p_Texture.getSize() / 2U));
