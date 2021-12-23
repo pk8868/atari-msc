@@ -3,13 +3,19 @@
     <head>
         <meta charset="utf-8">
         <title> Polecenia ATARI </title>
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="polecenie.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
         <div id="header">
             <h1> Polecenia ATARI </h1>
         </div>
         <div id="nav">
-            <a href="index.html"> strona główna </a>
+            <a href="index.html"> Strona Główna </a>
+            <a href="#" class="active">Polecenia ATARI</a>
+            <a href="bledy_main.html">Błędy interpretera ATARI</a>
+            <a href="bledy_programu.html">Błędy programu</a>
         </div>
         <div id="main">
             <div id="c-nav">
@@ -26,93 +32,94 @@
             </div>
 
             <div id="commands">
-                <div class="command">
-                    <h2> <a name="FD">FD</a> </h2> 
-                    Użycie: <code> FD <i>wartość</i></code>
-                    <p>
-                        Przesuwa żółwia o podaną wartość do przodu.
-                        Jeśli żółw(ie) zostawiają ślad zostanie narysowana linia na planszy.<br>
+                <div class="row">
+                    <div class="command">
+                        <h2> <a name="FD">FD</a> </h2> 
+                        Użycie: <code> FD <i>wartość</i></code>
+                        <p>
+                            Przesuwa żółwia o podaną wartość do przodu.
+                            Jeśli żółw(ie) zostawiają ślad zostanie narysowana linia na planszy.<br>
 
-                        Uwaga: wartość musi być liczbą całkowitą.
-                    </p>
+                            Uwaga: wartość musi być liczbą całkowitą.
+                        </p>
+                    </div>
+                    <div class="command">
+                        <h2> <a name="BK">BK</a> </h2>
+                        Użycie: <code> BK <i>wartość</i></code>
+                        <p>
+                            Przesuwa żółwia o podaną wartość do tyłu.
+                            Jeśli żółw(ie) zostawiają ślad zostanie narysowana linia na planszy.<br>
+
+                            Uwaga: wartość musi być liczbą całkowitą.
+                        </p>
+                    </div>
+                    <div class="command">
+                        <h2> <a name="RT">RT</a> </h2>
+                        Użycie: <code> RT <i>wartość</i></code>
+                        <p>
+                            Obraca żółwia(ie) o podaną liczbę stopni w prawo.<br>
+
+                            Uwaga: wartość musi być liczbą całkowitą.
+                        </p>
+                    </div>
+                    <div class="command">
+                        <h2> <a name="LT">LT</a> </h2>
+                        Użycie: <code> LT <i>wartość</i></code>
+                        <p>
+                            Obraca żółwia(ie) o podaną liczbę stopni w lewo.<br>
+
+                            Uwaga: wartość musi być liczbą całkowitą.
+                        </p>
+                    </div>
+
+                    <div class="command">
+                        <h2> <a name="HT">HT</a> </h2>
+                        Użycie: <code> HT </code>
+                        <p>
+                            Ukrywa wybrane żółwie.
+                        </p>
+                    </div>
+                    <div class="command">
+                        <h2> <a name="ST">ST</a> </h2>
+                        Użycie: <code> ST </code>
+                        <p>
+                            Pokazuje wybrane żółwie.
+                        </p>
+                    </div>
+
+                    <div class="command">
+                        <h2> <a name="PU">PU</a> </h2>
+                        Użycie: <code> PU </code>
+                        <p>
+                            Wyłącza zostawianie śladu przez żólwie.
+                        </p>
+                    </div>
+                    <div class="command">
+                        <h2> <a name="PD">PD</a> </h2>
+                        Użycie: <code> PD </code>
+                        <p>
+                            Włącza zostawianie śladu przez żólwie.
+                        </p>
+                    </div>
+
+                    <div class="command">
+                        <h2> <a name="CS">CS</a> </h2> <a name="CS"></a>
+                        Użycie: <code> CS </code>
+                        <p>
+                            Czyści planszę.
+                        </p>
+                    </div>
+
+                    <div class="command">
+                        <h2> <a name="REPEAT">REPEAT</a> </h2> 
+                        Użycie: <code> REPEAT <i>ilość powtórzeń</i> <i>[polecenia]</i> </code>
+                        <p>
+                            Powtarza podane w nawiasach kwadratowych polecenia podaną ilość razy. Ilość powtórzeń jest liczbą całkowitą.
+
+
+                        </p>
+                    </div>
                 </div>
-                <div class="command">
-                    <h2> <a name="BK">BK</a> </h2>
-                    Użycie: <code> BK <i>wartość</i></code>
-                    <p>
-                        Przesuwa żółwia o podaną wartość do tyłu.
-                        Jeśli żółw(ie) zostawiają ślad zostanie narysowana linia na planszy.<br>
-
-                        Uwaga: wartość musi być liczbą całkowitą.
-                    </p>
-                </div>
-                <div class="command">
-                    <h2> <a name="RT">RT</a> </h2>
-                    Użycie: <code> RT <i>wartość</i></code>
-                    <p>
-                        Obraca żółwia(ie) o podaną liczbę stopni w prawo.<br>
-
-                        Uwaga: wartość musi być liczbą całkowitą.
-                    </p>
-                </div>
-                <div class="command">
-                    <h2> <a name="LT">LT</a> </h2>
-                    Użycie: <code> LT <i>wartość</i></code>
-                    <p>
-                        Obraca żółwia(ie) o podaną liczbę stopni w lewo.<br>
-
-                        Uwaga: wartość musi być liczbą całkowitą.
-                    </p>
-                </div>
-
-                <div class="command">
-                    <h2> <a name="HT">HT</a> </h2>
-                    Użycie: <code> HT </code>
-                    <p>
-                        Ukrywa wybrane żółwie.
-                    </p>
-                </div>
-                <div class="command">
-                    <h2> <a name="ST">ST</a> </h2>
-                    Użycie: <code> ST </code>
-                    <p>
-                        Pokazuje wybrane żółwie.
-                    </p>
-                </div>
-
-                <div class="command">
-                    <h2> <a name="PU">PU</a> </h2>
-                    Użycie: <code> PU </code>
-                    <p>
-                        Wyłącza zostawianie śladu przez żólwie.
-                    </p>
-                </div>
-                <div class="command">
-                    <h2> <a name="PD">PD</a> </h2>
-                    Użycie: <code> PD </code>
-                    <p>
-                        Włącza zostawianie śladu przez żólwie.
-                    </p>
-                </div>
-
-                <div class="command">
-                    <h2> <a name="CS">CS</a> </h2> <a name="CS"></a>
-                    Użycie: <code> CS </code>
-                    <p>
-                        Czyści planszę.
-                    </p>
-                </div>
-
-                <div class="command">
-                    <h2> <a name="REPEAT">REPEAT</a> </h2> 
-                    Użycie: <code> REPEAT <i>ilość powtórzeń</i> <i>[polecenia]</i> </code>
-                    <p>
-                        Powtarza podane w nawiasach kwadratowych polecenia podaną ilość razy. Ilość powtórzeń jest liczbą całkowitą.
-
-
-                    </p>
-                </div>
-
             </div>
         </div>
         <div id="footer">
