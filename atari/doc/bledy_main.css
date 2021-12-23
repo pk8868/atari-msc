@@ -1,0 +1,36 @@
+#c-nav{
+    text-align: center;
+}
+
+#c-nav a{
+    color: royalblue;
+    padding-right: 10px;
+    text-decoration: none;
+}
+
+#c-nav a:hover{
+    text-shadow: 0px 0px 15px white;
+    color: white;
+}
+
+.errors{
+    width: 100%;
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.error{
+    float: left;
+    width: 50%;
+    padding-top: 20px;
+}
+
+@media only screen and (max-width: 900px) {
+    .error {
+        width: 100%;
+    }
+}
