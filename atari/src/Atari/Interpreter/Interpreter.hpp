@@ -67,4 +67,8 @@ private:
 
 private:
 	void markInactiveTurtles();
+
+private:
+	int getLeftBracketPos(const std::string& string, uint32_t startPos);
+	int getRightBracketPos(const std::string& string, uint32_t leftBracket);
 };

@@ -24,16 +24,17 @@ void Interpreter::pInterpret(SetPrecursor& precursor) {
 			// !!! SPRAWDZIÆ CZY TO LICZBA
 			bool addVar = true;
 
+			// jeden argument
 			if (status.expectingArg == 1)
 				getArgList(currentInstruction, current);
+			// lista argumentów
 			else {
 				argList += current + ",";
 
+				// sprawdzenie czy jest nawias kwadratowy zamykajacy
 				addVar = current.find(']') != std::string::npos; 
-				for (int i = 0; (i < current.length()) && current[i] != '\0'; i++) {
-					std::cout << i << ": " << current[i] << "\n";
-				}
 				if (addVar) {
+					// jeœli jest to stworz liste argumentow
 					getArgList(currentInstruction, argList);
 					argList = "";
 				}
@@ -98,6 +99,7 @@ void Interpreter::pInterpret(SetPrecursor& precursor) {
 }
 
 void Interpreter::getArgList(Instruction& instruction, std::string& string) {
+	// usuniecie specjalnych znakow
 	arglistStripString(string);
 
 	pGetArgList(instruction.arg, string);

@@ -3,8 +3,6 @@
 
 
 void Interpreter::pParse(const std::string& code, SetPList& r_setList){
-	std::string current;
-
 	SetPrecursor currentSet{};
 
 	ParsingStatus status{false};
@@ -17,42 +15,32 @@ void Interpreter::pParse(const std::string& code, SetPList& r_setList){
 
 		// repeat
 		if (status.insideSpecialCommand) {
-			size_t leftBracketPos = 0;
+			// ustawienie pozycji otwierajacego nawiasu kwadratowego
+			size_t leftBracketPos = getLeftBracketPos(code, oldPosition);
 
-			// znalezienie startu repeat'a
-			if (code.find('[', oldPosition) == std::string::npos) {
-				m_list.emplace_back(ErrorCode::MissingLeftBracket, "nie znaleziono znaku [");
+			if (leftBracketPos < 0)
 				break;
-			}
-			else
-				leftBracketPos = code.find('[', oldPosition);
 
-			// znalezienie zamkniecia repeat'a
-			if (code.find(']', leftBracketPos) == std::string::npos) {
-				m_list.emplace_back(ErrorCode::MissingRightBracket, "nie znaleziono znaku ]");
+			// ustawienie pozycji zamykajacego nawiasu kwadratowego
+			currentPosition = getRightBracketPos(code, leftBracketPos);
+
+			if (currentPosition < 0)
 				break;
-			}
-			else
-				currentPosition = (int)code.find(']', oldPosition);
-
 
 			// znalezienie liczby powtórzeñ
 			currentSet.repeat = pGetRepeatNumber(code.substr(oldPosition,
 													leftBracketPos - oldPosition) + " ");
 
 			// wyciêcie kodu miêdzy nawiasami kwadratowymi
-			currentSet.code = code.substr(leftBracketPos + 1, (currentPosition) - (leftBracketPos + 1));
+			currentSet.code = code.substr(leftBracketPos + 1, currentPosition - (leftBracketPos + 1));
 
-			
 			status.insideSpecialCommand = false;
-			status.specialCommand = ParsingStatus::Repeat;
 			currentPosition++; // przejscie za znak ]
 		}
 
 		// zwyk³y kod
 		else {
 			// jesli nie ma repeat to do konca jest zwykly instruction set
-			// TODO: liczenie nawiasow kwadratowych w srodku
 			if (code.find("REPEAT", oldPosition) == std::string::npos)
 				currentPosition = (int)code.length() - 1;
 			else {
@@ -90,4 +78,39 @@ int Interpreter::pGetRepeatNumber(const std::string& code) {
 		return atoi(code.substr(7, code.length() - 7).c_str());
 
 	return 1;
+}
+
+int Interpreter::getLeftBracketPos(const std::string& string, uint32_t startPos) {
+	if (string.find('[', startPos) == std::string::npos) {
+		m_list.emplace_back(ErrorCode::MissingLeftBracket, "nie znaleziono znaku [");
+		return -1;
+	}
+		
+	return string.find('[', startPos);
+}
+
+int Interpreter::getRightBracketPos(const std::string& string, uint32_t leftBracket) {
+	// znalezienie zamkniecia repeat'a
+	if (string.find(']', leftBracket) == std::string::npos) {
+		m_list.emplace_back(ErrorCode::MissingRightBracket, "nie znaleziono znaku ]");
+		return -1;
+	}
+
+	uint32_t currentPos = leftBracket + 1;
+	while (currentPos < string.size()) {
+		// jesli jest lewy nawias wewnatrz kodu przejdz do nastepnego nawiasu
+		if (string.find('[', currentPos) != std::string::npos) {
+			currentPos = string.find(']', currentPos) + 1;
+		}
+		else {
+			// brakuje nawiasu zamykajacego
+			if (string.find(']', currentPos) == std::string::npos)
+				break;
+			return string.find(']', currentPos);
+		}
+	}
+
+	m_list.emplace_back(ErrorCode::MissingRightBracket, "nie znaleziono znaku ]");
+
+	return -1;	
 }
