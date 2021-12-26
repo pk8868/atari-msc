@@ -48,15 +48,26 @@ void Atari::DrawUI() {
 		ImGui::Columns(2);
 		ImGui::SetColumnOffset(1, 200.f);
 
+		auto defaultButtonColor = ImGui::GetStyle().Colors[ImGuiCol_Button];
+
 		// tabela z ¿ó³wiami
 		ImGui::BeginChild("menu");
 		for (int i = 0; i < m_turtles.size(); i++) {
+			bool changedColor = false;
 			std::string nazwa = "Zolw" + std::to_string(i);
 
-			// DO ZROBIENIA - POKAZYWANIE ZE PRZYCISK JEST AKTYWNY
-			if (ImGui::Button(nazwa.c_str(), ImVec2{200.f - (2.f * (ImGui::GetStyle().ItemSpacing.x + ImGui::GetStyle().FramePadding.x)), 0.f})) {
-				activeTab = i;
+			// zmiana koloru na aktywny
+			if (activeTab == i) {
+				ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetStyle().Colors[ImGuiCol_ButtonActive]);
+				changedColor = true;
 			}
+
+			if (ImGui::Button(nazwa.c_str(), ImVec2{200.f - (2.f * (ImGui::GetStyle().ItemSpacing.x + ImGui::GetStyle().FramePadding.x)), 0.f}))
+				activeTab = i;
+			
+			// przywrócenie zwyk³ego koloru
+			if (changedColor)
+				ImGui::PopStyleColor();
 		}
 		ImGui::EndChild();
 
