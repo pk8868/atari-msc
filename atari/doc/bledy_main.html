@@ -3,13 +3,19 @@
     <head>
         <meta charset="utf-8">
         <title> Kody błędów </title>
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="bledy_main.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
         <div id="header">
             <h1> Kody błędów </h1>
         </div>
         <div id="nav">
-            <a href="index.html"> strona główna </a>
+            <a href="index.html">Strona Główna</a>
+            <a href="polecenia_main.html">Polecenia ATARI</a>
+            <a href="#" class="active">Błędy interpretera ATARI</a>
+            <a href="bledy_programu.html">Błędy programu</a>
         </div>
         <div id="main">
             <div id="c-nav">
@@ -24,38 +30,40 @@
             </div>
 
             <div id="errors">
-                <div class="error">
-                    <h2> <a name="E1">Kod 1</a> </h2>
-                    <p>
-                        Oczekiwano argumentu po poleceniu.<br>
-                        Przykład:
-                        <code>FD PU</code>
-                    </p>
-                </div>
-                <div class="error">
-                    <h2> <a name="E242">Kod 2</a> </h2>
-                    <p>
-                        Nieznane polecenie.<br>
-                        Przykład:
-                        <code>FT 90</code>
-                    </p>
-                </div>
+                <div class="row">
+                    <div class="error">
+                        <h2> <a name="E1">Kod 1</a> </h2>
+                        <p>
+                            Oczekiwano argumentu po poleceniu.<br>
+                            Przykład:
+                            <code>FD PU</code>
+                        </p>
+                    </div>
+                    <div class="error">
+                        <h2> <a name="E242">Kod 2</a> </h2>
+                        <p>
+                            Nieznane polecenie.<br>
+                            Przykład:
+                            <code>FT 90</code>
+                        </p>
+                    </div>
 
-                <div class="error">
-                    <h2> <a name="E241">Kod 241</a> </h2>
-                    <p>
-                        Brak lewego nawiasu kwadratowego po poleceniu REPEAT.<br>
-                        Przykład:
-                        <code>REPEAT 3 FD 40]</code>
-                    </p>
-                </div>
-                <div class="error">
-                    <h2> <a name="E242">Kod 242</a> </h2>
-                    <p>
-                        Brak prawego nawiasu kwadratowego po poleceniu REPEAT<br>
-                        Przykład:
-                        <code>REPEAT 3 [FD 40</code>
-                    </p>
+                    <div class="error">
+                        <h2> <a name="E241">Kod 241</a> </h2>
+                        <p>
+                            Brak lewego nawiasu kwadratowego po poleceniu REPEAT.<br>
+                            Przykład:
+                            <code>REPEAT 3 FD 40]</code>
+                        </p>
+                    </div>
+                    <div class="error">
+                        <h2> <a name="E242">Kod 242</a> </h2>
+                        <p>
+                            Brak prawego nawiasu kwadratowego po poleceniu REPEAT<br>
+                            Przykład:
+                            <code>REPEAT 3 [FD 40</code>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,0 +1,40 @@
+.command{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#c-nav{
+    text-align: center;
+}
+
+#c-nav a{
+    color: royalblue;
+    padding-right: 10px;
+    text-decoration: none;
+}
+
+#c-nav a:hover{
+    text-shadow: 0px 0px 15px white;
+    color: white;
+}
+
+#commands{
+    width: 100%;
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.command{
+    float: left;
+    width: 50%;
+}
+
+@media only screen and (max-width: 900px) {
+    .command {
+        width: 100%;
+    }
+}

@@ -1,0 +1,9 @@
+#appErrors{
+    width: 100%;
+}
+
+.overallInfo, .appError{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
