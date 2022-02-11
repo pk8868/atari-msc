@@ -1,6 +1,6 @@
 #pragma once
 #include "Atari/Canvas/Canvas.hpp"
-
+#include "Atari/Interpreter/Interpreter.hpp"
 // pomocnicza struktura do wyœwietlania danych o ¿ó³wiu
 struct TurtleData {
 	sf::Vector2i currentPosition = sf::Vector2i{ 0, 0 };

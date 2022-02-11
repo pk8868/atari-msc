@@ -1,7 +1,7 @@
 #pragma once
-#include "Canvas/Canvas.hpp"
-#include "Turtle/Turtle.hpp"
 #include "Interpreter/Interpreter.hpp"
+#include "Turtle/Turtle.hpp"
+#include "Canvas/Canvas.hpp"
 #include "Utils/Utils.hpp"
 #include <memory>
 

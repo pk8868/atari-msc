@@ -22,7 +22,7 @@ void Turtle::Draw(sf::RenderTarget& window) {
 	if (m_data.visible) {
 		// ustawienie pozycji ¿ó³wia przy kazdym renderowaniu ze wzgledu na zmiane rozmiaru okna
 		m_turtleSprite.setPosition(p_normalizeVector(sf::Vector2f(m_data.currentPosition)));
-		
+		m_turtleSprite.setRotation(m_data.rotation);
 		window.draw(m_turtleSprite);
 	}
 }
@@ -64,10 +64,10 @@ bool Turtle::Run(const Interpreter::OneArgInstruction& instruction) {
 		break;
 
 	case Interpreter::Instruction::Type::FD:
-		p_move(instruction.value);
+		p_move(-instruction.value);
 		break;
 	case Interpreter::Instruction::Type::BK:
-		p_move(-instruction.value);
+		p_move(instruction.value);
 		break;
 	}
 

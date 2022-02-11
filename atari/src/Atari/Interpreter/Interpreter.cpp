@@ -21,8 +21,6 @@ void Interpreter::interpretCode(std::string code) {
 	perf::ScopeClock i_clock("Interpreter");
 #endif
 	{
-		Instruction temp = { Instruction::Type::FD, {"100 * WHO"} };
-		std::cout << pValidateArgs(temp);
 		code = code.substr(0, code.find('\0'));
 
 		std::vector<Token> t_tokens;
@@ -57,7 +55,7 @@ void Interpreter::interpretCode(std::string code) {
 		}
 		// wykonanie funkcji
 		else {
-
+			pRun(t_instructions);
 		}
 
 
@@ -219,17 +217,33 @@ bool Interpreter::pValidateArgs(Instruction& instruction) {
 void Interpreter::pRun(std::vector<Instruction>& input) {
 	auto& turtles = Atari::Get().getTurtles();
 	
-	for (const auto& instruction : input) {
-
-		if (instruction.type < Instruction::Type::CS) {
-			
+	for (auto& instruction : input) {
+		if (instruction.type == Instruction::Type::CS) {
+			Canvas::Get().Clear();
+			continue;
+		}
+		else if (instruction.type == Instruction::Type::POTS) {
+			continue; // unimplemented
 		}
 
+		for (auto& turtleID : m_activeTurtles) {
+			if (instruction.type < Instruction::Type::CS) {
+				auto exec = pGet<OneArgInstruction>(instruction);
+				turtles[turtleID].Run(exec);
+			}
+			else if (instruction.type < Instruction::Type::PD) {
+				auto exec = pGet<ShortInstruction>(instruction);
+				turtles[turtleID].Run(exec);
+			}
+			else {
+				;
+			}
+		}
 	}
 }
 
 float Interpreter::evaluate(std::string& string) {
-	return 0.0f;
+	return atof(string.c_str());
 }
 
 
