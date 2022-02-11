@@ -1,25 +1,56 @@
 #pragma once
-#include "CodeStructures.hpp"
 #include "Errors.hpp"
 #include "Atari/Turtle/Turtle.hpp"
 
 class Interpreter {
 	// private interpreter structures
-private:
-	struct ParsingStatus {
-		bool insideSpecialCommand = false;
-		enum SpecialCommand {
-			Repeat,
-			Ask
-		} specialCommand;
+public:
+	struct Instruction {
+		enum class Type {
+			None = -1,
+			FD, BK,
+			RT, LT,
+
+			CS, POTS,
+			
+			HT, ST,
+			PU, PD,
+
+			TELL,
+			ASK,
+			SETC, SETPN, SETPC,
+
+			EACH,
+			REPEAT,
+
+
+			CUSTOM_FUNCTION,
+
+			TO = 1000, END = 1001
+		} type;
+		std::vector<std::string> args;
 	};
 
-	struct SetPrecursor {
-		std::string code = "";
-		int repeat = 1;
+	struct Function {
+		std::string name;
+		std::vector<std::string> argName;
+
+		std::vector<Instruction> instructions;
+	};
+	
+
+	// no args
+	struct ShortInstruction {
+		Instruction::Type type;
 	};
 
-	typedef std::vector<SetPrecursor> SetPList;
+	// one arg
+	// FD, BK, LT, RT
+	struct OneArgInstruction {
+		Instruction::Type type;
+		float value;
+	};
+
 
 public:
 	Interpreter();
@@ -31,44 +62,67 @@ public:
 
 	static Interpreter& Get();
 
-	ErrorList interpretCode(std::string code);
+	void interpretCode(std::string code);
+
 
 	const std::string& getErrorString() { return m_errorString; }
+	const std::string getInputSymbol() { return m_insideFunction ? ">" : ":"; }
 private:
 	// do interpretera
-	ErrorList m_list;
+	ErrorList m_errorList;
 	std::string m_errorString;
+
+	bool m_insideFunction = false;
 
 
 	std::vector<int> m_activeTurtles{ 0 };
 
 	// lista zapisanych procedur
-	std::vector<Function> m_functions;
-
-	InstructionSets m_instructionSets;
-
-	// interpreter private functions
 private:
-	void pParse(const std::string& code, SetPList& r_setList);
-	int pGetRepeatNumber(const std::string& code);
+	// prywatne funkcje interpretera
+	struct Token {
+		std::string keyword = "";
+		std::vector<std::string> args = {};
+	};
 
-	bool ifEmptyString(const std::string& string);
+	void pTokenize(std::vector<Token>& output, std::string& code);
+	void pCombineWords(std::vector<Token>& output, std::vector<std::string>& input);
 
-	void pInterpret(SetPrecursor& precursor);
+	// sprawdzenie czy jest to specjalny argument (np. WHO lub argument do funkcji)
+	bool pSpecial(const std::string& string);
 
-private:
-	void getArgList(Instruction& instruction, std::string& string);
-	void arglistStripString(std::string& string);
-	void pGetArgList(std::vector<int>& argList, std::string& string);
+	bool pParse(std::vector<Instruction>& output, std::vector<Token>& input);
 
-private:
-	void pCreateErrorString();
-	void pDeleteSpaces(std::string& string);
+	bool pValidateArgs(Instruction& instruction);
 
-private:
-	void markInactiveTurtles();
+	// validate functions
+	// no argument functions
+	bool pValidateNoArgsFunction		(const Instruction& instruction);
+	// one arg (FD, RT)
+	bool pValidateOneArgFunction		(const Instruction& instruction);
+	// TELL, ASK
+	bool pValidateMultipleArgFunction	(const Instruction& instruction);
+	// CUSTOM FUNCTION
+	bool pValidateFunctionArgFunction	(const Instruction& instruction);
+	// REPEAT
+	bool pValidateRepeatFunction		(const Instruction& instruction);
 
-private:
-	int getLeftBracketPos(const std::string& string, uint32_t startPos);
-	int getRightBracketPos(const std::string& string, uint32_t leftBracket);
+	bool pIsMathSign(char x);
+
+	void pRun(std::vector<Instruction>& input);
+	
+	template <class T>
+	T pGet(Instruction& instruction) { return T(); }
+
+	template<>
+	ShortInstruction pGet<ShortInstruction>(Instruction& ins) {
+		return { ins.type };
+	}
+	
+	template<>
+	OneArgInstruction pGet<OneArgInstruction>(Instruction& ins) {
+		return { ins.type, evaluate(ins.args[0]) };
+	}
+
+	float evaluate(std::string& string);
 };

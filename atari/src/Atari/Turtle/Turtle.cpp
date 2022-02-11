@@ -27,58 +27,52 @@ void Turtle::Draw(sf::RenderTarget& window) {
 	}
 }
 
-void Turtle::ExecuteInstructionSet(const Instruction& instructionSet) {
-	
-
+bool Turtle::Run(const Interpreter::ShortInstruction& instruction) {
 	if (!m_data.active)
-		return;
-
-	// powtórzenie zestawu
-	switch (instructionSet.instruction) {
-		// ukrycie ¿ó³wia
-	case Instructions::HT:
+		return true;
+	
+	switch (instruction.type) {
+	case Interpreter::Instruction::Type::HT:
 		m_data.visible = false;
 		break;
-
-		// pokazanie ¿ó³wia
-	case Instructions::ST:
+	case Interpreter::Instruction::Type::ST:
 		m_data.visible = true;
 		break;
 
-		// podniesienie pisaka
-	case Instructions::PU:
+	case Interpreter::Instruction::Type::PU:
 		m_data.penDown = false;
 		break;
-
-		// opuœæ pisak
-	case Instructions::PD:
+	case Interpreter::Instruction::Type::PD:
 		m_data.penDown = true;
-		break;
-
-
-		// ========== ruch ¿ó³wia ============
-		// ruch do przodu
-	case Instructions::FD:
-		p_move(-instructionSet.arg[0]);
-		break;
-		// ruch do ty³u
-	case Instructions::BK:
-		p_move(instructionSet.arg[0]);
-		break;
-
-		// obrót w prawo
-	case Instructions::RT:
-		p_rotate((float)instructionSet.arg[0]);
-		break;
-
-		// obrót w lewo
-	case Instructions::LT:
-		p_rotate((float)-instructionSet.arg[0]);
 		break;
 	}
 
-	// ustawienie rotacji ¿ó³wia
-	m_turtleSprite.setRotation(m_data.rotation);
+
+	return true;
+}
+
+bool Turtle::Run(const Interpreter::OneArgInstruction& instruction) {
+	if (!m_data.active)
+		return true;
+
+	switch (instruction.type) {
+	case Interpreter::Instruction::Type::LT:
+		p_rotate(-instruction.value);
+		break;
+	case Interpreter::Instruction::Type::RT:
+		p_rotate(instruction.value);
+		break;
+
+	case Interpreter::Instruction::Type::FD:
+		p_move(instruction.value);
+		break;
+	case Interpreter::Instruction::Type::BK:
+		p_move(-instruction.value);
+		break;
+	}
+
+
+	return true;
 }
 
 void Turtle::p_move(int amount) {

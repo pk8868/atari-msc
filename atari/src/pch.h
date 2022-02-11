@@ -28,10 +28,6 @@
 // tealang
 #include "tlang/TeaLang.hpp"
 
-// struktury kodu atari
-#include "Atari/Interpreter/CodeStructures.hpp"
-
-
 // monitoring wydajnoœci
 #ifdef PERFMON
 #include "Utils/PerformanceMonitoring.hpp"

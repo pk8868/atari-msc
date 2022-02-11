@@ -2,6 +2,10 @@
 #include "Interpreter.hpp"
 #include "Atari/Atari.hpp"
 
+#define INT_BIND_FUNCTION(x) if (input[i].keyword == #x){\
+			tempInstruction.type == Instruction::Type::x;\
+			}
+
 Interpreter::Interpreter() {
 	;
 }
@@ -12,100 +16,221 @@ Interpreter& Interpreter::Get()
 	return interpreter;
 }
 
-ErrorList Interpreter::interpretCode(std::string code) {
+void Interpreter::interpretCode(std::string code) {
 #ifdef PERFMON
 	perf::ScopeClock i_clock("Interpreter");
 #endif
 	{
+		Instruction temp = { Instruction::Type::FD, {"100 * WHO"} };
+		std::cout << pValidateArgs(temp);
+		code = code.substr(0, code.find('\0'));
 
-		m_instructionSets.clear();
+		std::vector<Token> t_tokens;
+		// zarezerwowanie miejsca (mniej kopiowania)
+		t_tokens.reserve(50);
+		pTokenize(t_tokens, code);
+		t_tokens.shrink_to_fit();
 
-		// zmniejszenie do faktycznego rozmiaru
-		m_list.clear();
+		for (const auto& token : t_tokens) {
+			std::cout << token.keyword << ": ";
+			for (const auto& arg : token.args) {
+				std::cout << arg << ", ";
+			}
+			std::cout << "\n";
+		}
 
-		SetPList setList{};
+		std::vector<Instruction> t_instructions;
 
-		// parsowanie kodu (duze wyrazy)
-		pParse(code, setList);
+		auto isFunction = pParse(t_instructions, t_tokens);
 
-		for (int i = 0; i < setList.size(); i++)
-			pInterpret(setList[i]);
+		for (auto& instruction : t_instructions) {
+			if (!pValidateArgs(instruction))
+				return;
+		}
+		// specjalna funkcja do interpretowania funkcji
+		if (isFunction) {
 
-		
+		}
+		// dodawanie kodu do funkcji
+		else if (m_insideFunction) {
+
+		}
+		// wykonanie funkcji
+		else {
+
+		}
+
+
 	}
+}
 
-	// jeœli nie ma errorów
-	if (!m_list.size()) {
-		// ¿ó³w wykonuje polecenia jesli nie ma bledow
-		for (int i = 0; i < m_instructionSets.size(); i++) {
-			for (int j = 0; j < m_instructionSets[i].set_data.repeat; j++) {
-				for (int n = 0; n < m_instructionSets[i].instructions.size(); n++) {
-					switch (m_instructionSets[i][n].instruction) {
-					case Instructions::CS:
-						Canvas::Get().Clear();
-						break;
-					case Instructions::TELL:
-						// podmiana aktywnych ¿ó³wi
-						m_activeTurtles = m_instructionSets[i][n].arg;
-						for (int i = 0; i < m_activeTurtles.size(); i++) {
-							// za duze id
-							if (m_activeTurtles[i] > Atari::Get().getTurtles().size()) {
-								m_list.emplace_back(ErrorCode::InvalidTurtleID, " zle ID zolwia!");
-							}
-							// dodanie zolwia
-							else if (m_activeTurtles[i] == Atari::Get().getTurtles().size())
-								Atari::Get().getTurtles().push_back(Turtle());
-						}
-						markInactiveTurtles();
-						break;
-					default:
-						// wykonanie operacji dla kazdego aktywnego zolwia
-						for (int x = 0; x < Atari::Get().getTurtles().size(); x++)
-							Atari::Get().getTurtles()[x].ExecuteInstructionSet(m_instructionSets[i][n]);
-						break;
-					}
+void Interpreter::pTokenize(std::vector<Token>& output, std::string& code) {
+	std::stringstream stream(code);
+
+	std::vector<std::string> words;
+
+	std::string currentLine;
+
+	while (std::getline(stream, currentLine, ' '))
+		words.push_back(currentLine);
+
+	pCombineWords(output, words);
+}
+
+void Interpreter::pCombineWords(std::vector<Token>& output, std::vector<std::string>& input) {
+	Token currentToken;
+
+	int listCount = 0;
+
+	for (auto& word : input) {
+		// poza listami
+		if (listCount == 0) {
+			// pierwszy lub nowy token
+			if (currentToken.keyword == "") 
+				currentToken.keyword = word;
+			// argument liczbowy
+			else if (util::isInt(word) || pSpecial(word))
+				currentToken.args.push_back(word);
+			// nowy argument
+			else {
+				// wchodzimy do listy
+				if (word[0] == '[') {
+					listCount++;
+
+					// jesli jednoargumentowa lista nie dodawaj spacji
+					if (word[word.length() - 1] == ']')
+						currentToken.args.push_back(word);
+
+					currentToken.args.push_back(word + " ");
+				}
+				// lub nowy token
+				else {
+					output.push_back(currentToken);
+					currentToken = Token{};
+					currentToken.keyword = word;
 				}
 			}
 		}
-	}
-
-	pCreateErrorString();
-	return m_list;
-}
-
-bool Interpreter::ifEmptyString(const std::string& string) {
-	for (int i = 1; i < string.size(); i++) {
-		if (string[i] != string[i - 1])
-			return false;
-	}
-	return true;
-}
-
-void Interpreter::pCreateErrorString() {
-	m_errorString.clear();
-	std::stringstream stream;
-	for (int i = 0; i < m_list.size(); i++)
-		stream << (int)m_list[i].code << " - " << m_list[i].message << "\n";
-
-	m_errorString = stream.str();
-}
-
-// po koñcu repeata zostaje spacja po ] i wszystkie komendy po nim s¹ Ÿle interpretowane
-void Interpreter::pDeleteSpaces(std::string& string) {
-	while (string[0] == ' ')
-		string.erase(0, 1);
-}
-
-void Interpreter::markInactiveTurtles() {
-	for (int i = 0; i < Atari::Get().getTurtles().size(); i++) {
-		bool active = false;
-		for (int j = 0; j < m_activeTurtles.size(); j++) {
-			// jesli znajdzie na liscie zolwia
-			if (m_activeTurtles[j] == i) {
-				active = true;
-				break;
-			}
+		else if (listCount > 0) {
+			// zawsze dodajemy do ostatniego argumentu
+			currentToken.args[currentToken.args.size() - 1] += word;
+			// wyjscie z listy
+			if (word[word.length() - 1] == ']')
+				listCount--;
+			// dodanie separatora
+			else
+				currentToken.args[currentToken.args.size() - 1] += " ";
 		}
-		Atari::Get().getTurtles()[i].getTurtleDataRef().active = active;
+	}
+
+	if (currentToken.keyword != "")
+		output.push_back(currentToken);
+
+
+}
+
+bool Interpreter::pSpecial(const std::string& string) {
+	// argumenty funkcji
+	if (string[0] == ':')
+		return true;
+	if (pIsMathSign(string[0]))
+		return true;
+	// who
+	else if (string.find("WHO") != std::string::npos)
+		return true;
+
+	return false;
+}
+
+bool Interpreter::pParse(std::vector<Instruction>& output, std::vector<Token>& input) {
+
+	for (int i = 0; i < input.size(); i++) {
+		if (input[i].keyword == "TO")
+			return true;
+
+		else {
+			Instruction tempInstruction{};
+			tempInstruction.args = input[i].args;
+
+
+
+			if (input[i].keyword == "FD")
+				tempInstruction.type = Instruction::Type::FD;
+			else if (input[i].keyword == "BK")
+				tempInstruction.type = Instruction::Type::BK;
+			else if (input[i].keyword == "LT")
+				tempInstruction.type = Instruction::Type::LT;
+			else if (input[i].keyword == "RT")
+				tempInstruction.type = Instruction::Type::RT;
+			else if (input[i].keyword == "CS")
+				tempInstruction.type = Instruction::Type::CS;
+			else if (input[i].keyword == "PU")
+				tempInstruction.type = Instruction::Type::PU;
+			else if (input[i].keyword == "PD")
+				tempInstruction.type = Instruction::Type::PD;
+			else if (input[i].keyword == "HT")
+				tempInstruction.type = Instruction::Type::HT;
+			else if (input[i].keyword == "ST")
+				tempInstruction.type = Instruction::Type::ST;
+			else if (input[i].keyword == "TELL")
+				tempInstruction.type = Instruction::Type::TELL;
+			else if (input[i].keyword == "REPEAT")
+				tempInstruction.type = Instruction::Type::REPEAT;
+			else if (input[i].keyword == "ASK")
+				tempInstruction.type = Instruction::Type::ASK;
+			else if (input[i].keyword == "SETC")
+				tempInstruction.type = Instruction::Type::SETC;
+			else if (input[i].keyword == "SETPN")
+				tempInstruction.type = Instruction::Type::SETPN;
+			else if (input[i].keyword == "SETPC")
+				tempInstruction.type = Instruction::Type::SETPC;
+			else if (input[i].keyword == "EACH")
+				tempInstruction.type = Instruction::Type::EACH;
+			else if (input[i].keyword == "POTS")
+				tempInstruction.type = Instruction::Type::POTS;
+			// else for functions
+
+
+			if (tempInstruction.type != Instruction::Type::None)
+				output.push_back(tempInstruction);
+			else
+				m_errorList.emplace_back(ErrorCode::UnknownCommand, "Unknown command " + input[i].keyword);
+		}
+	}
+
+	return false;
+}
+
+bool Interpreter::pValidateArgs(Instruction& instruction) {
+	if (instruction.type == Instruction::Type::None)
+		return false;
+
+	// z jednym argumentem
+	if (instruction.type <= Instruction::Type::LT)
+		return pValidateOneArgFunction(instruction);
+	
+	// bez argumentów
+	if (instruction.type <= Instruction::Type::PD)
+		return pValidateNoArgsFunction(instruction);
+
+	return false;
+}
+
+void Interpreter::pRun(std::vector<Instruction>& input) {
+	auto& turtles = Atari::Get().getTurtles();
+	
+	for (const auto& instruction : input) {
+
+		if (instruction.type < Instruction::Type::CS) {
+			
+		}
+
 	}
 }
+
+float Interpreter::evaluate(std::string& string) {
+	return 0.0f;
+}
+
+
+

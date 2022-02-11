@@ -54,7 +54,6 @@ void Atari::DrawUI() {
 		ImGui::BeginChild("menu");
 		for (int i = 0; i < m_turtles.size(); i++) {
 			bool changedColor = false;
-			std::string nazwa = "Zolw" + std::to_string(i);
 
 			// zmiana koloru na aktywny
 			if (activeTab == i) {
@@ -62,7 +61,8 @@ void Atari::DrawUI() {
 				changedColor = true;
 			}
 
-			if (ImGui::Button(nazwa.c_str(), ImVec2{200.f - (2.f * (ImGui::GetStyle().ItemSpacing.x + ImGui::GetStyle().FramePadding.x)), 0.f}))
+			// stworzenie przycisku
+			if (ImGui::Button(("Zolw" + std::to_string(i)).c_str(), ImVec2{200.f - (2.f * (ImGui::GetStyle().ItemSpacing.x + ImGui::GetStyle().FramePadding.x)), 0.f}))
 				activeTab = i;
 			
 			// przywrócenie zwyk³ego koloru

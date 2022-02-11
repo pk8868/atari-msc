@@ -38,6 +38,10 @@ void Input::Update(const std::string& errorCodes) {
 		{ // okienko z inputem
 
 			ImGui::EndTabItem();
+			ImGui::Text(Interpreter::Get().getInputSymbol().c_str());
+			// napis w tej samej lini
+			ImGui::SameLine();
+
 			// miejsce na tekst
 			ImGui::PushItemWidth(maxItemSize.x - 150.f);
 			if (ImGui::InputText("", (char*)p_Input.inputText.c_str(), INPUTSIZE, ImGuiInputTextFlags_EnterReturnsTrue))

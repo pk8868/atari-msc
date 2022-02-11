@@ -8,7 +8,7 @@ void App::run() {
 	sf::Event l_event;
 	sf::Clock l_clock;
 	sf::Time l_frameTime;
-
+	m_window.getSystemHandle();
 	// glowna petla
 	while (true) {
 		// handlowanie eventów
@@ -134,10 +134,10 @@ void App::pSettings() {
 		if (ImGui::BeginCombo("Motyw",
 			m_appSettings.theme.c_str())) {
 			
-			for (int i = 0; i < smThemes.size(); i++) {
-				if (ImGui::Selectable(smThemes[i].c_str())) {
+			for (const auto& theme : smThemes) {
+				if (ImGui::Selectable(theme.c_str())) {
 					// jeœli jest wybrany zmiana nazwy motywu
-					m_appSettings.theme = smThemes[i];
+					m_appSettings.theme = theme;
 
 					// zresetowanie opcji stylu
 					util::resetStyle();

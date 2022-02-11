@@ -1,5 +1,4 @@
 #pragma once
-#include "Atari/Interpreter/CodeStructures.hpp"
 #include "Atari/Canvas/Canvas.hpp"
 
 // pomocnicza struktura do wyœwietlania danych o ¿ó³wiu
@@ -20,7 +19,8 @@ public:
 
 	void Draw(sf::RenderTarget& window);
 	
-	void ExecuteInstructionSet(const Instruction& instructionSet);
+	bool Run(const Interpreter::ShortInstruction& instruction);
+	bool Run(const Interpreter::OneArgInstruction& instruction);
 
 	TurtleData getTurtleData() { return m_data; }
 	TurtleData& getTurtleDataRef() { return m_data; }
