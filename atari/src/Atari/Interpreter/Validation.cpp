@@ -75,10 +75,16 @@ static bool validateTraits(const ExpressionTrait& trait) {
 // validation types
 
 bool Interpreter::pValidateNoArgsFunction(const Instruction& instruction) {
+	if (instruction.args.size())
+		m_errorList.emplace_back(ErrorCode::TooManyArgs, "Too many args");
 	return instruction.args.size() == 0;
 }
 
 bool Interpreter::pValidateOneArgFunction(const Instruction& instruction) {
+	if (instruction.args.size() > 1)
+		m_errorList.emplace_back(ErrorCode::TooManyArgs, "Too many args");
+	else if (instruction.args.size() == 0)
+		m_errorList.emplace_back(ErrorCode::ExpectedArgument, "Expected argument");
 	if (instruction.args.size() != 1)
 		return false;
 
@@ -89,6 +95,23 @@ bool Interpreter::pValidateOneArgFunction(const Instruction& instruction) {
 		return false; // jeœli ma ceche "error"
 	}
 	return true;
+}
+
+bool Interpreter::pValidateRepeatFunction(const Instruction& instruction) {
+	if (instruction.args.size() != 2)
+		return false;
+
+	auto x = getTraits(instruction.args[0]);
+
+	if (!validateTraits(x)) {
+		m_errorList.emplace_back(ErrorCode::InvalidExpression, "Invalid expression");
+		return false; // jeœli ma ceche "error"
+	}
+
+	auto& code = instruction.args[1];
+	auto input = code.substr(1U, code.rfind(']') - 1U);
+	std::vector<Instruction> instructions;
+	return pInterpret(input, instructions);
 }
 
 bool Interpreter::pIsMathSign(char x) {

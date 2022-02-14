@@ -17,16 +17,22 @@ Interpreter& Interpreter::Get()
 }
 
 void Interpreter::interpretCode(std::string code) {
+	std::vector<Instruction> instructions;
+	code = code.substr(0, code.find('\0'));
+	bool OK = pInterpret(code, instructions);
+	if (OK)
+		pRun(instructions);
+}
+
+bool Interpreter::pInterpret(std::string& str, std::vector<Instruction>& output) {
 #ifdef PERFMON
 	perf::ScopeClock i_clock("Interpreter");
 #endif
 	{
-		code = code.substr(0, code.find('\0'));
-
 		std::vector<Token> t_tokens;
 		// zarezerwowanie miejsca (mniej kopiowania)
 		t_tokens.reserve(50);
-		pTokenize(t_tokens, code);
+		pTokenize(t_tokens, str);
 		t_tokens.shrink_to_fit();
 
 		for (const auto& token : t_tokens) {
@@ -37,29 +43,17 @@ void Interpreter::interpretCode(std::string code) {
 			std::cout << "\n";
 		}
 
-		std::vector<Instruction> t_instructions;
+		auto isFunction = pParse(output, t_tokens);
 
-		auto isFunction = pParse(t_instructions, t_tokens);
-
-		for (auto& instruction : t_instructions) {
+		for (auto& instruction : output) {
 			if (!pValidateArgs(instruction))
-				return;
-		}
-		// specjalna funkcja do interpretowania funkcji
-		if (isFunction) {
-
-		}
-		// dodawanie kodu do funkcji
-		else if (m_insideFunction) {
-
-		}
-		// wykonanie funkcji
-		else {
-			pRun(t_instructions);
+				return false;
 		}
 
-
+		if (m_errorList.size() != 0)
+			return false;
 	}
+	return true;
 }
 
 void Interpreter::pTokenize(std::vector<Token>& output, std::string& code) {
@@ -210,13 +204,14 @@ bool Interpreter::pValidateArgs(Instruction& instruction) {
 	// bez argumentów
 	if (instruction.type <= Instruction::Type::PD)
 		return pValidateNoArgsFunction(instruction);
+	
+	if (instruction.type == Instruction::Type::REPEAT)
+		return pValidateRepeatFunction(instruction);
 
 	return false;
 }
 
-void Interpreter::pRun(std::vector<Instruction>& input) {
-	auto& turtles = Atari::Get().getTurtles();
-	
+void Interpreter::pRun(std::vector<Instruction>& input) {	
 	for (auto& instruction : input) {
 		if (instruction.type == Instruction::Type::CS) {
 			Canvas::Get().Clear();
@@ -225,24 +220,41 @@ void Interpreter::pRun(std::vector<Instruction>& input) {
 		else if (instruction.type == Instruction::Type::POTS) {
 			continue; // unimplemented
 		}
+		else if (instruction.type == Instruction::Type::REPEAT) {
+			int repeats = atoi(instruction.args[0].c_str());
 
-		for (auto& turtleID : m_activeTurtles) {
-			if (instruction.type < Instruction::Type::CS) {
-				auto exec = pGet<OneArgInstruction>(instruction);
-				turtles[turtleID].Run(exec);
+			std::vector<Instruction> repeatInstructions;
+			auto input = instruction.args[1].substr(1U, instruction.args[1].rfind(']') - 1);
+			bool OK = pInterpret(input, repeatInstructions);
+			if (OK) {
+				for (int i = 0; i < repeats; i++)
+					pRun(repeatInstructions);
 			}
-			else if (instruction.type < Instruction::Type::PD) {
-				auto exec = pGet<ShortInstruction>(instruction);
-				turtles[turtleID].Run(exec);
-			}
-			else {
-				;
-			}
+		}
+		else {
+			executeSimpleCommand(instruction);
 		}
 	}
 }
 
-float Interpreter::evaluate(std::string& string) {
+void Interpreter::executeSimpleCommand(Instruction& instruction) {
+	auto& turtles = Atari::Get().getTurtles();
+	for (auto& turtleID : m_activeTurtles) {
+		if (instruction.type < Instruction::Type::CS) {
+			auto exec = pGet<OneArgInstruction>(instruction, turtleID);
+			turtles[turtleID].Run(exec);
+		}
+		else if (instruction.type < Instruction::Type::PD) {
+			auto exec = pGet<ShortInstruction>(instruction, turtleID);
+			turtles[turtleID].Run(exec);
+		}
+		else {
+			m_errorList.emplace_back(ErrorCode::Unimplemented, "Unimplemented command");
+		}
+	}
+}
+
+float Interpreter::evaluate(std::string& string, int who) {
 	return atof(string.c_str());
 }
 

@@ -83,6 +83,8 @@ private:
 		std::string keyword = "";
 		std::vector<std::string> args = {};
 	};
+	
+	bool pInterpret(std::string& str, std::vector<Instruction>& output);
 
 	void pTokenize(std::vector<Token>& output, std::string& code);
 	void pCombineWords(std::vector<Token>& output, std::vector<std::string>& input);
@@ -109,19 +111,21 @@ private:
 	bool pIsMathSign(char x);
 
 	void pRun(std::vector<Instruction>& input);
-	
+
 	template <class T>
-	T pGet(Instruction& instruction) { return T(); }
+	T pGet(Instruction& instruction, int who) { return T(); }
 
 	template<>
-	ShortInstruction pGet<ShortInstruction>(Instruction& ins) {
+	ShortInstruction pGet<ShortInstruction>(Instruction& ins, int who) {
 		return { ins.type };
 	}
 	
 	template<>
-	OneArgInstruction pGet<OneArgInstruction>(Instruction& ins) {
-		return { ins.type, evaluate(ins.args[0]) };
+	OneArgInstruction pGet<OneArgInstruction>(Instruction& ins, int who) {
+		return { ins.type, evaluate(ins.args[0], who) };
 	}
 
-	float evaluate(std::string& string);
+	void executeSimpleCommand(Instruction& instruction);
+
+	float evaluate(std::string& string, int who);
 };

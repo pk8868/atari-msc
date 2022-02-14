@@ -10,6 +10,8 @@ enum class ErrorCode : short {
 	UnknownCommand,
 	InvalidTurtleID,
 	InvalidExpression,
+	Unimplemented,
+	TooManyArgs,
 
 	MissingLeftBracket = 0xF1,
 	MissingRightBracket
