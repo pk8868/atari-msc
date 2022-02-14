@@ -2,6 +2,10 @@
 #include <SFML/System/Vector2.hpp>
 #include <math.h>
 
+#if _WIN32
+#include <Windows.h>
+#endif
+
 #define LAUNCH_THREAD(id, ...) id = std::async(std::launch::async, __VA_ARGS__)
 #define NEW_THREAD(id, type, ...) std::future<type> id = std::async(std::launch::async, __VA_ARGS__)
 #define JOIN_THREAD(id) id.get()
@@ -109,6 +113,33 @@ namespace util {
 		}
 		return true;
 	}
+
+// rzeczy do windows.h
+#if _WIN32
+	static std::string saveFileDialog(const char* filter) {
+		OPENFILENAMEA ofna;
+
+		char file[256] = { 0 };
+		ZeroMemory(&ofna, sizeof(ofna));
+		ofna.lStructSize = sizeof(ofna);
+		ofna.hwndOwner = NULL;
+
+		ofna.lpstrFile = file;
+		ofna.nMaxFile = sizeof(file);
+
+		ofna.lpstrFilter = filter;
+		ofna.nFilterIndex = 1;
+
+		ofna.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
+
+		if (GetSaveFileNameA(&ofna) == TRUE) {
+			return ofna.lpstrFile;
+		}
+
+		return "";
+	}
+#endif
+
 
 }
 

@@ -3,7 +3,6 @@
 #include "Utils/Utils.hpp"
 
 // macro do zapisywania planszy
-#define SAVE_SCREENSHOT() secondThread = std::async(std::launch::async, util::saveToFile, Canvas::Get().getImage(), "screenshots/" + util::getScreenshotTime() + ".png")
 void App::run() {
 	sf::Event l_event;
 	sf::Clock l_clock;
@@ -20,12 +19,8 @@ void App::run() {
 			}
 			else {
 				if (l_event.type == sf::Event::KeyReleased) {
-					// F11 - screenshot
-					if (l_event.key.code == sf::Keyboard::Key::F11)
-						// zapisywanie do pliku na drugim w¹tku
-						SAVE_SCREENSHOT();
 					// F5 - logger
-					else if (l_event.key.code == sf::Keyboard::Key::F5)
+					if (l_event.key.code == sf::Keyboard::Key::F5)
 						// zmiana stanu okna
 						ErrorLog::Toggle();
 				}
@@ -100,8 +95,13 @@ void App::p_mainMenu() {
 
 	// menu File
 	if (ImGui::BeginMenu("File")) {
-		if (ImGui::MenuItem("Save"))
-			SAVE_SCREENSHOT();
+		if (ImGui::MenuItem("Save")) {
+			std::string filename = util::saveFileDialog("PNG Files (*.png)\0*.png\0\0");
+			if (filename != "") {
+				secondThread = std::async(std::launch::async, util::saveToFile,
+					Canvas::Get().getImage(), filename);
+			}
+		}
 
 		if (ImGui::MenuItem("Exit"))
 			m_window.close();
