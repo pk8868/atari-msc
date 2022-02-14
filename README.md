@@ -31,3 +31,7 @@ SFML >= 2.5.1
     - Advapi32.lib
     - shell32.lib
     - Comdlg32.lib
+- dodatkowe katalogi #include
+    - src/
+    - src/imgui/
+- i wszystko potrzebne z sfml - https://www.sfml-dev.org/tutorials/2.5/#getting-started 
