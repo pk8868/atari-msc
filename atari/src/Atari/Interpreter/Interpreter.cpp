@@ -22,6 +22,16 @@ void Interpreter::interpretCode(std::string code) {
 	bool OK = pInterpret(code, instructions);
 	if (OK)
 		pRun(instructions);
+	pCreateErrorString();
+}
+
+void Interpreter::pCreateErrorString() {
+	m_errorString.clear();
+	std::stringstream stream;
+	for (int i = 0; i < m_errorList.size(); i++)
+		stream << (int)m_errorList[i].code << " - " << m_errorList[i].message << "\n";
+
+	m_errorString = stream.str();
 }
 
 bool Interpreter::pInterpret(std::string& str, std::vector<Instruction>& output) {

@@ -128,4 +128,6 @@ private:
 	void executeSimpleCommand(Instruction& instruction);
 
 	float evaluate(std::string& string, int who);
+
+	void pCreateErrorString();
 };
