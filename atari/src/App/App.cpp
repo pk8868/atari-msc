@@ -7,7 +7,7 @@ static void LoadStyle(tLang::tCode* imguiConfigFile, std::string* theme, bool* r
 	imguiConfigFile->addFile("imgui");
 
 	// zaczekaj na imgui init
-	while (!(*readyStyle)) { Sleep(10); }
+	while (!(*readyStyle)) { std::chrono::milliseconds(10); }
 	
 	
 	// za³adowanie g³ównych zmiennych
@@ -22,7 +22,16 @@ static void app_LoadIcon(std::string filename, sf::Image* img) {
 	img->loadFromFile(filename);
 }
 
+App& App::Get() {
+	static App m_app;
+	return m_app;
+}
+
 App::App() {
+#if PERFMON
+	perf::ScopeClock initClock("Init clock");
+#endif
+
 	bool readyStyle = false;
 	NEW_THREAD(styleLoader, void, LoadStyle, &m_imguiConfigFile, &m_appSettings.theme, &readyStyle);
 
@@ -114,9 +123,6 @@ App::App() {
 
 	readyStyle = true;
 
-	// stworzenie instancji atari
-	m_atari = std::make_unique<Atari>(AppData{ sf::Vector2i(m_window.getSize()) });
-
 
 	// jesli jest ladowana ikona zaczekaj az skoncza sie ladowac
 	if (loadIcon)
@@ -126,6 +132,9 @@ App::App() {
 
 	// zaczekaj az style skoñcz¹ siê ³adowaæ
 	JOIN_THREAD(styleLoader);
+
+
+	Atari::Get(); // stworzenie instancji atari
 }
 
 App::~App() {

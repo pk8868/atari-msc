@@ -1,9 +1,7 @@
 #include "pch.h"
 #include "Atari.hpp"
 
-Atari::Atari(const AppData& appData)
-	:m_appData(appData)
-{
+Atari::Atari() {
 	tLang::tCode t_atariSettings("atariSettings");
 	
 	std::future<bool> texture_thread;
@@ -15,25 +13,14 @@ Atari::Atari(const AppData& appData)
 		texture_thread = std::async(std::launch::async, util::getTexture, t_atariSettings["turtle"]["texture"]->value, m_turtleTexture);
 	}
 	else
-		throw std::runtime_error("Couldn't find \"texture\" in atariSettings");
+		ErrorLog::Log(Error{ Error::Critical, "Couldn't find \"texture\" in atariSettings" });
 
-
-	// stworzenie planszy
-	m_canvas = std::make_unique<Canvas>(appData.windowSize);
-
-	// wyczyszczenie planszy
-	m_canvas->Clear();
-
-	// stworzenie instancji interpretera
-	m_interpreter = std::make_unique<Interpreter>(m_turtles);
-	
 	// odebranie tekstury od drugiego rdzenia
 	if (!texture_thread.get())
-		throw std::runtime_error("Couldn't load turtle texture!");
-
+		ErrorLog::Log(Error{ Error::Critical, "Couldn't load turtle texture!" });
 
 	// stworzenie pierwszego (domyœlnego) ¿ó³wia
-	m_turtles.emplace_back(m_turtleTexture, m_canvas.get());
+	m_turtles.push_back(Turtle());
 }
 
 Atari::~Atari() {
@@ -42,8 +29,13 @@ Atari::~Atari() {
 	m_turtles.clear();
 }
 
+Atari& Atari::Get() {
+	static Atari atari;
+	return atari;
+}
+
 void Atari::DrawCanvas(sf::RenderWindow& window) {
-	m_canvas->DrawOnScreen(window);
+	Canvas::Get().DrawOnScreen(window);
 	// narysowanie ¿ó³wi
 	{
 		for (int i = 0; i < m_turtles.size(); i++)
@@ -56,15 +48,26 @@ void Atari::DrawUI() {
 		ImGui::Columns(2);
 		ImGui::SetColumnOffset(1, 200.f);
 
+		auto defaultButtonColor = ImGui::GetStyle().Colors[ImGuiCol_Button];
+
 		// tabela z ¿ó³wiami
 		ImGui::BeginChild("menu");
 		for (int i = 0; i < m_turtles.size(); i++) {
-			std::string nazwa = "Zolw" + std::to_string(i);
+			bool changedColor = false;
 
-			// DO ZROBIENIA - POKAZYWANIE ZE PRZYCISK JEST AKTYWNY
-			if (ImGui::Button(nazwa.c_str(), ImVec2{200.f - (2.f * (ImGui::GetStyle().ItemSpacing.x + ImGui::GetStyle().FramePadding.x)), 0.f})) {
-				activeTab = i;
+			// zmiana koloru na aktywny
+			if (activeTab == i) {
+				ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetStyle().Colors[ImGuiCol_ButtonActive]);
+				changedColor = true;
 			}
+
+			// stworzenie przycisku
+			if (ImGui::Button(("Zolw" + std::to_string(i)).c_str(), ImVec2{200.f - (2.f * (ImGui::GetStyle().ItemSpacing.x + ImGui::GetStyle().FramePadding.x)), 0.f}))
+				activeTab = i;
+			
+			// przywrócenie zwyk³ego koloru
+			if (changedColor)
+				ImGui::PopStyleColor();
 		}
 		ImGui::EndChild();
 
@@ -93,6 +96,11 @@ void Atari::DrawUI() {
 			ImGui::SameLine();
 
 			ImGui::Checkbox("Zostawia slad", &temp_data.penDown);
+
+			// checkbox w tej samej linii
+			ImGui::SameLine();
+
+			ImGui::Checkbox("Aktywny", &temp_data.active);
 		}
 
 		

@@ -16,7 +16,7 @@ namespace tLang {
 
 		if (!stream.good()) {
 			stream.close();
-			throw std::runtime_error("tCode - Couldn't open " + filename);
+			ErrorLog::Log(Error{ Error::Warning, "Couldn't open" + filename });
 		}
 		else {
 			std::string code;

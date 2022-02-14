@@ -5,12 +5,14 @@
 enum class ErrorCode : short {
 	None = -1,
 
-	// interpreting errors
 	ExpectedArgument = 1,
+	ExpectedNumber,
 	UnknownCommand,
 	InvalidTurtleID,
+	InvalidExpression,
+	Unimplemented,
+	TooManyArgs,
 
-	// parsing errors
 	MissingLeftBracket = 0xF1,
 	MissingRightBracket
 

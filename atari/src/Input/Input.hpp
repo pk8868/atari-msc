@@ -11,7 +11,7 @@ public:
 	
 
 	// wyrenderowanie okienka, logika przycisku
-	void Update(const std::string& errorCodes, Atari& atari);
+	void Update(const std::string& errorCodes);
 
 
 	bool shouldGet() { return p_Input.shouldReturn; }

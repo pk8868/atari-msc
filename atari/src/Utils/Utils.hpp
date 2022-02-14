@@ -84,7 +84,7 @@ namespace util {
 	}
 
 	// dopisanie do pliku
-	static void addToLogFile(const char* string) {
+	static void addToLogFile(const std::string& string) {
 		std::ofstream stream("log.txt", std::ios::out | std::ios::app);
 
 		if (stream.good()) {
@@ -100,7 +100,16 @@ namespace util {
 	template<typename T>
 	static std::string vec2ToString(const sf::Vector2<T>& vector, const std::string& separator = ", ") {
 		return std::to_string(vector.x) + separator + std::to_string(vector.y);
-	}	
+	}
+
+	static bool isInt(const std::string& string) {
+		for (int i = 0; i < string.length(); i++) {
+			if (!std::isdigit(string[i]))
+				return false;
+		}
+		return true;
+	}
+
 }
 
 #ifdef _DEBUG

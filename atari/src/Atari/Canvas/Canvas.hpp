@@ -9,8 +9,14 @@ private:
 		sf::Color color;
 	};
 public:
-	Canvas(sf::Vector2i windowSize);
+	Canvas();
 	~Canvas();
+
+	static Canvas& Get();
+
+	// usuniecie kopiowania
+	Canvas(const Canvas&) = delete;
+	void operator=(const Canvas&) = delete;
 
 	void DrawOnScreen(sf::RenderWindow& r_window);
 

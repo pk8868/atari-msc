@@ -1,87 +1,78 @@
 #include "pch.h"
 #include "Turtle.hpp"
 #include "Utils/Utils.hpp"
+#include "Atari/Atari.hpp"
 
-Turtle::Turtle(sf::Texture* texturePtr, Canvas* canvas)
-	:r_canvas(canvas)
-{
-	// ustawienie tekstury, srodka ¿ó³wia i pozycji
-	m_turtleSprite.setTexture(*texturePtr);
-	m_turtleSprite.setOrigin(sf::Vector2f(texturePtr->getSize() / 2U));
-	m_turtleSprite.setPosition(p_normalizeVector(sf::Vector2f(0.f, 0.f)));
+Turtle::Turtle() {
+
 }
 
 Turtle::~Turtle() {
-	r_canvas = nullptr;
+	;
 }
 
 void Turtle::Draw(sf::RenderTarget& window) {
+	if (!textureptr) {
+		textureptr = Atari::Get().getTexture();
+
+		m_turtleSprite.setTexture(*textureptr);
+		m_turtleSprite.setOrigin((sf::Vector2f)textureptr->getSize() / 2.f);
+	}
+
 	if (m_data.visible) {
+		// ustawienie pozycji ¿ó³wia przy kazdym renderowaniu ze wzgledu na zmiane rozmiaru okna
 		m_turtleSprite.setPosition(p_normalizeVector(sf::Vector2f(m_data.currentPosition)));
+		m_turtleSprite.setRotation(m_data.rotation);
 		window.draw(m_turtleSprite);
 	}
 }
 
-void Turtle::ExecuteInstructionSet(InstructionSet& instructionSet) {
-	// powtórzenie zestawu
-	for (int j = 0; j < instructionSet.set_data.repeat; j++) {
+bool Turtle::Run(const Interpreter::ShortInstruction& instruction) {
+	if (!m_data.active)
+		return true;
+	
+	switch (instruction.type) {
+	case Interpreter::Instruction::Type::HT:
+		m_data.visible = false;
+		break;
+	case Interpreter::Instruction::Type::ST:
+		m_data.visible = true;
+		break;
 
-		// przejœcie przez wszystkie instrukcje w zestawie
-		for (int i = 0; i < instructionSet.size(); i++) {
-			switch (instructionSet[i].instruction) {
-				// ukrycie ¿ó³wia
-			case Instructions::HT:
-				m_data.visible = false;
-				break;
-
-				// pokazanie ¿ó³wia
-			case Instructions::ST:
-				m_data.visible = true;
-				break;
-
-				// podniesienie pisaka
-			case Instructions::PU:
-				m_data.penDown = false;
-				break;
-
-				// opuœæ pisak
-			case Instructions::PD:
-				m_data.penDown = true;
-				break;
-
-
-				// ========== ruch ¿ó³wia ============
-				// ruch do przodu
-			case Instructions::FD:
-				p_move(-instructionSet[i].arg);
-				break;
-				// ruch do ty³u
-			case Instructions::BK:
-				p_move(instructionSet[i].arg);
-				break;
-
-				// obrót w prawo
-			case Instructions::RT:
-				p_rotate((float)instructionSet[i].arg);
-				break;
-
-				// obrót w lewo
-			case Instructions::LT:
-				p_rotate((float)-instructionSet[i].arg);
-				break;
-
-			case Instructions::CS:
-				r_canvas->Clear();
-				break;
-			}
-		}
-
+	case Interpreter::Instruction::Type::PU:
+		m_data.penDown = false;
+		break;
+	case Interpreter::Instruction::Type::PD:
+		m_data.penDown = true;
+		break;
 	}
 
-	// ustawienie ¿ó³wia
-	m_turtleSprite.setPosition(p_normalizeVector(sf::Vector2f(m_data.currentPosition)));
 
-	m_turtleSprite.setRotation(m_data.rotation);
+	return true;
+}
+
+bool Turtle::Run(const Interpreter::OneArgInstruction& instruction) {
+	if (!m_data.active)
+		return true;
+
+	switch (instruction.type) {
+	case Interpreter::Instruction::Type::LT:
+		p_rotate(-instruction.value);
+		break;
+	case Interpreter::Instruction::Type::RT:
+		p_rotate(instruction.value);
+		break;
+
+	case Interpreter::Instruction::Type::FD:
+		p_move(-instruction.value);
+		break;
+	case Interpreter::Instruction::Type::BK:
+		p_move(instruction.value);
+		break;
+	}
+
+
+	return true;
 }
 
 void Turtle::p_move(int amount) {
@@ -95,7 +86,7 @@ void Turtle::p_move(int amount) {
 
 	// rysowanie na planszy
 	if (m_data.penDown)
-		r_canvas->Draw(sf::Vector2f(old_pos),
+		Canvas::Get().Draw(sf::Vector2f(old_pos),
 					   sf::Vector2f(m_data.currentPosition),
 					   sf::Color::Black);
 
@@ -111,11 +102,10 @@ void Turtle::p_rotate(float angle) {
 	// sprawdzenie czy rotacja nie jest poni¿ej 0 stopni
 	while (m_data.rotation < 0.f)
 		m_data.rotation += 360.f;
-
 	
 }
 
 sf::Vector2f Turtle::p_normalizeVector(sf::Vector2f vector) {
-	vector += r_canvas->getSize() / 2.f;
+	vector += Canvas::Get().getSize() / 2.f;
 	return vector;
 }

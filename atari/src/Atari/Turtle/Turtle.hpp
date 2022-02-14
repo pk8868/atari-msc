@@ -1,38 +1,36 @@
 #pragma once
-#include <SFML/Graphics.hpp>
-#include "Atari/Interpreter/CodeStructures.hpp"
 #include "Atari/Canvas/Canvas.hpp"
-
-
-
+#include "Atari/Interpreter/Interpreter.hpp"
 // pomocnicza struktura do wyœwietlania danych o ¿ó³wiu
 struct TurtleData {
 	sf::Vector2i currentPosition = sf::Vector2i{ 0, 0 };
 	float rotation = 0.f;
 	bool penDown = true;
 	bool visible = true;
+
+	// czy jest aktywny
+	bool active = true;
 };
 
 class Turtle {
 public:
-	Turtle() { ; }
-	Turtle(sf::Texture* texturePtr, Canvas* canvas);
+	Turtle();
 	~Turtle();
 
 	void Draw(sf::RenderTarget& window);
 	
-	void ExecuteInstructionSet(InstructionSet& instructionSet);
+	bool Run(const Interpreter::ShortInstruction& instruction);
+	bool Run(const Interpreter::OneArgInstruction& instruction);
 
 	TurtleData getTurtleData() { return m_data; }
+	TurtleData& getTurtleDataRef() { return m_data; }
 private:
-	// tekstura wspólna dla wszystkich instancji ¿ó³wii
 	sf::Sprite m_turtleSprite;
 
-	TurtleData m_data;
+	// tekstura dla zolwii (updateowana co Draw() zeby zapobiec petli)
+	const sf::Texture* textureptr = nullptr;
 
-private:
-	Canvas* r_canvas = nullptr;
-	
+	TurtleData m_data;	
 private:
 	void p_move(int amount);
 	void p_rotate(float angle);

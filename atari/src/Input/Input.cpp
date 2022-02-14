@@ -13,7 +13,7 @@ Input::~Input() {
 
 }
 
-void Input::Update(const std::string& errorCodes, Atari& atari) {
+void Input::Update(const std::string& errorCodes) {
 
 	{
 		sf::Vector2f temp_windowsize((float)r_window->getSize().x, r_window->getSize().y * 0.20f);
@@ -38,6 +38,10 @@ void Input::Update(const std::string& errorCodes, Atari& atari) {
 		{ // okienko z inputem
 
 			ImGui::EndTabItem();
+			ImGui::Text(Interpreter::Get().getInputSymbol().c_str());
+			// napis w tej samej lini
+			ImGui::SameLine();
+
 			// miejsce na tekst
 			ImGui::PushItemWidth(maxItemSize.x - 150.f);
 			if (ImGui::InputText("", (char*)p_Input.inputText.c_str(), INPUTSIZE, ImGuiInputTextFlags_EnterReturnsTrue))
@@ -63,7 +67,7 @@ void Input::Update(const std::string& errorCodes, Atari& atari) {
 		{
 			ImGui::EndTabItem();
 			// stan zolwi
-			atari.DrawUI();
+			Atari::Get().DrawUI();
 		}
 
 		ImGui::EndTabBar();
