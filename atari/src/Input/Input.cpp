@@ -29,7 +29,9 @@ void Input::Update(const std::string& errorCodes) {
 		ImGuiWindowFlags_NoTitleBar |
 		ImGuiWindowFlags_NoResize	|
 		ImGuiWindowFlags_NoMove		|
-		ImGuiWindowFlags_NoCollapse);
+		ImGuiWindowFlags_NoCollapse |
+		ImGuiWindowFlags_NoScrollbar|
+		ImGuiWindowFlags_NoScrollWithMouse);
 
 	if (ImGui::BeginTabBar("Opcje"))
 	{
@@ -54,6 +56,11 @@ void Input::Update(const std::string& errorCodes) {
 			// przycisk do wykonania poleceñ
 			if (ImGui::Button("Wykonaj", ImVec2(150.f, 0.f)))
 				p_Input.shouldReturn = true;
+
+			// historia poleceñ
+			for (int i = 0; i < strings.size(); i++) {
+				ImGui::Text(strings[i].c_str());
+			}
 		}
 
 		if (ImGui::BeginTabItem("Konsola Interpretera"))
@@ -84,6 +91,13 @@ std::string Input::getString() {
 }
 
 void Input::clear() {
+	pushCommand();
 	p_Input.inputText = "";
 	p_Input.inputText.resize(INPUTSIZE);
+}
+
+void Input::pushCommand() {
+	for (int i = strings.size() - 1; i > 0; i--)
+		strings[i] = strings[i - 1];
+	strings[0] = p_Input.inputText;
 }

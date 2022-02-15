@@ -7,7 +7,7 @@ void App::run() {
 	sf::Event l_event;
 	sf::Clock l_clock;
 	sf::Time l_frameTime;
-	m_window.getSystemHandle();
+
 	// glowna petla
 	while (true) {
 		// handlowanie eventów
