@@ -29,6 +29,8 @@ private:
 	std::array<std::string, historySize> strings;
 	void pushCommand();
 
+	int currentTab = 0;
+
 	struct {
 		std::string inputText = "";
 		bool shouldReturn = false;

@@ -25,20 +25,24 @@ void Input::Update(const std::string& errorCodes) {
 	sf::Vector2f maxItemSize(r_window->getSize().x - ImGui::GetStyle().WindowPadding.x,
 				(r_window->getSize().y * 0.20f) - ImGui::GetStyle().WindowPadding.y);
 
+	int flag = 0;
+	if (currentTab == 0)
+		flag =	ImGuiWindowFlags_NoScrollbar |
+				ImGuiWindowFlags_NoScrollWithMouse;
+
 	ImGui::Begin("Atari Interpreter", NULL, 
 		ImGuiWindowFlags_NoTitleBar |
 		ImGuiWindowFlags_NoResize	|
 		ImGuiWindowFlags_NoMove		|
 		ImGuiWindowFlags_NoCollapse |
-		ImGuiWindowFlags_NoScrollbar|
-		ImGuiWindowFlags_NoScrollWithMouse);
+		flag);
 
 	if (ImGui::BeginTabBar("Opcje"))
 	{
 
 		if (ImGui::BeginTabItem("Wejscie"))
 		{ // okienko z inputem
-
+			currentTab = 0;
 			ImGui::EndTabItem();
 			ImGui::Text(Interpreter::Get().getInputSymbol().c_str());
 			// napis w tej samej lini
@@ -65,6 +69,7 @@ void Input::Update(const std::string& errorCodes) {
 
 		if (ImGui::BeginTabItem("Konsola Interpretera"))
 		{ // okienko z bledami
+			currentTab = 1;
 			ImGui::EndTabItem();
 			
 			ImGui::Text(errorCodes.c_str());
@@ -72,6 +77,7 @@ void Input::Update(const std::string& errorCodes) {
 
 		if (ImGui::BeginTabItem("Atari"))
 		{
+			currentTab = 2;
 			ImGui::EndTabItem();
 			// stan zolwi
 			Atari::Get().DrawUI();

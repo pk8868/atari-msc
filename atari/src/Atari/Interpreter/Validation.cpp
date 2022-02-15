@@ -98,6 +98,10 @@ bool Interpreter::pValidateOneArgFunction(const Instruction& instruction) {
 }
 
 bool Interpreter::pValidateRepeatFunction(const Instruction& instruction) {
+	if (instruction.args.size() > 2)
+		m_errorList.emplace_back(ErrorCode::TooManyArgs, "Too many args");
+	else if (instruction.args.size() < 2)
+		m_errorList.emplace_back(ErrorCode::ExpectedArgument, "Expected argument");
 	if (instruction.args.size() != 2)
 		return false;
 

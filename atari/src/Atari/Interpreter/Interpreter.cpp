@@ -55,10 +55,8 @@ bool Interpreter::pInterpret(std::string& str, std::vector<Instruction>& output)
 
 		auto isFunction = pParse(output, t_tokens);
 
-		for (auto& instruction : output) {
-			if (!pValidateArgs(instruction))
-				return false;
-		}
+		for (auto& instruction : output)
+			pValidateArgs(instruction);
 
 		if (m_errorList.size() != 0)
 			return false;
