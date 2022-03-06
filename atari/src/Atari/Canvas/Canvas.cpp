@@ -3,6 +3,8 @@
 #include "Utils/Utils.hpp"
 #include "App/App.hpp"
 
+static sf::Color background = sf::Color(225, 225, 225);
+
 Canvas::Canvas() {
 	p_circleShape.setRadius(1.5f);
 	p_circleShape.setOrigin({ 1.5f, 1.5f });
@@ -31,13 +33,14 @@ void Canvas::DrawOnScreen(sf::RenderWindow& r_window) {
 void Canvas::Draw(const sf::Vector2f& point_A, const sf::Vector2f& point_B, const sf::Color& color, bool newLine) {	
 	// stworzenie grubej linii od a do b
 	{
-		sf::VertexArray temp_buffer(sf::PrimitiveType::Lines);
-
-
-		temp_buffer.append(sf::Vertex(p_normalizeVector(point_A), color));
-		temp_buffer.append(sf::Vertex(p_normalizeVector(point_B), color));
-
-		p_Texture.draw(temp_buffer);
+		sf::RectangleShape shape;
+		sf::Vector2f x{ 2.f, util::getDistance(point_A, point_B) };
+		shape.setSize(x);
+		shape.setOrigin({1.f, x.y});
+		shape.setFillColor(sf::Color::Black);
+		shape.setRotation(util::getAngle(point_A, point_B));
+		shape.setPosition(p_normalizeVector(point_A));
+		p_Texture.draw(shape);
 
 		if (newLine)
 			lines.emplace_back(point_A, point_B, color);
@@ -65,7 +68,7 @@ void Canvas::Clear() {
 	lines.clear();
 	lines.reserve(20);
 
-	p_Texture.clear(sf::Color::White);
+	p_Texture.clear(background);
 	p_Texture.display();
 }
 
@@ -78,14 +81,14 @@ void Canvas::newWindowSize(sf::Vector2u windowSize) {
 	
 
 	// stworzenie nowego canvasa
-	if (!p_Texture.create(windowSize.x, int(windowSize.y * 0.8f), sf::ContextSettings(0, 0, 16)))
+	if (!p_Texture.create(windowSize.x, int(windowSize.y * 0.8f)))
 		ErrorLog::Log(Error{ Error::Critical, "Couldn't create canvas" });
 
 	// wycentrowanie starego canvasa
 	temp_oldCanvasSprite.setPosition(sf::Vector2f(p_Texture.getSize() / 2U));
 
 	// wyrenderowanie starego canvasa na oknie
-	p_Texture.clear(sf::Color::White);
+	p_Texture.clear(background);
 
 	// narysowanie linii od nowa
 	for (int i = 0; i < lines.size(); i++)

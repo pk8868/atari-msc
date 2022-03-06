@@ -98,8 +98,7 @@ void App::p_mainMenu() {
 		if (ImGui::MenuItem("Save")) {
 			std::string filename = util::saveFileDialog("PNG Files (*.png)\0*.png\0\0");
 			if (filename != "") {
-				secondThread = std::async(std::launch::async, util::saveToFile,
-					Canvas::Get().getImage(), filename);
+				util::saveToFile(Canvas::Get().getImage(), filename);
 			}
 		}
 

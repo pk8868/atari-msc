@@ -26,7 +26,7 @@ public:
 			CUSTOM_FUNCTION,
 
 			TO = 1000, END = 1001
-		} type;
+		} type = Type::None;
 		std::vector<std::string> args;
 	};
 #define BIND_COMMAND_STR(x) if (insType == Instruction::Type::x) {return #x;}
@@ -62,13 +62,13 @@ public:
 
 	// no args
 	struct ShortInstruction {
-		Instruction::Type type;
+		Instruction::Type type = Instruction::Type::None;
 	};
 
 	// one arg
 	// FD, BK, LT, RT
 	struct OneArgInstruction {
-		Instruction::Type type;
+		Instruction::Type type = Instruction::Type::None;
 		float value;
 	};
 

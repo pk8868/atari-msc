@@ -26,6 +26,12 @@ namespace util {
 		return angle;
 	} // get angle between two points
 
+	static float getDistance(const sf::Vector2f& v1, const sf::Vector2f& v2) {
+		return (float)sqrt(
+			pow((v1.x - v2.x), 2) + pow((v1.y - v2.y), 2)
+		);
+	}
+
 	static sf::Vector2f rotate(sf::Vector2f point, float angle) {
 		angle *= 0.0174532925f;
 		return sf::Vector2f(point.x * cos(angle) - point.y * sin(angle),
@@ -133,7 +139,7 @@ namespace util {
 		ofna.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
 
 		if (GetSaveFileNameA(&ofna) == TRUE) {
-			return ofna.lpstrFile;
+			return std::string(ofna.lpstrFile) + ".png";
 		}
 
 		return "";

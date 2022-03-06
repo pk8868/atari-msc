@@ -29,6 +29,8 @@
                 <a href="#ST">ST</a>
                 <a href="#CS">CS</a>
                 <a href="#REPEAT">REPEAT</a>
+                <a href="#TELL">TELL</a>
+                <a href="#ASK">ASK</a>
             </div>
 
             <div id="commands">
@@ -76,14 +78,14 @@
                         <h2> <a name="HT">HT</a> </h2>
                         Użycie: <code> HT </code>
                         <p>
-                            Ukrywa wybrane żółwie.
+                            Ukrywa aktywne żółwie.
                         </p>
                     </div>
                     <div class="command">
                         <h2> <a name="ST">ST</a> </h2>
                         Użycie: <code> ST </code>
                         <p>
-                            Pokazuje wybrane żółwie.
+                            Pokazuje aktywne żółwie.
                         </p>
                     </div>
 
@@ -116,9 +118,24 @@
                         <p>
                             Powtarza podane w nawiasach kwadratowych polecenia podaną ilość razy. Ilość powtórzeń jest liczbą całkowitą.
 
-
                         </p>
                     </div>
+                    <div class="command">
+                        <h2> <a name="TELL">TELL</a> </h2>
+                        Użycie: <code> TELL <i>ID żółwia </i> lub <i> [id żółwi] </i></code>
+                        <p>
+                            Tworzy lub wybiera żółwie. ID żółwia nie może być wyższe o 2 od najwyższego istniejącego żółwia.
+                        </p>
+                    </div>
+
+                    <div class="command">
+                        <h2> <a name="ASK">ASK</a> </h2>
+                        Użycie: <code> ASK <i> id żółwia </i> lub <i> [id żółwi]</i> <i>[polecenia]</i></code>
+                        <p>
+                            Wykonuje podane w nawiasach kwadratowych polecenia dla wybranych żółwi. Może tworzyć nowe żółwie.
+                        </p>
+                    </div>
+
                 </div>
             </div>
         </div>

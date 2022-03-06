@@ -22,6 +22,11 @@
                 <div id="parser">
                     <a href="#E1"> Kod 1</a>
                     <a href="#E2"> Kod 2</a>
+                    <a href="#E3"> Kod 3</a>
+                    <a href="#E4"> Kod 4</a>
+                    <a href="#E5"> Kod 5</a>
+                    <a href="#E7"> Kod 7</a>
+                    <a href="#E8"> Kod 8</a>
                 </div>
                 <div id="interpreting">
                     <a href="#E241"> Kod 241</a>
@@ -36,15 +41,54 @@
                         <p>
                             Oczekiwano argumentu po poleceniu.<br>
                             Przykład:
-                            <code>FD PU</code>
+                            <code>FD <i>oczekiwano argumentu</i> PU</code>
                         </p>
                     </div>
                     <div class="error">
-                        <h2> <a name="E242">Kod 2</a> </h2>
+                        <h2> <a name="E2">Kod 2</a> </h2>
+                        <p>
+                            Oczekiwano liczby naturalnej<br>
+                            Przykład:
+                            <code>TELL -1 <i>oczekiwano argumentu</i></code>
+                        </p>
+                    </div>
+                    <div class="error">
+                        <h2> <a name="E3">Kod 3</a> </h2>
+                        <p>
+                            Oczekiwano listy<br>
+                            Przykład:
+                            <code>REPEAT 3 FD 100 RT 90 <i>oczekiwano listy poleceń</i></code>
+                        </p>
+                    </div>
+                    <div class="error">
+                        <h2> <a name="E4">Kod 4</a> </h2>
                         <p>
                             Nieznane polecenie.<br>
                             Przykład:
                             <code>FT 90</code>
+                        </p>
+                    </div>
+                    <div class="error">
+                        <h2> <a name="E5">Kod 5</a> </h2>
+                        <p>
+                            Nieprawidłowe ID żółwia.<br>
+                            Przykład:
+                            <code>TELL 5</code>, gdy są 2 żółwie
+                        </p>
+                    </div>
+                    <div class="error">
+                        <h2> <a name="E7">Kod 7</a> </h2>
+                        <p>
+                            Niezaimplementowana komenda
+                        </p>
+                    </div>
+
+                    <div class="error">
+                        <h2> <a name="E8">Kod 8</a> </h2>
+                        <p>
+                            Za dużo argumentów.<br>
+                            Przykład:
+                            <code>FD 5 15</code>
                         </p>
                     </div>
 

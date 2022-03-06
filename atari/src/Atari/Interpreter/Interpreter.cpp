@@ -17,6 +17,7 @@ Interpreter& Interpreter::Get()
 }
 
 void Interpreter::interpretCode(std::string code) {
+	m_errorList.clear();
 	std::vector<Instruction> instructions;
 	code = code.substr(0, code.find('\0'));
 	bool OK = pInterpret(code, instructions);
@@ -240,7 +241,6 @@ void Interpreter::pRun(std::vector<Instruction>& input) {
 	for (auto& instruction : input) {
 		if (instruction.type == Instruction::Type::CS) {
 			Canvas::Get().Clear();
-			continue;
 		}
 		else if (instruction.type == Instruction::Type::REPEAT) {
 			int repeats = atoi(instruction.args[0].c_str());
@@ -297,11 +297,11 @@ void Interpreter::pRun(std::vector<Instruction>& input) {
 void Interpreter::executeSimpleCommand(Instruction& instruction) {
 	auto& turtles = Atari::Get().getTurtles();
 	for (auto& turtleID : m_activeTurtles) {
-		if (instruction.type < Instruction::Type::CS) {
+		if (instruction.type <= Instruction::Type::CS) {
 			auto exec = pGet<OneArgInstruction>(instruction, turtleID);
 			turtles[turtleID].Run(exec);
 		}
-		else if (instruction.type < Instruction::Type::PD) {
+		else if (instruction.type >= Instruction::Type::HT && instruction.type <= Instruction::Type::PD) {
 			auto exec = pGet<ShortInstruction>(instruction, turtleID);
 			turtles[turtleID].Run(exec);
 		}
