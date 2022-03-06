@@ -76,39 +76,105 @@ static bool validateTraits(const ExpressionTrait& trait) {
 
 bool Interpreter::pValidateNoArgsFunction(const Instruction& instruction) {
 	if (instruction.args.size())
-		m_errorList.emplace_back(ErrorCode::TooManyArgs, "Too many args");
+		m_errorList.emplace_back(ErrorCode::TooManyArgs, "Too many args - " + getInstructionString(instruction.type));
 	return instruction.args.size() == 0;
 }
 
 bool Interpreter::pValidateOneArgFunction(const Instruction& instruction) {
 	if (instruction.args.size() > 1)
-		m_errorList.emplace_back(ErrorCode::TooManyArgs, "Too many args");
+		m_errorList.emplace_back(ErrorCode::TooManyArgs, "Too many args - " + getInstructionString(instruction.type));
 	else if (instruction.args.size() == 0)
-		m_errorList.emplace_back(ErrorCode::ExpectedArgument, "Expected argument");
+		m_errorList.emplace_back(ErrorCode::ExpectedArgument, "Expected argument - " + getInstructionString(instruction.type));
 	if (instruction.args.size() != 1)
 		return false;
 
 	auto x = getTraits(instruction.args[0]);
 
 	if (!validateTraits(x)) {
-		m_errorList.emplace_back(ErrorCode::InvalidExpression, "Invalid expression");
+		m_errorList.emplace_back(ErrorCode::InvalidExpression, "Invalid expression - " + getInstructionString(instruction.type));
 		return false; // jeœli ma ceche "error"
+	}
+	return true;
+}
+
+bool Interpreter::pValidateMultipleArgFunction(const Instruction& instruction) {
+	if (instruction.args.size() > 2)
+		m_errorList.emplace_back(ErrorCode::TooManyArgs, "Too many args - " + getInstructionString(instruction.type));
+	else if (instruction.args.size() < 2)
+		m_errorList.emplace_back(ErrorCode::ExpectedArgument, "Expected 2 arguments - " + getInstructionString(instruction.type));
+	if (instruction.args.size() != 2)
+		return false;
+
+	if (instruction.args[0].find('[') == std::string::npos) {
+		if (!isInt(instruction.args[0])) {
+			m_errorList.emplace_back(ErrorCode::InvalidTurtleID, "Expected int - " + getInstructionString(instruction.type));
+			return false;
+		}
+	}
+	else {
+		if (!(instruction.args[0].front() == '[') || !(instruction.args[0].back() == ']'))
+			return false;
+
+		std::stringstream strStr(instruction.args[0].substr(1U, instruction.args[0].rfind(']') - 1U));
+		std::string line;
+		while (std::getline(strStr, line, ' ')) {
+			if (!isInt(line)) {
+				m_errorList.emplace_back(ErrorCode::InvalidTurtleID, "Expected int - " + getInstructionString(instruction.type));
+				return false;
+			}
+		}
+	}
+	if (!(instruction.args[1].front() == '[') || !(instruction.args[1].back() == ']')) {
+		m_errorList.emplace_back(ErrorCode::ExpectedList, "Expected instruction list - " + getInstructionString(instruction.type));
+		return false;
+	}
+	auto& code = instruction.args[1];
+	auto input = code.substr(1U, code.rfind(']') - 1U);
+	std::vector<Instruction> instructions;
+	return pInterpret(input, instructions);
+}
+bool Interpreter::pValidateTellFunction(const Instruction& instruction) {
+	if (instruction.args.size() > 1)
+		m_errorList.emplace_back(ErrorCode::TooManyArgs, "Expected 1 argument - " + getInstructionString(instruction.type));
+	else if (instruction.args.size() < 1)
+		m_errorList.emplace_back(ErrorCode::ExpectedArgument, "Expected 1 argument - " + getInstructionString(instruction.type));
+	if (instruction.args.size() != 1)
+		return false;
+
+	if (instruction.args[0].find('[') == std::string::npos) {
+		if (!isInt(instruction.args[0])) {
+			m_errorList.emplace_back(ErrorCode::InvalidTurtleID, "Expected int - " + getInstructionString(instruction.type));
+			return false;
+		}
+	}
+	else {
+		if (!(instruction.args[0].front() == '[') && !(instruction.args[0].back() == ']'))
+			return false;
+
+		std::stringstream strStr(instruction.args[0].substr(1U, instruction.args[0].rfind(']') - 1U));
+		std::string line;
+		while (std::getline(strStr, line, ' ')) {
+			if (!isInt(line)) {
+				m_errorList.emplace_back(ErrorCode::InvalidTurtleID, "Expected int - " + getInstructionString(instruction.type));
+				return false;
+			}
+		}
 	}
 	return true;
 }
 
 bool Interpreter::pValidateRepeatFunction(const Instruction& instruction) {
 	if (instruction.args.size() > 2)
-		m_errorList.emplace_back(ErrorCode::TooManyArgs, "Too many args");
+		m_errorList.emplace_back(ErrorCode::TooManyArgs, "Too many args - " + getInstructionString(instruction.type));
 	else if (instruction.args.size() < 2)
-		m_errorList.emplace_back(ErrorCode::ExpectedArgument, "Expected argument");
+		m_errorList.emplace_back(ErrorCode::ExpectedArgument, "Expected 2 arguments - " + getInstructionString(instruction.type));
 	if (instruction.args.size() != 2)
 		return false;
 
 	auto x = getTraits(instruction.args[0]);
 
 	if (!validateTraits(x)) {
-		m_errorList.emplace_back(ErrorCode::InvalidExpression, "Invalid expression");
+		m_errorList.emplace_back(ErrorCode::InvalidExpression, "Invalid expression - " + getInstructionString(instruction.type));
 		return false; // jeœli ma ceche "error"
 	}
 

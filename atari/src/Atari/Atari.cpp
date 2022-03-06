@@ -112,3 +112,14 @@ void Atari::DrawUI() {
 void Atari::Update() {
 
 }
+
+void Atari::UpdateActiveTurtles(std::vector<int>& activeTurtles) {
+	for (auto& turtle : m_turtles)
+		turtle.getTurtleDataRef().active = false;
+
+	for (auto& id : activeTurtles) {
+		if (id >= m_turtles.size())
+			continue;
+		m_turtles[id].getTurtleDataRef().active = true;
+	}
+}

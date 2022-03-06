@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Input.hpp"
 
-#define INPUTSIZE 100
+#define INPUTSIZE 128
 
 Input::Input(sf::RenderWindow* r_window)
 	:r_window(r_window)
@@ -50,7 +50,7 @@ void Input::Update(const std::string& errorCodes) {
 
 			// miejsce na tekst
 			ImGui::PushItemWidth(maxItemSize.x - 150.f);
-			if (ImGui::InputText("", (char*)p_Input.inputText.c_str(), INPUTSIZE, ImGuiInputTextFlags_EnterReturnsTrue))
+			if (ImGui::InputText("", p_Input.inputText.data(), INPUTSIZE, ImGuiInputTextFlags_EnterReturnsTrue))
 				p_Input.shouldReturn = true;
 			ImGui::PopItemWidth();
 

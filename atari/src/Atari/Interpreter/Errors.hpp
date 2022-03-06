@@ -7,6 +7,7 @@ enum class ErrorCode : short {
 
 	ExpectedArgument = 1,
 	ExpectedNumber,
+	ExpectedList,
 	UnknownCommand,
 	InvalidTurtleID,
 	InvalidExpression,

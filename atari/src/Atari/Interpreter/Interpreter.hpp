@@ -29,6 +29,28 @@ public:
 		} type;
 		std::vector<std::string> args;
 	};
+#define BIND_COMMAND_STR(x) if (insType == Instruction::Type::x) {return #x;}
+	std::string getInstructionString(Instruction::Type insType) {
+		BIND_COMMAND_STR(FD);
+		BIND_COMMAND_STR(BK);
+		BIND_COMMAND_STR(RT);
+		BIND_COMMAND_STR(LT);
+		BIND_COMMAND_STR(CS);
+		BIND_COMMAND_STR(POTS);
+		BIND_COMMAND_STR(HT);
+		BIND_COMMAND_STR(ST);
+		BIND_COMMAND_STR(PU);
+		BIND_COMMAND_STR(PD);
+		BIND_COMMAND_STR(TELL);
+		BIND_COMMAND_STR(ASK);
+		BIND_COMMAND_STR(SETC);
+		BIND_COMMAND_STR(SETPN);
+		BIND_COMMAND_STR(SETPC);
+		BIND_COMMAND_STR(EACH);
+		BIND_COMMAND_STR(TELL);
+		BIND_COMMAND_STR(REPEAT);
+		return "Unknown";
+	}
 
 	struct Function {
 		std::string name;
@@ -101,10 +123,10 @@ private:
 	bool pValidateNoArgsFunction		(const Instruction& instruction);
 	// one arg (FD, RT)
 	bool pValidateOneArgFunction		(const Instruction& instruction);
-	// TELL, ASK
+	// ASK
 	bool pValidateMultipleArgFunction	(const Instruction& instruction);
-	// CUSTOM FUNCTION
-	bool pValidateFunctionArgFunction	(const Instruction& instruction);
+	// TELL
+	bool pValidateTellFunction			(const Instruction& instruction);
 	// REPEAT
 	bool pValidateRepeatFunction		(const Instruction& instruction);
 
@@ -130,4 +152,8 @@ private:
 	float evaluate(std::string& string, int who);
 
 	void pCreateErrorString();
+
+	bool createTurtles(std::vector<int>& ids);
+
+	void getIntList(const std::string& input, std::vector<int>& output);
 };

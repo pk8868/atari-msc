@@ -15,18 +15,10 @@ SFML >= 2.5.1
     - sfml-graphics-s.lib
     - sfml-window-s.lib
     - sfml-system-s.lib
-    - sfml-audio-s.lib
-    - sfml-network-s.lib	
-    - opengl32.lib
     - freetype.lib
+    - opengl32.lib
     - winmm.lib
     - gdi32.lib
-    - openal32.lib
-    - flac.lib
-    - vorbisenc.lib
-    - vorbisfile.lib
-    - vorbis.lib
-    - ogg.lib
     - ws2_32.lib
     - Advapi32.lib
     - shell32.lib
