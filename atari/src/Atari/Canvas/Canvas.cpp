@@ -6,10 +6,8 @@
 Canvas::Canvas() {
 	p_circleShape.setRadius(1.5f);
 	p_circleShape.setOrigin({ 1.5f, 1.5f });
-
 	// y * 0.8f, zeby nie stworzylo sie pod UI
-	if (!p_Texture.create(App::Get().m_appSettings.windowSize.x, int(App::Get().m_appSettings.windowSize.y * 0.8f),
-		sf::ContextSettings(0, 0, 16)))
+	if (!p_Texture.create(App::Get().m_appSettings.windowSize.x, int(App::Get().m_appSettings.windowSize.y * 0.8f)))
 		ErrorLog::Log(Error{ Error::Critical, "Couldn't create canvas" });
 
 	Clear();

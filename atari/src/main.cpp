@@ -30,7 +30,6 @@ int main(char** args, int argc) {
 	// wypisanie z³apanego b³êdu do pliku
 	catch (std::exception& e)
 	{
-		util::addToLogFile(e.what());
 
 #if _WIN32
 		// okno errora windows
