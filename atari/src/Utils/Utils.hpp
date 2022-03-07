@@ -39,8 +39,8 @@ namespace util {
 	} // rotate a vector
 
 	// zapisanie obrazu do pliku
-	static void saveToFile(sf::Image image, std::string filename) {
-		image.saveToFile(filename);
+	static bool saveToFile(sf::Image image, std::string filename) {
+		return image.saveToFile(filename);
 	}
 	
 	// wczytanie tekstury

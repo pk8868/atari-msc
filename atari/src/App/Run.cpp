@@ -98,7 +98,8 @@ void App::p_mainMenu() {
 		if (ImGui::MenuItem("Zapisz")) {
 			std::string filename = util::saveFileDialog("PNG Files (*.png)\0*.png\0\0");
 			if (filename != "") {
-				util::saveToFile(Canvas::Get().getImage(), filename);
+				if (!util::saveToFile(Canvas::Get().getImage(), filename))
+					ErrorLog::Log(Error{ Error::Warning, "Couldn't save " + filename });
 			}
 		}
 
