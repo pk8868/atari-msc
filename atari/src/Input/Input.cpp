@@ -92,8 +92,14 @@ void Input::Update(const std::string& errorCodes) {
 
 std::string Input::getString() {
 	p_Input.shouldReturn = false;
+	std::string tempStr = p_Input.inputText;
 
-	return p_Input.inputText;
+	for (auto& ch : tempStr) {
+		if (ch >= 'a' && ch <= 'z')
+			ch -= 'a' - 'A'; // to uppercase
+	}
+
+	return tempStr;
 }
 
 void Input::clear() {

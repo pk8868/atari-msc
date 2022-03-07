@@ -312,7 +312,7 @@ void Interpreter::executeSimpleCommand(Instruction& instruction) {
 }
 
 float Interpreter::evaluate(std::string& string, int who) {
-	return atof(string.c_str());
+	return (float)atof(string.c_str());
 }
 
 
