@@ -5,6 +5,22 @@
         <title> Strona główna </title>
         <link rel="stylesheet" href="style.css">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/x-icon" href="gfx/favicon.ico">
+
+        <style>
+            #main {
+                margin: auto;
+                width: 80%;
+                text-align: center;
+            }
+            #main img{
+                margin-bottom: 15px;
+                width: 70%;
+            }
+            #main h3{
+                margin-top: 10px;
+            }
+        </style>
     </head>
     <body>
         <div id="header">
@@ -17,7 +33,29 @@
             <a href="bledy_programu.html">Błędy programu</a>
         </div>
         <div id="main">
-            <p> testowa tresc </p>
+            <h2>Interfejs użytkownika</h2>
+            Na górze znajduje panel główny aplikacji, a na dole jest panel do kontroli interpretera.<br>
+            <h3>Panel główny</h3>
+            <img src="gfx/gui/main.png"/><br>
+            W zakładce <i>Plik</i> można zapisać stan planszy lub wyłączyć program.<br>
+            <img src="gfx/gui/file.png"/><br>
+            Klikając w <i>Ustawienia</i> pojawi się okno ustawień. Zmiana rozmiaru czcionki wymaga restartu programu.<br>
+            <img src="gfx/gui/settings.png"/><br>
+            Klikając w <i>Pomoc</i> pojawi się strona z dokumentacją.<br>
+
+            <h3>Panel interpretera</h3>
+            W zakładce <i>Wejscie</i> znajduje się miejsce na wpisywanie poleceń i pod nim pojawia się historia wpisywanych poleceń.<br>
+            <img src="gfx/gui/main.png"/><br>
+            W zakładce <i>Konsola interpretera</i> pojawiają się wszystkie błędy.<br>
+            <img src="gfx/gui/console.png"/><br>
+            W zakładce <i>Atari</i> pojawiają się wszystkie informacje o żółwiach.<br>
+            <img src="gfx/gui/atari.png"/><br>
+
+            <h3>Inne informacje</h3>
+            Klikając <i>F5</i> pojawi się okno logowania błędów. Błędy są również zapisywane w pliku <i>log.txt</i>.<br>
+            <img src="gfx/gui/logger.png"/><br>
+            Motywy imgui można modyfikować w pliku <i>imgui</i>, a ustawienia użytkownika są zapisywane w pliku <i>config</i>.<br>
+            <img src="gfx/gui/config.png"/><br>
         </div>
         <div id="footer">
 

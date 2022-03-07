@@ -52,9 +52,6 @@ bool Turtle::Run(const Interpreter::ShortInstruction& instruction) {
 }
 
 bool Turtle::Run(const Interpreter::OneArgInstruction& instruction) {
-	if (!m_data.active)
-		return true;
-
 	switch (instruction.type) {
 	case Interpreter::Instruction::Type::LT:
 		p_rotate(-instruction.value);
@@ -64,10 +61,10 @@ bool Turtle::Run(const Interpreter::OneArgInstruction& instruction) {
 		break;
 
 	case Interpreter::Instruction::Type::FD:
-		p_move(-instruction.value);
+		p_move((int)-instruction.value);
 		break;
 	case Interpreter::Instruction::Type::BK:
-		p_move(instruction.value);
+		p_move((int)instruction.value);
 		break;
 	}
 

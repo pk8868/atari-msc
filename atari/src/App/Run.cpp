@@ -7,7 +7,7 @@ void App::run() {
 	sf::Event l_event;
 	sf::Clock l_clock;
 	sf::Time l_frameTime;
-	m_window.getSystemHandle();
+
 	// glowna petla
 	while (true) {
 		// handlowanie eventów
@@ -34,7 +34,7 @@ void App::run() {
 
 					// aktualizacja ustawieñ i canvasu
 					m_appSettings.windowSize = sf::Vector2i(m_window.getSize());
-					Canvas::Get().newWindowSize(m_window.getSize());
+					Canvas::Get().newWindowSize(sf::Vector2u(l_event.size.width, l_event.size.height));
 				}
 
 
@@ -94,25 +94,25 @@ void App::p_mainMenu() {
 	ImGui::BeginMainMenuBar();
 
 	// menu File
-	if (ImGui::BeginMenu("File")) {
-		if (ImGui::MenuItem("Save")) {
+	if (ImGui::BeginMenu("Plik")) {
+		if (ImGui::MenuItem("Zapisz")) {
 			std::string filename = util::saveFileDialog("PNG Files (*.png)\0*.png\0\0");
 			if (filename != "") {
-				secondThread = std::async(std::launch::async, util::saveToFile,
-					Canvas::Get().getImage(), filename);
+				if (!util::saveToFile(Canvas::Get().getImage(), filename))
+					ErrorLog::Log(Error{ Error::Warning, "Couldn't save " + filename });
 			}
 		}
 
-		if (ImGui::MenuItem("Exit"))
+		if (ImGui::MenuItem("Wyjdz"))
 			m_window.close();
 
 		ImGui::EndMenu();
 	}
 
-	if (ImGui::MenuItem("Settings"))
+	if (ImGui::MenuItem("Ustawienia"))
 		m_SettingsOpened = !m_SettingsOpened;
 
-	if (ImGui::MenuItem("Help"))
+	if (ImGui::MenuItem("Pomoc"))
 		// wywo³anie przegl¹darki dla dokumentu html, dwa \ bo nie zadzia³a z normalnym /
 		ShellExecuteA(NULL, "open", "doc\\index.html", NULL, NULL, SW_SHOWNORMAL);
 
@@ -123,7 +123,7 @@ void App::p_mainMenu() {
 void App::pSettings() {
 	// nowe okno ImGUI
 	
-	ImGui::Begin("Settings", &m_SettingsOpened,
+	ImGui::Begin("Ustawienia", &m_SettingsOpened,
 		ImGuiWindowFlags_NoCollapse);
 
 	// rozmiar czcionki

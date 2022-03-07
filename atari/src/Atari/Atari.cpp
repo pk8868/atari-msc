@@ -82,11 +82,11 @@ void Atari::DrawUI() {
 
 			{ // wypisanie pozycji
 				ImGui::Text("Aktualna pozycja: %d, %d",
-					temp_data.currentPosition.x, temp_data.currentPosition.y);
+					(int)round(temp_data.currentPosition.x), (int)round(temp_data.currentPosition.y));
 			}
 
 			{ // wypisanie rotacji
-				ImGui::Text("Obrot: %d stopni", (int)temp_data.rotation);
+				ImGui::Text("Obrot: %d stopni", (int)round(temp_data.rotation));
 			}
 
 			// checkboxy z danymi na temat sladu i widocznosci
@@ -111,4 +111,15 @@ void Atari::DrawUI() {
 
 void Atari::Update() {
 
+}
+
+void Atari::UpdateActiveTurtles(std::vector<int>& activeTurtles) {
+	for (auto& turtle : m_turtles)
+		turtle.getTurtleDataRef().active = false;
+
+	for (auto& id : activeTurtles) {
+		if (id >= m_turtles.size())
+			continue;
+		m_turtles[id].getTurtleDataRef().active = true;
+	}
 }

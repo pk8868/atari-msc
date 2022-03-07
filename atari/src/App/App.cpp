@@ -62,7 +62,7 @@ App::App() {
 			{
 				// stworzenie okna
 				m_window.create(sf::VideoMode(m_appSettings.windowSize.x, m_appSettings.windowSize.y), temp_windowName,
-					sf::Style::Titlebar | sf::Style::Resize | sf::Style::Close, sf::ContextSettings(0, 0, 8));
+					sf::Style::Titlebar | sf::Style::Resize | sf::Style::Close);
 			}
 		}
 

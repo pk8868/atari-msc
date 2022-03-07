@@ -17,11 +17,43 @@ Interpreter& Interpreter::Get()
 }
 
 void Interpreter::interpretCode(std::string code) {
+	m_errorList.clear();
 	std::vector<Instruction> instructions;
 	code = code.substr(0, code.find('\0'));
 	bool OK = pInterpret(code, instructions);
 	if (OK)
 		pRun(instructions);
+	pCreateErrorString();
+}
+
+void Interpreter::pCreateErrorString() {
+	m_errorString.clear();
+	std::stringstream stream;
+	for (int i = 0; i < m_errorList.size(); i++)
+		stream << (int)m_errorList[i].code << " - " << m_errorList[i].message << "\n";
+
+	m_errorString = stream.str();
+}
+
+bool Interpreter::createTurtles(std::vector<int>& ids) {
+	auto& turtles = Atari::Get().getTurtles();
+	for (auto& id : ids) {
+		if (id > turtles.size()) {
+			m_errorList.emplace_back(ErrorCode::InvalidTurtleID, "Too high Turtle ID");
+			return false;
+		}
+		else if (id == turtles.size())
+			turtles.push_back(Turtle{});
+	}
+
+	return true;
+}
+
+void Interpreter::getIntList(const std::string& input, std::vector<int>& output) {
+	std::stringstream strStr(input);
+	std::string number;
+	while (std::getline(strStr, number, ' '))
+		output.push_back(atoi(number.c_str()));
 }
 
 bool Interpreter::pInterpret(std::string& str, std::vector<Instruction>& output) {
@@ -35,20 +67,10 @@ bool Interpreter::pInterpret(std::string& str, std::vector<Instruction>& output)
 		pTokenize(t_tokens, str);
 		t_tokens.shrink_to_fit();
 
-		for (const auto& token : t_tokens) {
-			std::cout << token.keyword << ": ";
-			for (const auto& arg : token.args) {
-				std::cout << arg << ", ";
-			}
-			std::cout << "\n";
-		}
-
 		auto isFunction = pParse(output, t_tokens);
 
-		for (auto& instruction : output) {
-			if (!pValidateArgs(instruction))
-				return false;
-		}
+		for (auto& instruction : output)
+			pValidateArgs(instruction);
 
 		if (m_errorList.size() != 0)
 			return false;
@@ -87,13 +109,13 @@ void Interpreter::pCombineWords(std::vector<Token>& output, std::vector<std::str
 			else {
 				// wchodzimy do listy
 				if (word[0] == '[') {
-					listCount++;
-
 					// jesli jednoargumentowa lista nie dodawaj spacji
 					if (word[word.length() - 1] == ']')
 						currentToken.args.push_back(word);
-
-					currentToken.args.push_back(word + " ");
+					else {
+						currentToken.args.push_back(word + " ");
+						listCount++;
+					}
 				}
 				// lub nowy token
 				else {
@@ -118,7 +140,10 @@ void Interpreter::pCombineWords(std::vector<Token>& output, std::vector<std::str
 	if (currentToken.keyword != "")
 		output.push_back(currentToken);
 
-
+	while (listCount > 0) {
+		m_errorList.emplace_back(ErrorCode::MissingRightBracket, "Missing right bracket");
+		listCount--;
+	}
 }
 
 bool Interpreter::pSpecial(const std::string& string) {
@@ -138,13 +163,11 @@ bool Interpreter::pParse(std::vector<Instruction>& output, std::vector<Token>& i
 
 	for (int i = 0; i < input.size(); i++) {
 		if (input[i].keyword == "TO")
-			return true;
+			return false;
 
 		else {
 			Instruction tempInstruction{};
 			tempInstruction.args = input[i].args;
-
-
 
 			if (input[i].keyword == "FD")
 				tempInstruction.type = Instruction::Type::FD;
@@ -208,6 +231,12 @@ bool Interpreter::pValidateArgs(Instruction& instruction) {
 	if (instruction.type == Instruction::Type::REPEAT)
 		return pValidateRepeatFunction(instruction);
 
+	if (instruction.type == Instruction::Type::ASK)
+		return pValidateMultipleArgFunction(instruction);
+
+	if (instruction.type == Instruction::Type::TELL)
+		return pValidateTellFunction(instruction);
+
 	return false;
 }
 
@@ -215,10 +244,6 @@ void Interpreter::pRun(std::vector<Instruction>& input) {
 	for (auto& instruction : input) {
 		if (instruction.type == Instruction::Type::CS) {
 			Canvas::Get().Clear();
-			continue;
-		}
-		else if (instruction.type == Instruction::Type::POTS) {
-			continue; // unimplemented
 		}
 		else if (instruction.type == Instruction::Type::REPEAT) {
 			int repeats = atoi(instruction.args[0].c_str());
@@ -231,6 +256,41 @@ void Interpreter::pRun(std::vector<Instruction>& input) {
 					pRun(repeatInstructions);
 			}
 		}
+		else if (instruction.type == Instruction::Type::TELL) {
+			std::vector<int> newTurtles;
+			// lista
+			if (instruction.args[0][0] == '[')
+				getIntList(instruction.args[0].substr(1U, instruction.args[0].rfind(']') - 1)
+					, newTurtles);
+			else
+				newTurtles.push_back(atoi(instruction.args[0].c_str()));
+			if (!createTurtles(newTurtles))
+				return;
+			m_activeTurtles = newTurtles;
+			Atari::Get().UpdateActiveTurtles(m_activeTurtles);
+		}
+		else if (instruction.type == Instruction::Type::ASK) {
+			std::vector<Instruction> tellInstructions;
+			auto input = instruction.args[1].substr(1U, instruction.args[1].rfind(']') - 1);
+			bool OK = pInterpret(input, tellInstructions);
+
+			std::vector<int> oldTurtles = m_activeTurtles;
+			std::vector<int> newTurtles;
+
+			// lista
+			if (instruction.args[0][0] == '[')
+				getIntList(instruction.args[0].substr(1U, instruction.args[0].rfind(']') - 1), newTurtles);
+			else
+				newTurtles.push_back(atoi(instruction.args[0].c_str()));
+
+			if (!createTurtles(newTurtles))
+				return;
+
+			m_activeTurtles = newTurtles;
+			if (OK)
+				pRun(tellInstructions);
+			m_activeTurtles = oldTurtles;
+		}
 		else {
 			executeSimpleCommand(instruction);
 		}
@@ -240,11 +300,11 @@ void Interpreter::pRun(std::vector<Instruction>& input) {
 void Interpreter::executeSimpleCommand(Instruction& instruction) {
 	auto& turtles = Atari::Get().getTurtles();
 	for (auto& turtleID : m_activeTurtles) {
-		if (instruction.type < Instruction::Type::CS) {
+		if (instruction.type <= Instruction::Type::CS) {
 			auto exec = pGet<OneArgInstruction>(instruction, turtleID);
 			turtles[turtleID].Run(exec);
 		}
-		else if (instruction.type < Instruction::Type::PD) {
+		else if (instruction.type >= Instruction::Type::HT && instruction.type <= Instruction::Type::PD) {
 			auto exec = pGet<ShortInstruction>(instruction, turtleID);
 			turtles[turtleID].Run(exec);
 		}
@@ -255,7 +315,7 @@ void Interpreter::executeSimpleCommand(Instruction& instruction) {
 }
 
 float Interpreter::evaluate(std::string& string, int who) {
-	return atof(string.c_str());
+	return (float)atof(string.c_str());
 }
 
 

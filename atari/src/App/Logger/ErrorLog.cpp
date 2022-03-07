@@ -15,7 +15,7 @@ ErrorLog& ErrorLog::Get() {
 }
 
 void ErrorLog::LogImpl(const Error& error) {
-	util::addToLogFile(cm_errorSeverities[error.severity] + error.message);
+	util::addToLogFile(cm_errorSeverities[error.severity] + " - " + error.message);
 
 	if (error.severity == Error::Critical)
 		throw std::runtime_error(error.message);

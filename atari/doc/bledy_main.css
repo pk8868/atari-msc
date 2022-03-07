@@ -29,6 +29,10 @@
     padding-top: 20px;
 }
 
+#main{
+    text-align: left !important;
+}
+
 @media only screen and (max-width: 900px) {
     .error {
         width: 100%;
