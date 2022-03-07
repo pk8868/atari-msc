@@ -1,6 +1,7 @@
 # atari-msc
 ATARI Logo Interpreter
-interpreter na motorola science cup
+Interpreter na motorola science cup
+![grafika](https://user-images.githubusercontent.com/87194023/157021840-30df2b21-6e2e-4cc4-818c-283700c2858f.png)
 
 ## zależności
 SFML >= 2.5.1
