@@ -34,7 +34,7 @@ void App::run() {
 
 					// aktualizacja ustawieñ i canvasu
 					m_appSettings.windowSize = sf::Vector2i(m_window.getSize());
-					Canvas::Get().newWindowSize(m_window.getSize());
+					Canvas::Get().newWindowSize(sf::Vector2u(l_event.size.width, l_event.size.height));
 				}
 
 

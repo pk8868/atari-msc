@@ -61,7 +61,7 @@ void Canvas::newWindowSize(sf::Vector2u windowSize) {
 	// stworzenie nowego canvasa
 	if (!p_Texture.create(windowSize.x, int(windowSize.y * 0.8f)))
 		ErrorLog::Log(Error{ Error::Critical, "Couldn't create canvas" });
-
+	p_Texture.setView(p_Texture.getDefaultView());
 	p_Texture.clear(background);
 
 	// narysowanie linii od nowa
