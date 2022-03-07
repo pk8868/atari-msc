@@ -61,10 +61,10 @@ bool Turtle::Run(const Interpreter::OneArgInstruction& instruction) {
 		break;
 
 	case Interpreter::Instruction::Type::FD:
-		p_move(-instruction.value);
+		p_move((int)-instruction.value);
 		break;
 	case Interpreter::Instruction::Type::BK:
-		p_move(instruction.value);
+		p_move((int)instruction.value);
 		break;
 	}
 

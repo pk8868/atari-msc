@@ -109,7 +109,7 @@ void Input::clear() {
 }
 
 void Input::pushCommand() {
-	for (int i = strings.size() - 1; i > 0; i--)
+	for (auto i = strings.size() - 1; i > 0; i--)
 		strings[i] = strings[i - 1];
 	strings[0] = p_Input.inputText;
 }
