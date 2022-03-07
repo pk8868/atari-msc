@@ -27,6 +27,7 @@ Canvas& Canvas::Get()
 
 void Canvas::DrawOnScreen(sf::RenderWindow& r_window) {
 	p_Sprite.setTexture(p_Texture.getTexture());
+	p_Sprite.setTextureRect(sf::IntRect{ sf::Vector2i{0, 0}, (sf::Vector2i)p_Texture.getSize() });
 	r_window.draw(p_Sprite);
 }
 
