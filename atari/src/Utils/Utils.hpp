@@ -139,7 +139,10 @@ namespace util {
 		ofna.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
 
 		if (GetSaveFileNameA(&ofna) == TRUE) {
-			return std::string(ofna.lpstrFile) + ".png";
+			std::string str{ ofna.lpstrFile };
+			if (str.find(".png") == std::string::npos)
+				return std::string(ofna.lpstrFile) + ".png";
+			return std::string(ofna.lpstrFile);
 		}
 
 		return "";
