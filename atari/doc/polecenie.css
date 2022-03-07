@@ -33,6 +33,10 @@
     width: 50%;
 }
 
+#main{
+    text-align: left !important;
+}
+
 @media only screen and (max-width: 900px) {
     .command {
         width: 100%;
