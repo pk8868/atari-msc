@@ -58,21 +58,10 @@ void Canvas::Clear() {
 }
 
 void Canvas::newWindowSize(sf::Vector2u windowSize) {
-	// zapisanie starej planszy
-	sf::Texture temp_oldCanvas = p_Texture.getTexture();
-	sf::Sprite temp_oldCanvasSprite(temp_oldCanvas);
-	temp_oldCanvasSprite.setOrigin(sf::Vector2f(temp_oldCanvas.getSize() / 2U));
-
-	
-
 	// stworzenie nowego canvasa
 	if (!p_Texture.create(windowSize.x, int(windowSize.y * 0.8f)))
 		ErrorLog::Log(Error{ Error::Critical, "Couldn't create canvas" });
 
-	// wycentrowanie starego canvasa
-	temp_oldCanvasSprite.setPosition(sf::Vector2f(p_Texture.getSize() / 2U));
-
-	// wyrenderowanie starego canvasa na oknie
 	p_Texture.clear(background);
 
 	// narysowanie linii od nowa
