@@ -46,21 +46,6 @@ void Canvas::Draw(const sf::Vector2f& point_A, const sf::Vector2f& point_B, cons
 			lines.emplace_back(point_A, point_B, color);
 	}
 
-	// stworzenie dwóch kó³ na punkcie A i B
-	{
-		// ustawienie koloru
-		p_circleShape.setFillColor(color);
-
-		// zaokr¹glenie punktu A
-		p_circleShape.setPosition(p_normalizeVector(point_A));
-		p_Texture.draw(p_circleShape);
-
-		// zaokr¹glenie punktu B
-		p_circleShape.setPosition(p_normalizeVector(point_B));
-		p_Texture.draw(p_circleShape);
-		
-	}
-
 	p_Texture.display();
 }
 
