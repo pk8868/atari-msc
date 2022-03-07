@@ -140,7 +140,10 @@ void Interpreter::pCombineWords(std::vector<Token>& output, std::vector<std::str
 	if (currentToken.keyword != "")
 		output.push_back(currentToken);
 
-
+	while (listCount > 0) {
+		m_errorList.emplace_back(ErrorCode::MissingRightBracket, "Missing right bracket");
+		listCount--;
+	}
 }
 
 bool Interpreter::pSpecial(const std::string& string) {
