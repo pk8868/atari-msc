@@ -14,3 +14,4 @@ SFML >= 2.5.1
 - Następnie należy kliknąć dwukrotnie na atari.sln
 - Następnie należy kliknąć PPM na atari (w Eksploratorze rozwiązań) i wybrać Kompiluj
 - Plik .exe pojawi się w katalogu bin
+- Resztę plików (konfiguracja, grafiki i czcionki) należy przekopiować manualnie
