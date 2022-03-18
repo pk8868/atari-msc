@@ -13,3 +13,4 @@ SFML >= 2.5.1
     - cmake -G "Visual Studio 16"
 - Następnie należy kliknąć dwukrotnie na atari.sln
 - Następnie należy kliknąć PPM na atari (w Eksploratorze rozwiązań) i wybrać Kompiluj
+- Plik .exe pojawi się w katalogu bin
