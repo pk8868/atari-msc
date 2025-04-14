@@ -5,10 +5,10 @@
 #include "Utils/HeapMonitoring.hpp"
 #endif
 
-int main(char** args, int argc) {
+int main() {
 	try {
 #ifdef PERFMON
-		// wyczyszczenie pliku z danymi wydajnoœci
+		// wyczyszczenie pliku z danymi wydajnoï¿½ci
 		perf::init();
 #endif
 
@@ -18,7 +18,6 @@ int main(char** args, int argc) {
 		std::future<void> snapshotHandlerThread;
 		snapshotHandlerThread = std::async(std::launch::async, runSnapshotHandler, &running);
 #endif // HEAP_MONITOR
-
 		App::Get().run();
 
 #ifdef HEAP_MONITOR
@@ -27,7 +26,7 @@ int main(char** args, int argc) {
 #endif
 
 	}
-	// wypisanie z³apanego b³êdu do pliku
+	// wypisanie zï¿½apanego bï¿½ï¿½du do pliku
 	catch (std::exception& e)
 	{
 

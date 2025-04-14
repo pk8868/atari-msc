@@ -26,11 +26,11 @@ public:
 	
 	void UpdateActiveTurtles(std::vector<int>& activeTurtles);
 
-	const sf::Image& getImage() { return Canvas::Get().getImage(); }
+	const sf::Image getImage() { return Canvas::Get().getImage(); }
 	const sf::Texture* getTexture() { return m_turtleTexture; }
 	std::vector<Turtle>& getTurtles() { return m_turtles; }
 private:
-	// lista ¿ó³wii
+	// lista ï¿½ï¿½wii
 	std::vector<Turtle> m_turtles;
 
 	// tekstura

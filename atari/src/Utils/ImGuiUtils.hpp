@@ -1,6 +1,6 @@
 #pragma once
-#include <imgui/imgui-SFML.h>
-#include <imgui/imgui.h>
+#include "imgui-SFML.h"
+#include <imgui.h>
 #include "tlang/TeaLang.hpp"
 #include <string>
 
@@ -15,7 +15,7 @@
 namespace util {
 
 	static bool setTheme(const std::string& theme) {
-		// ustawienie g³ównego motywu kolorów
+		// ustawienie gï¿½ï¿½wnego motywu kolorï¿½w
 		if (theme == "dark")
 			ImGui::StyleColorsDark();
 		else if (theme == "classic")

@@ -224,7 +224,7 @@ bool Interpreter::pValidateArgs(Instruction& instruction) {
 	if (instruction.type <= Instruction::Type::LT)
 		return pValidateOneArgFunction(instruction);
 	
-	// bez argumentów
+	// bez argumentï¿½w
 	if (instruction.type <= Instruction::Type::PD)
 		return pValidateNoArgsFunction(instruction);
 	
@@ -301,11 +301,11 @@ void Interpreter::executeSimpleCommand(Instruction& instruction) {
 	auto& turtles = Atari::Get().getTurtles();
 	for (auto& turtleID : m_activeTurtles) {
 		if (instruction.type <= Instruction::Type::CS) {
-			auto exec = pGet<OneArgInstruction>(instruction, turtleID);
+			auto exec = pGetShortInstruction(instruction, turtleID);
 			turtles[turtleID].Run(exec);
 		}
 		else if (instruction.type >= Instruction::Type::HT && instruction.type <= Instruction::Type::PD) {
-			auto exec = pGet<ShortInstruction>(instruction, turtleID);
+			auto exec = pGetOneArgInstruction(instruction, turtleID);
 			turtles[turtleID].Run(exec);
 		}
 		else {

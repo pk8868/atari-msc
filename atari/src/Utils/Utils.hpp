@@ -45,7 +45,7 @@ namespace util {
 	
 	// wczytanie tekstury
 	static bool getTexture(std::string filename, sf::Texture* texture) {
-		// jesli nie za³aduje siê tekstura zwróci siê null
+		// jesli nie zaï¿½aduje siï¿½ tekstura zwrï¿½ci siï¿½ null
 		bool done = texture->loadFromFile(filename);
 		texture->setSmooth(true);	
 		return done;
@@ -56,7 +56,7 @@ namespace util {
 		time_t t = time(NULL);
 
 		tm time;
-		localtime_s(&time, &t);
+		localtime_r(&t, &time);
 
 		return "[" + std::to_string(1900 + time.tm_year) + "-" +
 			(time.tm_mon >= 10 ? std::to_string(time.tm_mon + 1) : "0" + std::to_string(time.tm_mon + 1)) + "-" +
@@ -71,7 +71,7 @@ namespace util {
 		time_t t = time(NULL);
 
 		tm time;
-		localtime_s(&time, &t);
+		localtime_r(&t, &time);
 
 		return std::to_string(1900 + time.tm_year) + "_" +
 			(time.tm_mon >= 10 ? std::to_string(time.tm_mon + 1) : "0" + std::to_string(time.tm_mon + 1)) + "_" +
@@ -86,7 +86,7 @@ namespace util {
 		time_t t = time(NULL);
 
 		tm time;
-		localtime_s(&time, &t);
+		localtime_r(&t, &time);
 
 		return "[" + std::to_string(time.tm_hour) + ":" +
 			(time.tm_min >= 10 ? std::to_string(time.tm_min) : "0" + std::to_string(time.tm_min)) + ":"

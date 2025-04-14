@@ -10,9 +10,9 @@ void App::run() {
 
 	// glowna petla
 	while (true) {
-		// handlowanie eventów
+		// handlowanie eventï¿½w
 		while (m_window.pollEvent(l_event)) {
-			// obs³uga eventu klikniêcia x
+			// obsï¿½uga eventu klikniï¿½cia x
 			if (l_event.type == sf::Event::Closed) {
 				m_window.close();
 				break;
@@ -32,7 +32,7 @@ void App::run() {
 					m_window.setView(sf::View(sf::FloatRect(0.f, 0.f,
 						(float)l_event.size.width, (float)l_event.size.height)));
 
-					// aktualizacja ustawieñ i canvasu
+					// aktualizacja ustawieï¿½ i canvasu
 					m_appSettings.windowSize = sf::Vector2i(m_window.getSize());
 					Canvas::Get().newWindowSize(sf::Vector2u(l_event.size.width, l_event.size.height));
 				}
@@ -42,14 +42,14 @@ void App::run() {
 			}
 		}
 
-		// wyjœcie z pêtli
+		// wyjï¿½cie z pï¿½tli
 		if (!m_window.isOpen())
 			break;
 
 		// updateowanie czasu klatki
 		l_frameTime = l_clock.restart();
 
-		// updatowanie elementów gui
+		// updatowanie elementï¿½w gui
 		ImGui::SFML::Update(m_window, l_frameTime);
 
 
@@ -64,10 +64,10 @@ void App::run() {
 		// narysowanie loggera
 		ErrorLog::Draw();
 
-		// zupdatowanie okna z interfejsem u¿ytkownika
+		// zupdatowanie okna z interfejsem uï¿½ytkownika
 		m_input.Update(Interpreter::Get().getErrorString());
 
-		// g³ówne menu programu
+		// gï¿½ï¿½wne menu programu
 		p_mainMenu();
 
 		// okno z ustawieniami
@@ -81,7 +81,7 @@ void App::run() {
 		m_window.display();
 
 
-		// odebranie danych wejœciowych
+		// odebranie danych wejï¿½ciowych
 		if (m_input.shouldGet()) {
 			Interpreter::Get().interpretCode(m_input.getString());
 			m_input.clear();
@@ -95,6 +95,7 @@ void App::p_mainMenu() {
 
 	// menu File
 	if (ImGui::BeginMenu("Plik")) {
+#if _WIN32
 		if (ImGui::MenuItem("Zapisz")) {
 			std::string filename = util::saveFileDialog("PNG Files (*.png)\0*.png\0\0");
 			if (filename != "") {
@@ -102,6 +103,7 @@ void App::p_mainMenu() {
 					ErrorLog::Log(Error{ Error::Warning, "Couldn't save " + filename });
 			}
 		}
+#endif
 
 		if (ImGui::MenuItem("Wyjdz"))
 			m_window.close();
@@ -112,10 +114,11 @@ void App::p_mainMenu() {
 	if (ImGui::MenuItem("Ustawienia"))
 		m_SettingsOpened = !m_SettingsOpened;
 
+#if _WIN32
 	if (ImGui::MenuItem("Pomoc"))
-		// wywo³anie przegl¹darki dla dokumentu html, dwa \ bo nie zadzia³a z normalnym /
+		// wywoï¿½anie przeglï¿½darki dla dokumentu html, dwa \ bo nie zadziaï¿½a z normalnym /
 		ShellExecuteA(NULL, "open", "doc\\index.html", NULL, NULL, SW_SHOWNORMAL);
-
+#endif
 
 	ImGui::EndMainMenuBar();
 }
@@ -128,7 +131,7 @@ void App::pSettings() {
 
 	// rozmiar czcionki
 	ImGui::SliderInt("Rozmiar czcionki (px)", &m_appSettings.fontSize, 12, 40);
-	{ // wybieranie rozdzielczoœci
+	{ // wybieranie rozdzielczoï¿½ci
 
 		// kombo
 		if (ImGui::BeginCombo("Motyw",
@@ -136,7 +139,7 @@ void App::pSettings() {
 			
 			for (const auto& theme : smThemes) {
 				if (ImGui::Selectable(theme.c_str())) {
-					// jeœli jest wybrany zmiana nazwy motywu
+					// jeï¿½li jest wybrany zmiana nazwy motywu
 					m_appSettings.theme = theme;
 
 					// zresetowanie opcji stylu
@@ -145,10 +148,10 @@ void App::pSettings() {
 					// ustawienie motywu
 					util::setTheme(m_appSettings.theme);
 
-					// wczytanie g³ównych ustawieñ
+					// wczytanie gï¿½ï¿½wnych ustawieï¿½
 					util::changeStyle(m_imguiConfigFile[0]);
 
-					// wczytanie ustawieñ wybranego stylu
+					// wczytanie ustawieï¿½ wybranego stylu
 					util::changeStyle(m_imguiConfigFile[m_appSettings.theme]);
 				}
 			}

@@ -134,16 +134,12 @@ private:
 
 	void pRun(std::vector<Instruction>& input);
 
-	template <class T>
-	T pGet(Instruction& instruction, int who) { return T(); }
-
-	template<>
-	ShortInstruction pGet<ShortInstruction>(Instruction& ins, int who) {
+	
+	ShortInstruction pGetShortInstruction(Instruction& ins, int who) {
 		return { ins.type };
 	}
 	
-	template<>
-	OneArgInstruction pGet<OneArgInstruction>(Instruction& ins, int who) {
+	OneArgInstruction pGetOneArgInstruction(Instruction& ins, int who) {
 		return { ins.type, evaluate(ins.args[0], who) };
 	}
 
