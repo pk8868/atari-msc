@@ -1,6 +1,6 @@
 # atari-msc
 ATARI Logo Interpreter
-Interpreter na motorola science cup
+na Motorola Science Cup 2021
 ![grafika](https://user-images.githubusercontent.com/87194023/157021840-30df2b21-6e2e-4cc4-818c-283700c2858f.png)
 
 
